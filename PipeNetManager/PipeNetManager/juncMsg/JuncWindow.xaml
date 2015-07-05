@@ -1,0 +1,18 @@
+﻿<Window x:Class="PipeNetManager.juncMsg.JuncWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="检查井信息" Height="450" Width="525" ResizeMode="NoResize">
+    <Grid>
+        <TextBlock  Name="Junc_Name" HorizontalAlignment="Center" Margin="24,0,-0.333,0" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top"
+                RenderTransformOrigin="-2.551,-7.777" Height="36" Width="495" FontSize="20"/>
+        <ScrollViewer x:Name="scrolls" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Height="400" Margin="0,40,0,0">
+            <ScrollViewer.Content>
+                <StackPanel Name="Stackpanel1" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                            Orientation="Horizontal" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+
+                </StackPanel>
+            </ScrollViewer.Content>
+        </ScrollViewer>
+
+    </Grid>
+</Window>
