@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\project\master\PNManager\PipeNetManager\PipeNetManager\App.xaml
-9-1746093865
+16-978721948
 
-34-1592024814
-151446435456
-eMap\MapBackground.xaml;eMap\Mapctl.xaml;eMap\RainJuncs.xaml;eMap\RainPipes.xaml;eMap\WasteJuncs.xaml;eMap\WastePipes.xaml;juncMsg\BaseContent.xaml;juncMsg\JuncWindow.xaml;MainWindow.xaml;
+41-569072739
+171607360084
+eMap\MapBackground.xaml;eMap\Mapctl.xaml;eMap\RainJuncs.xaml;eMap\RainPipes.xaml;eMap\WasteJuncs.xaml;eMap\WastePipes.xaml;juncMsg\BaseContent.xaml;juncMsg\JuncWindow.xaml;MainWindow.xaml;pipeMsg\BaseInfoControl.xaml;pipeMsg\DataGrid\PipeInfo.xaml;pipeMsg\DataGrid\USInfo.xaml;pipeMsg\PicControl.xaml;pipeMsg\PipeWindow.xaml;pipeMsg\ReportControl.xaml;pipeMsg\VideoControl.xaml;
 
-True
+False
 

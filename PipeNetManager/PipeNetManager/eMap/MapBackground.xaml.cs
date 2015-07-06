@@ -98,20 +98,8 @@ namespace PipeNetManager.eMap
             App.Tiles = lvl.GetTiles_M(x, y);
             //进行后台地图加载，利用Task Parallel 进行并行加载，.net 4.0以上版本支持
             //first stop task
-            var token = cancleToken.Token;
-            Task task = null;
-            if (mCanbeCancle){
-                cancleToken.Cancel();
-            }
-            try
-            {
-             task = Task.Factory.StartNew<MemoryStream[]>((Obj) =>
+             Task.Factory.StartNew<MemoryStream[]>((Obj) =>
              {
-                mCanbeCancle = true;
-                if (token.IsCancellationRequested)
-                {
-                    token.ThrowIfCancellationRequested();
-                }
                 MemoryStream[] maps = new MemoryStream[64];
                 Parallel.For(0, (int)Obj, i =>
                 {
@@ -134,15 +122,6 @@ namespace PipeNetManager.eMap
                  }
                  MapPanel.Margin = MoveMargin;
              }, TaskScheduler.FromCurrentSynchronizationContext());
-            }
-            catch
-            {
-                if(task.IsCanceled)
-                for (int i = 0; i < Images.Count; i++)              //同步显示到界面上
-                {
-                    Images[i].Source = mDefaultImg;
-                }
-            }
         }
 
         private void ProcessZoomIn(int row, int column)

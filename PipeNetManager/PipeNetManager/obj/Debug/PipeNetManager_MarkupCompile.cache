@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\project\PipeNetManager1.4_debug\PipeNetManager\PipeNetManager\obj\Debug\
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\
 PipeNetManager
 none
 false
 DEBUG;TRACE
-C:\project\PipeNetManager1.4_debug\PipeNetManager\PipeNetManager\App.xaml
-9-1746093865
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\App.xaml
+16-978721948
 
-331710691056
-15-1245483595
-eMap\MapBackground.xaml;eMap\Mapctl.xaml;eMap\RainJuncs.xaml;eMap\RainPipes.xaml;eMap\WasteJuncs.xaml;eMap\WastePipes.xaml;juncMsg\BaseContent.xaml;juncMsg\JuncWindow.xaml;MainWindow.xaml;
+40-1561324165
+171607360084
+eMap\MapBackground.xaml;eMap\Mapctl.xaml;eMap\RainJuncs.xaml;eMap\RainPipes.xaml;eMap\WasteJuncs.xaml;eMap\WastePipes.xaml;juncMsg\BaseContent.xaml;juncMsg\JuncWindow.xaml;MainWindow.xaml;pipeMsg\BaseInfoControl.xaml;pipeMsg\DataGrid\PipeInfo.xaml;pipeMsg\DataGrid\USInfo.xaml;pipeMsg\PicControl.xaml;pipeMsg\PipeWindow.xaml;pipeMsg\ReportControl.xaml;pipeMsg\VideoControl.xaml;
 
 False
 
