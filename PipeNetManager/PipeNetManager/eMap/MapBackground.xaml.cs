@@ -39,7 +39,7 @@ namespace PipeNetManager.eMap
 
             App.TotalLevels = detail.Level_Count;    //总层级数
 
-            UpdateMap(App.Cur_Level, Ind_Row, Ind_Column);
+            initBgMap(App.Cur_Level, Ind_Row, Ind_Column);
         }
         // 加载器
         Loader loader = new Loader();                //瓦片图加载器
@@ -50,10 +50,6 @@ namespace PipeNetManager.eMap
 
         //默认地图，用于加载过程中间状态
         BitmapImage mDefaultImg = new BitmapImage();
-
-        System.Threading.CancellationTokenSource cancleToken = new System.Threading.CancellationTokenSource();
-
-        static Boolean mCanbeCancle = false;
 
         Point Movepos = new Point();                 //移动点
 
@@ -93,13 +89,11 @@ namespace PipeNetManager.eMap
             mDefaultImg.EndInit();
         }
 
-        private void UpdateMap(Level lvl, int x, int y)
+        void initBgMap(Level lvl, int x, int y)
         {
             App.Tiles = lvl.GetTiles_M(x, y);
-            //进行后台地图加载，利用Task Parallel 进行并行加载，.net 4.0以上版本支持
-            //first stop task
-             Task.Factory.StartNew<MemoryStream[]>((Obj) =>
-             {
+            Task.Factory.StartNew<MemoryStream[]>((Obj) =>
+            {
                 MemoryStream[] maps = new MemoryStream[64];
                 Parallel.For(0, (int)Obj, i =>
                 {
@@ -110,18 +104,30 @@ namespace PipeNetManager.eMap
                 });
                 return maps;
             }, Images.Count).ContinueWith(ant =>
-             {
-                 mCanbeCancle = false;
-                 for (int i = 0; i < Images.Count; i++)              //同步显示到界面上
-                 {
-                     BitmapImage img = new BitmapImage();
-                     img.BeginInit();
-                     img.StreamSource = ant.Result[i];
-                     img.EndInit();
-                     Images[i].Source = img;
-                 }
-                 MapPanel.Margin = MoveMargin;
-             }, TaskScheduler.FromCurrentSynchronizationContext());
+            {
+                for (int i = 0; i < Images.Count; i++)              //同步显示到界面上
+                {
+                    BitmapImage img = new BitmapImage();
+                    img.BeginInit();
+                    img.StreamSource = ant.Result[i];
+                    img.EndInit();
+                    Images[i].Source = img;
+                }
+                MapPanel.Margin = MoveMargin;
+            }, TaskScheduler.FromCurrentSynchronizationContext());
+        }
+
+        /// <summary>
+        /// update the map
+        /// </summary>
+        /// <param name="lvl">显示地图层级</param>
+        /// <param name="x">左上角显示的第一行</param>
+        /// <param name="y">左上角显示的第一列</param>
+        /// <param name="dirx">偏移x方向位置</param>
+        /// <param name="diry">偏移y方向位置</param>
+        private void UpdateMap(Level lvl, int x, int y , int dirx , int diry)
+        {
+            
         }
 
         private void ProcessZoomIn(int row, int column)
@@ -148,7 +154,7 @@ namespace PipeNetManager.eMap
             else
                 MoveMargin = new Thickness(-refp.X + MapPanel.Margin.Left, -refp.Y + MapPanel.Margin.Top, 0, 0);
             App.MoveRect = MoveMargin;                                  //图层同步
-            UpdateMap(App.Cur_Level, Ind_Row, Ind_Column);              //启动更新地图
+            UpdateMap(App.Cur_Level, Ind_Row, Ind_Column , 0 , 0 );              //启动更新地图
         }
 
         private void ProcessZoomOut(int row, int column)
@@ -206,7 +212,7 @@ namespace PipeNetManager.eMap
             else
                 MoveMargin = new Thickness(MapPanel.Margin.Left + refp.X, MapPanel.Margin.Top + refp.Y, 0, 0);
             App.MoveRect = MoveMargin;                              //同步
-            UpdateMap(App.Cur_Level, Ind_Row, Ind_Column);          //更新地图
+            UpdateMap(App.Cur_Level, Ind_Row, Ind_Column , 0 , 0);          //更新地图
             
         }
 
@@ -220,7 +226,7 @@ namespace PipeNetManager.eMap
             Ind_Column = App.Cur_Level.FTile.Column - 1;
             App.StrokeThinkness = 1;
 
-            UpdateMap(App.Cur_Level, Ind_Row, Ind_Column);
+            initBgMap(App.Cur_Level, Ind_Row, Ind_Column);
         }
 
         public override void OnMouseUp(object sender, MouseButtonEventArgs e)           //鼠标释放事件
@@ -240,36 +246,43 @@ namespace PipeNetManager.eMap
         {
             if (!IsViewMove||!IsMousedown)
                 return;
+            int dirx = 0;
+            int diry = 0;
             Grid currEle = this.MapPanel;
             double xPos = e.GetPosition(null).X - Movepos.X + currEle.Margin.Left;
             double yPos = e.GetPosition(null).Y - Movepos.Y + currEle.Margin.Top;
             
             App.MoveRect = new Thickness(e.GetPosition(null).X - Movepos.X + App.MoveRect.Left,
                e.GetPosition(null).Y - Movepos.Y + App.MoveRect.Top, 0, 0);
-            if(xPos>0)
+            if (xPos > 0)
             {
-                MoveMargin = new Thickness(xPos + mLeft, yPos, 0, 0);
-                UpdateMap(App.Cur_Level, Ind_Row, --Ind_Column);
+                dirx = (int)(xPos / Math.Abs(mLeft)) + 1;
+                MoveMargin = new Thickness(xPos + dirx * mLeft, yPos, 0, 0);               
             }
             else if (xPos < mLeft)
             {
-                MoveMargin = new Thickness(xPos - mLeft, yPos, 0, 0);
-                UpdateMap(App.Cur_Level, Ind_Row, ++Ind_Column);
+                dirx = (int)(xPos / Math.Abs(mLeft));
+                MoveMargin = new Thickness(xPos + dirx * mLeft, yPos, 0, 0);
             }
             else if (yPos > 0)
             {
-                MoveMargin = new Thickness(xPos, yPos + mTop, 0, 0);
-                UpdateMap(App.Cur_Level, --Ind_Row, Ind_Column);
+                diry = (int)(yPos / Math.Abs(mTop)) + 1;
+                MoveMargin = new Thickness(xPos, yPos + diry * mTop, 0, 0);
             }
             else if (yPos < mTop)
             {
-                MoveMargin = new Thickness(xPos, yPos - mTop, 0, 0);
-                UpdateMap(App.Cur_Level, ++Ind_Row, Ind_Column);
+                diry = (int)(yPos / Math.Abs(mTop));
+                MoveMargin = new Thickness(xPos, yPos + diry * mTop, 0, 0);
             }
             else
             {
-                currEle.Margin = new Thickness(xPos, yPos, 0, 0); 
+                currEle.Margin = new Thickness(xPos, yPos, 0, 0);
+                Movepos = e.GetPosition(null);
+                return;
             }
+            Ind_Column = Ind_Column - dirx;
+            Ind_Row = Ind_Row - diry;
+            UpdateMap(App.Cur_Level, Ind_Row, Ind_Column , dirx , diry);
             Movepos = e.GetPosition(null);
         }
 

@@ -39,8 +39,8 @@
             </DrawingBrush.Drawing>
         </DrawingBrush>
     </local:BaseControl.Resources>
-    <!--最高支持2048*2048分辨率-->
-    <Grid Width="2048" Height="2048" Name="MapPanel">
+    <!--最高支持2304*2048分辨率-->
+    <Grid Width="2304" Height="2048" Name="MapPanel">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -52,6 +52,7 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>

@@ -8,8 +8,8 @@ namespace GIS.Map
 {
     public class Level
     {
-        public static int Total_Row = (int)(SystemParameters.PrimaryScreenHeight / PipeNetManager.App.TILESIZE + 0.5) + 1;
-        public static int Total_Column = (int)(SystemParameters.PrimaryScreenWidth / PipeNetManager.App.TILESIZE + 0.5) + 1;
+        public static int Total_Row = Math.Min((int)(SystemParameters.PrimaryScreenHeight / PipeNetManager.App.TILESIZE + 0.5) + 1 , 8);
+        public static int Total_Column = Math.Min((int)(SystemParameters.PrimaryScreenWidth / PipeNetManager.App.TILESIZE + 0.5) + 1 , 9);
         /// <summary>
         /// 缩放等级名称
         /// </summary>
@@ -73,6 +73,25 @@ namespace GIS.Map
                     list.Add(t);
                 }
             return list;
+        }
+
+        public Tile getTile(int row, int column)
+        {
+            Tile FTile = M_Tiles[M_Tiles.Keys.First<String>()];
+            Tile LTile = M_Tiles[M_Tiles.Keys.Last<String>()];
+            Tile t = null;
+            if (row < FTile.Row || row > LTile.Row || column < FTile.Column || column > LTile.Column)
+            {
+                t = new Tile();
+                t.Dx = FTile.Dx;
+                t.Dy = FTile.Dy;
+                t.X = FTile.X + (column - FTile.Column) * 256 * t.Dx;
+                t.Y = FTile.Y - (row - FTile.Row) * 256 * t.Dy;
+                t.Filename = "map/default.jpg";
+            }
+            else
+                t = M_Tiles[row + "-" + column];
+            return t;
         }
 
         public static String GetDefault_Path(){
