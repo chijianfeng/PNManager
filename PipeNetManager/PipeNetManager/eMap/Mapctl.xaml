@@ -183,7 +183,7 @@
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
                         <Label x:Name="Lbl_Detail" Background="#000EA317" Foreground="#FF2AC015" FontWeight="Bold" 
-                               Margin="0,-10,0,77" Grid.ColumnSpan="2"/>
+                               Margin="0,-10,-106,77" Grid.ColumnSpan="2"/>
                         <Image HorizontalAlignment="Left" Height="150" Margin="0,50,-162,-66" 
                                VerticalAlignment="Top" Width="300" Source="/Assets/缺陷等级.png" Grid.ColumnSpan="2"/>
                     </Grid>

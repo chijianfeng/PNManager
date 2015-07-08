@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("acceleratelib.dll")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("pipe2.ico")]
 
 
