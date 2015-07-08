@@ -125,9 +125,85 @@ namespace PipeNetManager.eMap
         /// <param name="y">左上角显示的第一列</param>
         /// <param name="dirx">偏移x方向位置</param>
         /// <param name="diry">偏移y方向位置</param>
-        private void UpdateMap(Level lvl, int x, int y , int dirx , int diry)
+        private void UpdateMap(Level lvl, int x, int y , int c , int r)
         {
-            
+            if (c == 0 && r == 0) {
+                initBgMap(lvl, x, y);
+                return;
+            }
+            int i = 0;
+            int j = 0;
+            int R = r * -1;
+            int C = c * -1;
+            if (c <= 0 && r < 0){          //move from right-bottom to top-left
+                for (i = 0; i < Level.Total_Row; i++) {
+                    for (j = 0; j < Level.Total_Column; j++) {
+                        if (i + R < Level.Total_Row && j + C < Level.Total_Column)
+                        {
+                            Images[i * Level.Total_Column + j].Source = Images[(i + R) * Level.Total_Column + j + C].Source;
+                        }
+                        else {
+                            Images[i * Level.Total_Column + j].Source = loadSource(lvl, x + i, y + j);
+                        }
+                    }
+                }
+            }
+            else if (c > 0 && r <= 0){
+                for (i = 0; i < Level.Total_Row; i++)
+                {
+                    for (j = Level.Total_Column - 1; j >= 0; j--) {
+                        if (C + j >= 0 && i + R < Level.Total_Row)
+                        {
+                            Images[i * Level.Total_Column + j].Source = Images[(i + R) * Level.Total_Column + j + C].Source;
+                        }
+                        else
+                        {
+                            Images[i * Level.Total_Column + j].Source = loadSource(lvl, x + i, y + j);
+                        }
+                    }
+                }
+            }
+            else if (c >= 0 && r > 0)
+            {
+                for (i = Level.Total_Row - 1; i >= 0; i--)
+                {
+                    for (j = Level.Total_Column - 1; j >= 0; j--)
+                    {
+                        if (C + j >= 0 && i + R >= 0)
+                        {
+                            Images[i * Level.Total_Column + j].Source = Images[(i + R) * Level.Total_Column + j + C].Source;
+                        }
+                        else
+                        {
+                            Images[i * Level.Total_Column + j].Source = loadSource(lvl, x + i, y + j);
+                        }
+                    }
+                }
+            }
+            else {
+                for (i = Level.Total_Row - 1; i >= 0; i--)
+                {
+                    for (j = 0; j < Level.Total_Column; j++)
+                    {
+                        if (C + j < Level.Total_Column && i + R >= 0)
+                        {
+                            Images[i * Level.Total_Column + j].Source = Images[(i + R) * Level.Total_Column + j + C].Source;
+                        }
+                        else
+                        {
+                            Images[i * Level.Total_Column + j].Source = loadSource(lvl, x + i, y + j);
+                        }
+                    }
+                }
+            }
+            MapPanel.Margin = MoveMargin;
+        }
+
+        private BitmapSource loadSource(Level lvl, int x , int y)
+        {
+            Tile tile = lvl.getTile(x, y);
+            String Abs_File_Name = System.IO.Path.GetFullPath(tile.Filename);
+            return new BitmapImage(new Uri(Abs_File_Name, UriKind.RelativeOrAbsolute));
         }
 
         private void ProcessZoomIn(int row, int column)
