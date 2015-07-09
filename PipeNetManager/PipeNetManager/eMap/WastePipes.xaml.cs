@@ -36,36 +36,13 @@ namespace PipeNetManager.eMap
 
         void InitPipes()
         {
-            if (listWastes == null)                     //数据为空，从数据库中导入数据
+            if (((App)System.Windows.Application.Current).arcmap == null)                     //数据为空，从数据库中导入数据
             {
-                //首先加载污水检查井
-                listjunc = wastejunc.listWaste;
-                
-                //污水检查井加载完成，开始加载污水管道
-                listWastes = new List<WastePipe>();
-                TPipeInfo pipeinfo = new TPipeInfo(App._dbpath, App.PassWord);   //读取数据库
-                List<CPipeInfo> pipelist = pipeinfo.Sel_PipeInfo(2);             //仅仅读取污水管道
-
-                //读取管道内窥数据
-                TUSInfo usinfo = new TUSInfo(App._dbpath, App.PassWord);
-                List<CUSInfo> uslist = usinfo.Load_USInfo();
-
-                foreach (CPipeInfo info in pipelist)
-                {
-                    WastePipe pipe = null;
-                    WasteCover starjunc = FindStartJunc(info);                    //找到起始点坐标
-                    WasteCover endjunc = FindEndJunc(info);                       //找到终止点坐标
-                    if (starjunc == null || endjunc == null)
-                        continue;
-
-                    pipe = new WastePipe(starjunc, endjunc);
-
-                    pipe.pipeInfo = info;
-                    pipe.UsInfo = FindUSInfo(uslist, info.ID);
-                    listWastes.Add(pipe);
-                }
-                //数据加载，准备完毕
+                ArcMap map = new ArcMap();
+                map.LoadWasterCover();
+                map.LoadWasterPipe();
             }
+            listWastes = ((App)System.Windows.Application.Current).arcmap.WastePipeList;
             WastePipeGrid.Margin = new Thickness(0, 0, 0, 0);
             state = new WastePipeState(this);
 
@@ -73,18 +50,7 @@ namespace PipeNetManager.eMap
             EndPipe = new Point[listWastes.Count+500];
         }
 
-        WasteCover FindStartJunc(CPipeInfo cp)
-        {
-            WasteCover c = null;
-            c = listjunc.Find(cc => cc.juncInfo.ID == cp.In_JunID);
-            return c;
-        }
-        WasteCover FindEndJunc(CPipeInfo cp)
-        {
-            WasteCover c = null;
-            c = listjunc.Find(cc => cc.juncInfo.ID == cp.Out_JunID);
-            return c;
-        }
+       
 
         CUSInfo FindUSInfo(List<CUSInfo> usinfolist,int pipeId)
         {
@@ -226,7 +192,6 @@ namespace PipeNetManager.eMap
 
         public  WasteJuncs wastejunc = null;                    //污水检查井绑定
         List<WastePipe> listWastes = null;                      //污水管道集合
-        List<WasteCover> listjunc = null;                      //污水检查井集合
 
         WastePipeState state = null;                            //操作 
 

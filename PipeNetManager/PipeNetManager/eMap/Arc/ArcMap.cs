@@ -6,6 +6,8 @@ using System.Windows;
 using BLL.Command;
 using BLL.Receiver;
 using DBCtrl.DBClass;
+using DBCtrl.DBRW;
+using PipeNetManager;
 
 namespace GIS.Arc
 {
@@ -18,62 +20,100 @@ namespace GIS.Arc
         DeleteCmd dcmd = new DeleteCmd();
         ClearCmd ccmd = new ClearCmd();
 
-        public List<Pipe> PipeList { get; set; }
-        public List<Cover> CoverList { get; set; }
+        public List<RainPipe> RainPipeList { get; set; }
+        public List<WastePipe> WastePipeList { get; set; }
+        public List<RainCover> RainCoverList { get; set; }
+        public List<WasteCover> WasterCoverList { get; set; }
         public ArcMap()
         {
-            PipeList = new List<Pipe>();
-            CoverList = new List<Cover>();
+            RainPipeList = new List<RainPipe>();
+            WastePipeList = new List<WastePipe>();
+            RainCoverList = new List<RainCover>();
+            WasterCoverList = new List<WasteCover>();
         }
 
-        public void Load() 
+        public void LoadRainCover() 
         {
-            //////////////////////////////////////////////////////////////////////////
-            //加载井盖
-            JuncRev jrev = new JuncRev();
-            lcmd.SetReceiver(jrev);
-            lcmd.Execute();
-            foreach (CJuncInfo c in jrev.ListJunc)
+            TJuncInfo juninfo = new TJuncInfo(App._dbpath, App.PassWord);
+            List<CJuncInfo> tmplist = juninfo.Sel_JuncInfoByCaty(1);            //仅仅加载雨水检查井
+            //进行坐标转换
+            foreach (CJuncInfo junc in tmplist)
             {
-                if (c.X_Coor == 0)
+                if (junc.X_Coor == 0)                                           //无座标
                     continue;
-                Cover cover = null;
-                Point p = new Point(c.X_Coor+0.0045,c.Y_Coor-0.0034);
-                if(c.Junc_Category == 1)
-                    cover = new RainCover(c.JuncName, GISConverter.WGS842Merator(p), c.SystemID);
-                else if(c.Junc_Category == 2)
-                    cover = new WasteCover(c.JuncName, GISConverter.WGS842Merator(p), c.SystemID);
-                cover.juncInfo = c;
-                CoverList.Add(cover);
-                Cover.NUM++;
+                RainCover cover = null;
+                Point p = new Point(junc.X_Coor + 0.0045, junc.Y_Coor - 0.0034);
+
+                cover = new RainCover(junc.JuncName, GISConverter.WGS842Merator(p), junc.SystemID);
+                cover.juncInfo = junc;
+                RainCoverList.Add(cover);
             }
-            //////////////////////////////////////////////////////////////////////////
-            //加载管道
-            PipeRev piperev = new PipeRev();
-            lcmd.SetReceiver(piperev);
-            lcmd.Execute();
-            foreach (CPipeInfo cp in piperev.ListPipe)
-            {
-                Pipe pipe = null;
-                Cover StartCover = FindStartCover(cp);
-                Cover EndCover = FindEndCover(cp);
-                if (cp.Pipe_Category == 1)
-                    pipe = new RainPipe(StartCover,EndCover);
-                else if (cp.Pipe_Category == 2)
-                    pipe = new WastePipe(StartCover, EndCover);
-                pipe.pipeInfo = cp;
-                if (StartCover!=null)
-                    StartCover.Out_Pipe = pipe;
-                if (EndCover!=null)
-                    EndCover.In_Pipe = pipe;
-                pipe.Name = cp.PipeName;
-                pipe.UsInfo = FindUSInfo(piperev.ListUS, cp.ID);
-                PipeList.Add(pipe);
-                Pipe.NUM++;
-            }
-            Console.WriteLine("Load data complete");
         }
 
+        public void LoadWasterCover() {
+
+            TJuncInfo juninfo = new TJuncInfo(App._dbpath, App.PassWord);
+            List<CJuncInfo> tmplist = juninfo.Sel_JuncInfoByCaty(2);            //仅仅加载污水检查井
+            //进行坐标转换
+            foreach (CJuncInfo junc in tmplist)
+            {
+                if (junc.X_Coor == 0)                                           //无座标
+                    continue;
+                WasteCover cover = null;
+                Point p = new Point(junc.X_Coor + 0.0045, junc.Y_Coor - 0.0034);
+
+                cover = new WasteCover(junc.JuncName, GISConverter.WGS842Merator(p), junc.SystemID);
+                cover.juncInfo = junc;
+                WasterCoverList.Add(cover);
+            }
+        }
+
+        public void LoadRainPipe() {
+            TPipeInfo pipeinfo = new TPipeInfo(App._dbpath, App.PassWord);   //读取数据库
+            List<CPipeInfo> pipelist = pipeinfo.Sel_PipeInfo(1);             //仅仅读取雨水管道
+
+            TUSInfo usinfo = new TUSInfo(App._dbpath, App.PassWord);
+            List<CUSInfo> uslist = usinfo.Load_USInfo();
+
+            foreach (CPipeInfo info in pipelist)
+            {
+                RainPipe pipe = null;
+                RainCover starjunc = FindStartRJunc(info);                    //找到起始点坐标
+                RainCover endjunc = FindEndRJunc(info);                       //找到终止点坐标
+                if (starjunc == null || endjunc == null)
+                    continue;
+
+                pipe = new RainPipe(starjunc, endjunc);
+
+                pipe.pipeInfo = info;
+                pipe.UsInfo = FindUSInfo(uslist, info.ID);
+                RainPipeList.Add(pipe);
+            }
+        }
+
+        public void LoadWasterPipe() {
+            TPipeInfo pipeinfo = new TPipeInfo(App._dbpath, App.PassWord);   //读取数据库
+            List<CPipeInfo> pipelist = pipeinfo.Sel_PipeInfo(2);             //仅仅读取污水管道
+
+            //读取管道内窥数据
+            TUSInfo usinfo = new TUSInfo(App._dbpath, App.PassWord);
+            List<CUSInfo> uslist = usinfo.Load_USInfo();
+
+            foreach (CPipeInfo info in pipelist)
+            {
+                WastePipe pipe = null;
+                WasteCover starjunc = FindStartWJunc(info);                    //找到起始点坐标
+                WasteCover endjunc = FindEndWJunc(info);                       //找到终止点坐标
+                if (starjunc == null || endjunc == null)
+                    continue;
+
+                pipe = new WastePipe(starjunc, endjunc);
+
+                pipe.pipeInfo = info;
+                pipe.UsInfo = FindUSInfo(uslist, info.ID);
+                WastePipeList.Add(pipe);
+            }
+        }
         private CUSInfo FindUSInfo(List<CUSInfo> usinfolist,int pipeId)
         {
             CUSInfo info = null;
@@ -86,17 +126,29 @@ namespace GIS.Arc
         
         }
 
-        public Cover FindStartCover(CPipeInfo cp)
+        RainCover FindStartRJunc(CPipeInfo cp)
         {
-            Cover c = null;
-            c = CoverList.Find( cc => cc.juncInfo.ID == cp.In_JunID);
+            RainCover c = null;
+            c = RainCoverList.Find(cc => cc.juncInfo.ID == cp.In_JunID);
+            return c;
+        }
+        RainCover FindEndRJunc(CPipeInfo cp)
+        {
+            RainCover c = null;
+            c = RainCoverList.Find(cc => cc.juncInfo.ID == cp.Out_JunID);
             return c;
         }
 
-        public Cover FindEndCover(CPipeInfo cp)
+        WasteCover FindStartWJunc(CPipeInfo cp)
         {
-            Cover c = null;
-            c = CoverList.Find(cc => cc.juncInfo.ID == cp.Out_JunID);
+            WasteCover c = null;
+            c = WasterCoverList.Find(cc => cc.juncInfo.ID == cp.In_JunID);
+            return c;
+        }
+        WasteCover FindEndWJunc(CPipeInfo cp)
+        {
+            WasteCover c = null;
+            c = WasterCoverList.Find(cc => cc.juncInfo.ID == cp.Out_JunID);
             return c;
         }
 
@@ -109,7 +161,15 @@ namespace GIS.Arc
         public List<Cover> FindCover(Point Start,Point End)
         {
             List<Cover> list = new List<Cover>();
-            foreach (Cover c in CoverList)
+            foreach (Cover c in RainCoverList)
+            {
+                if (c.Location.X < Start.X || c.Location.X > End.X ||
+                    c.Location.Y > Start.Y || c.Location.Y < End.Y)
+                    continue;
+                else
+                    list.Add(c);
+            }
+            foreach (Cover c in WasterCoverList)
             {
                 if (c.Location.X < Start.X || c.Location.X > End.X ||
                     c.Location.Y > Start.Y || c.Location.Y < End.Y)

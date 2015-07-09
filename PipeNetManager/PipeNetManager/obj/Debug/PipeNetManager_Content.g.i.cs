@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("pipe2.ico")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/passwd.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/username.png")]
 
 

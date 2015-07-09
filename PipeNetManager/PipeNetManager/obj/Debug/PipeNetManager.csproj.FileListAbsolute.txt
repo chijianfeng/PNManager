@@ -175,3 +175,7 @@ C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\eMap\WastePi
 C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\PipeNetManager.g.resources
 C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\PipeNetManager.Properties.Resources.resources
 C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\PipeNetManager.csproj.GenerateResource.Cache
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\Login\LoadWait.baml
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\Login\LoginWnd.baml
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\Login\LoadWait.g.cs
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\Login\LoginWnd.g.cs

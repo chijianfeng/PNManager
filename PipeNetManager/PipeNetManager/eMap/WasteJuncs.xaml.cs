@@ -36,24 +36,16 @@ namespace PipeNetManager.eMap
 
         private void InitWasteJuncs()
         {
-            if (listWaste == null)
+            if (((App)System.Windows.Application.Current).arcmap == null)
             {
-                listWaste = new List<WasteCover>();
                 //加载雨水检查井
-                TJuncInfo juninfo = new TJuncInfo(App._dbpath, App.PassWord);
-                List<CJuncInfo> tmplist = juninfo.Sel_JuncInfoByCaty(2);            //仅仅加载污水检查井
-                //进行坐标转换
-                foreach (CJuncInfo junc in tmplist)
-                {
-                    if (junc.X_Coor == 0)                                           //无座标
-                        continue;
-                    WasteCover cover = null;
-                    Point p = new Point(junc.X_Coor + 0.0045, junc.Y_Coor - 0.0034);
-
-                    cover = new WasteCover(junc.JuncName, GISConverter.WGS842Merator(p), junc.SystemID);
-                    cover.juncInfo = junc;
-                    listWaste.Add(cover);
-                }
+                ArcMap map = new ArcMap();
+                map.LoadWasterCover();
+                listWaste = ((App)System.Windows.Application.Current).arcmap.WasterCoverList;
+            }
+            else
+            {
+                listWaste = ((App)System.Windows.Application.Current).arcmap.WasterCoverList;
             }
             WasteGrid.Margin = new Thickness(-0, -0, 0, 0);
             state = new WasteJuncState(this);

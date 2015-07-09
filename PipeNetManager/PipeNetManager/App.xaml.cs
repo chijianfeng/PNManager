@@ -1,4 +1,5 @@
-﻿using GIS.Map;
+﻿using GIS.Arc;
+using GIS.Map;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,6 +15,7 @@ namespace PipeNetManager
     /// </summary>
     public partial class App : Application
     {
+        public ArcMap arcmap = null;
         // 瓦片图
         public static List<Tile> Tiles = null;
 

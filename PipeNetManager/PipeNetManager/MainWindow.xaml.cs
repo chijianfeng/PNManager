@@ -1,4 +1,5 @@
 ﻿using PipeNetManager.eMap;
+using PipeNetManager.Login;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,13 +34,30 @@ namespace PipeNetManager
 
             this.Height = y;//设置窗体高度
 
-            //just for test
-            this.Grid1.Children.Remove(textBlock1);     //移除textblock
-            this.stackpanl.Children.Clear();
-            this.stackpanl.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
-            this.stackpanl.VerticalAlignment = System.Windows.VerticalAlignment.Top;
-            Mapctl eMap = new Mapctl();
-            this.stackpanl.Children.Add(eMap);
+            LoginWnd loginwnd = new LoginWnd();
+            this.stackpanl.Children.Add(loginwnd);
+            this.AddHandler(Button.ClickEvent, new RoutedEventHandler(PageChange));
+        }
+
+        void PageChange(object sender, RoutedEventArgs e)
+        {
+            if (e.OriginalSource.ToString().Equals("PipeNetManager.Login.LoginWnd"))
+            {
+                LoadWait wait = new LoadWait();
+                this.stackpanl.Children.Clear();
+                this.stackpanl.Children.Add(wait);
+            }
+            else if (e.OriginalSource.ToString().Equals("PipeNetManager.Login.LoadWait"))
+            {
+                this.Grid1.Children.Remove(textBlock1);     //移除textblock
+
+                Mapctl eMap = new Mapctl();
+                this.Grid1.Children.Remove(textBlock1);     //移除textblock
+                this.stackpanl.Children.Clear();
+                this.stackpanl.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                this.stackpanl.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+                this.stackpanl.Children.Add(eMap);
+            }
         }
     }
 }

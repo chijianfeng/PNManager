@@ -116,6 +116,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Login\LoadWait.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Login\LoginWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -167,6 +175,12 @@
     </Compile>
     <Compile Include="juncMsg\JuncWindow.xaml.cs">
       <DependentUpon>JuncWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Login\LoadWait.xaml.cs">
+      <DependentUpon>LoadWait.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Login\LoginWnd.xaml.cs">
+      <DependentUpon>LoginWnd.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -303,6 +317,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="pipe2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\passwd.png" />
+    <Resource Include="Assets\username.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

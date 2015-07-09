@@ -36,35 +36,14 @@ namespace PipeNetManager.eMap
 
         void InitPipes()
         {
-            if(listRains==null)                     //数据为空，从数据库中导入数据
+            if (((App)System.Windows.Application.Current).arcmap == null)                     //数据为空，从数据库中导入数据
             {
-                //首先绑定雨水检查井
-                listjunc = rainjunc.listRains;
-
-                //雨水检查井加载完成，开始加载雨水管道
-                listRains = new List<RainPipe>();
-                TPipeInfo pipeinfo = new TPipeInfo(App._dbpath, App.PassWord);   //读取数据库
-                List<CPipeInfo> pipelist = pipeinfo.Sel_PipeInfo(1);             //仅仅读取雨水管道
-
-                TUSInfo usinfo = new TUSInfo(App._dbpath, App.PassWord);
-                List<CUSInfo> uslist = usinfo.Load_USInfo();
-
-                foreach(CPipeInfo info in pipelist)
-                {
-                    RainPipe pipe = null;
-                    RainCover starjunc = FindStartJunc(info);                    //找到起始点坐标
-                    RainCover endjunc = FindEndJunc(info);                       //找到终止点坐标
-                    if (starjunc == null || endjunc == null)
-                        continue;
-
-                    pipe = new RainPipe(starjunc, endjunc);
-
-                    pipe.pipeInfo = info;
-                    pipe.UsInfo = FindUSInfo(uslist, info.ID);
-                    listRains.Add(pipe);
-                }
-                //数据加载，准备完毕
+                ArcMap map = new ArcMap();
+                map.LoadRainCover();
+                map.LoadRainPipe();
             }
+            listRains = ((App)System.Windows.Application.Current).arcmap.RainPipeList;
+
             RainPipeGrid.Margin = new Thickness(0, 0, 0, 0);
             state = new RainPipeState(this);
 
@@ -72,18 +51,7 @@ namespace PipeNetManager.eMap
             EndPipe = new Point[listRains.Count+500];
         }
 
-        RainCover FindStartJunc(CPipeInfo cp)
-        {
-            RainCover c = null;
-            c = listjunc.Find(cc => cc.juncInfo.ID == cp.In_JunID);
-            return c;
-        }
-        RainCover FindEndJunc(CPipeInfo cp)
-        {
-            RainCover c = null;
-            c = listjunc.Find(cc => cc.juncInfo.ID == cp.Out_JunID);
-            return c;
-        }
+        
         CUSInfo FindUSInfo(List<CUSInfo> usinfolist, int pipeId)
         {
             CUSInfo info = null;

@@ -32,31 +32,23 @@ namespace PipeNetManager.eMap
         {
             InitializeComponent();
             InitRainJuncs();
-            //UpdateRainJuncs();
             AddJuncs();
         }
 
         //初始化相关变量---》》》》》》》》》》进行坐标转换加速
         private void InitRainJuncs()
         {
-            if(listRains==null)
-            {
-                listRains = new List<RainCover>();
-                //加载雨水检查井
-                TJuncInfo juninfo = new TJuncInfo(App._dbpath , App.PassWord);
-                List<CJuncInfo> tmplist = juninfo.Sel_JuncInfoByCaty(1);            //仅仅加载雨水检查井
-                //进行坐标转换
-                foreach(CJuncInfo junc in tmplist)
-                {
-                    if (junc.X_Coor == 0)                                           //无座标
-                        continue;
-                    RainCover cover = null;
-                    Point p = new Point(junc.X_Coor + 0.0045, junc.Y_Coor - 0.0034);
 
-                    cover = new RainCover(junc.JuncName, GISConverter.WGS842Merator(p), junc.SystemID);
-                    cover.juncInfo = junc;
-                    listRains.Add(cover);
-                }
+            if (((App)System.Windows.Application.Current).arcmap == null)
+            {
+                //加载雨水检查井
+                ArcMap map = new ArcMap();
+                map.LoadRainCover();
+                listRains = ((App)System.Windows.Application.Current).arcmap.RainCoverList;
+            }
+            else
+            {
+                listRains = ((App)System.Windows.Application.Current).arcmap.RainCoverList;
             }
             RainGrid.Margin = new Thickness(-0, -0, 0, 0);                          //初始化相对位置
             state = new RainJuncState(this);
@@ -67,7 +59,7 @@ namespace PipeNetManager.eMap
         }
 
         //向图层添加检查井
-        private unsafe void AddJuncs()
+        private void AddJuncs()
         {
             Task.Factory.StartNew((Obj) =>
             {
