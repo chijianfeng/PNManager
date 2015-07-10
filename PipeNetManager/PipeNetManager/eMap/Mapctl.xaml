@@ -8,7 +8,9 @@
             d:DesignHeight="768" d:DesignWidth="1000">
     <UserControl.Resources>
         <local:DataControl x:Key="data"></local:DataControl>
+    
     </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
@@ -127,8 +129,9 @@
                 <MenuItem Header="帮助"></MenuItem>
             </Menu>
         </StackPanel>
-        <StackPanel Name="MainToolBar" Grid.Row="1" Grid.Column="0">
-            <ToolBarTray Background="LightGray">
+        <StackPanel Name="MainToolBar" Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+
+            <ToolBarTray Background="WhiteSmoke">
                 <ToolBar Band="1" BandIndex="0" Name="Edit">
                     <Button ToolTip="添加雨水检查井" Click="Edit_Add_RainJunc_Click">
                         <Image Source="/Assets/AddRainJunc.png" Height="24"></Image>
@@ -166,6 +169,8 @@
 
                 </ToolBar>
             </ToolBarTray>
+            <TextBlock Width="600" Name="TextState" FontSize="18" Text="show state" VerticalAlignment="Center" 
+                       TextAlignment="Center" Background="White"  Foreground="#ffbe4d4d"></TextBlock>
         </StackPanel>
         <StackPanel  Grid.Column="0" Grid.Row="2">
             <Grid Name="MapGrid" MouseUp="MapGrid_MouseUp" MouseLeftButtonDown="MapGrid_MouseLeftButtonDown"

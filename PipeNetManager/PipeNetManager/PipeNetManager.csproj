@@ -176,6 +176,7 @@
     <Compile Include="juncMsg\JuncWindow.xaml.cs">
       <DependentUpon>JuncWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Login\AuthControl.cs" />
     <Compile Include="Login\LoadWait.xaml.cs">
       <DependentUpon>LoadWait.xaml</DependentUpon>
     </Compile>

@@ -16,6 +16,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Resources;
 using GIS.Map;
 using PipeMessage.eMap;
+using PipeNetManager.Login;
 
 namespace PipeNetManager.eMap
 {
@@ -27,8 +28,14 @@ namespace PipeNetManager.eMap
         public Mapctl()
         {
             InitializeComponent();
-
+            TextState.Loaded += new RoutedEventHandler(textLoaded);
             AddContent();
+        }
+
+        private void textLoaded(object sender, RoutedEventArgs e)
+        {
+            TextState.Text = "当前用户：" + AuthControl.getInstance().UserName + "         " + AuthControl.getInstance().getLoginTime();
+            TextState.TextAlignment = TextAlignment.Center;
         }
 
         private List<BaseControl> listLayer = new List<BaseControl>();          //创建图层集合

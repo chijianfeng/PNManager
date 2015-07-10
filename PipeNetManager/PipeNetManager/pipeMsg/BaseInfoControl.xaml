@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="PipeNetManager.pipeMsg.BaseInfoControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+              mc:Ignorable="d" 
+             d:DesignHeight="431" d:DesignWidth="542">
+    <Grid>
+        <Button Content="管道基本数据" HorizontalAlignment="Left" Margin="0,24,0,0" VerticalAlignment="Top" Width="96" 
+                Background="#7FFAFAFA" Click="BaseInfo" FontSize="10"/>
+        <Button Content="管道内窥数据" HorizontalAlignment="Left" Margin="0,54,0,0" VerticalAlignment="Top" Width="96" 
+                Background="#7FFAFAFA" Click="USInfo"  FontSize="10"/>
+        <GridSplitter HorizontalAlignment="Left" Height="411" Margin="96,10,0,0" VerticalAlignment="Top" Width="3"/>
+        <ScrollViewer x:Name="scrolls" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="104,10,0,15.667">
+            <ScrollViewer.Content>
+                <StackPanel Height="395" Name="stackpanel" HorizontalAlignment="Center" Width="428"  VerticalAlignment="Center" 
+                            Orientation="Horizontal" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
+            </ScrollViewer.Content>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
