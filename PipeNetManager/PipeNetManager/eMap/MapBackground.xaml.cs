@@ -30,16 +30,6 @@ namespace PipeNetManager.eMap
             InitializeComponent();
 
             MapPanel.Margin = new Thickness(-0, -0, 0, 0);                          //初始布局
-            detail = loader.LoadMapDetail();        //加载地图基本信息
-            App.Cur_Level = detail.Levels[0];       //最初显示最小层级
-            App.Cur_Level_Index = 0;
-
-            //最初显示地图位置
-            Ind_Row = App.Cur_Level.FTile.Row + 1;   //最初显示地图
-            Ind_Column = App.Cur_Level.FTile.Column - 1;
-            App.Tiles = App.Cur_Level.GetTiles_M(Ind_Row, Ind_Column);
-
-            App.TotalLevels = detail.Level_Count;    //总层级数
         }
         // 加载器
         Loader loader = new Loader();                //瓦片图加载器
@@ -71,6 +61,17 @@ namespace PipeNetManager.eMap
 
         public void InitBackGroundMapGrid()
         {
+            detail = loader.LoadMapDetail();        //加载地图基本信息
+            App.Cur_Level = detail.Levels[0];       //最初显示最小层级
+            App.Cur_Level_Index = 0;
+
+                                                     //最初显示地图位置
+            Ind_Row = App.Cur_Level.FTile.Row + 1;   //最初显示地图
+            Ind_Column = App.Cur_Level.FTile.Column - 1;
+            App.Tiles = App.Cur_Level.GetTiles_M(Ind_Row, Ind_Column);
+
+            App.TotalLevels = detail.Level_Count;    //总层级数
+
             String Abs_File_Name = System.IO.Path.GetFullPath(Level.GetDefault_Path());
             byte[] bs = File.ReadAllBytes(Abs_File_Name);
             mDefalutcache = new MemoryStream(bs);

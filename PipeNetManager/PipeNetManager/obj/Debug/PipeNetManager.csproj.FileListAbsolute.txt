@@ -179,3 +179,5 @@ C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\Login\LoadWa
 C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\Login\LoginWnd.baml
 C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\Login\LoadWait.g.cs
 C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\Login\LoginWnd.g.cs
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\utils\WaitUserControl.baml
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\utils\WaitUserControl.g.cs

@@ -3,11 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PipeNetManager.utils"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="500">
     <Grid>
-        <ProgressBar  Grid.Column="0" Grid.Row="0" Name="progress" Minimum="0" Maximum="1" Value=".7" Height="16" Visibility="Visible"
-                          IsIndeterminate="true" Margin="0,201,0,283"></ProgressBar>
+        <!--<ProgressBar  Grid.Column="0" Grid.Row="0" Name="progress" Minimum="0" Maximum="1" Value=".7" Height="16" Visibility="Visible"
+                          IsIndeterminate="true" Margin="0,201,0,283"></ProgressBar>-->
+        <local:WaitUserControl Margin="70,41,86,222"></local:WaitUserControl>
         <StackPanel MinWidth="500" HorizontalAlignment="Center" VerticalAlignment="Center">
             <!--mui:ModernProgressRing IsActive="True" Height="100" Width="100" Style="{StaticResource CircleProgressRingStyle }">
 

@@ -52,6 +52,7 @@ namespace PipeNetManager
                 this.Grid1.Children.Remove(textBlock1);     //移除textblock
 
                 Mapctl eMap = e.OriginalSource as Mapctl;
+                eMap.AddContent();
                 this.Grid1.Children.Remove(textBlock1);     //移除textblock
                 this.stackpanl.Children.Clear();
                 this.stackpanl.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;

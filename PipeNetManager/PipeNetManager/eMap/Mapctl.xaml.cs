@@ -90,11 +90,11 @@ namespace PipeNetManager.eMap
             TextState.Text = "丽水城南水阁区块排水管网健康查询系统      当前用户：" + AuthControl.getInstance().UserName 
                                 + "         " + AuthControl.getInstance().getLoginTime();
             TextState.TextAlignment = TextAlignment.Center;
-            AddContent();
+            //AddContent();
         }
 
         private List<BaseControl> listLayer = new List<BaseControl>();          //创建图层集合
-        private void AddContent()
+        public void AddContent()
         {
             this.MapGrid.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
             this.MapGrid.VerticalAlignment = System.Windows.VerticalAlignment.Top;
