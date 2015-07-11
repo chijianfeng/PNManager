@@ -84,6 +84,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="utils\ExceptionProcess.cs" />
+    <Compile Include="utils\ValueConvert.cs" />
     <Compile Include="utils\WaitUserControl.xaml.cs">
       <DependentUpon>WaitUserControl.xaml</DependentUpon>
     </Compile>

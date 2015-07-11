@@ -70,3 +70,9 @@ C:\project\PipeNetManager1.4_debug\PipeNetManager\PipeNetManager\bin\Debug\DBCtr
 C:\project\PipeNetManager1.4_debug\PipeNetManager\PipeNetManager\DBCtrl\obj\x86\Debug\DBCtrl.csprojResolveAssemblyReference.cache
 C:\project\PipeNetManager1.4_debug\PipeNetManager\PipeNetManager\DBCtrl\obj\x86\Debug\DBCtrl.exe
 C:\project\PipeNetManager1.4_debug\PipeNetManager\PipeNetManager\DBCtrl\obj\x86\Debug\DBCtrl.pdb
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\bin\Debug\DBCtrl.exe.config
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\bin\Debug\DBCtrl.exe
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\bin\Debug\DBCtrl.pdb
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\DBCtrl\obj\x86\Debug\DBCtrl.csprojResolveAssemblyReference.cache
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\DBCtrl\obj\x86\Debug\DBCtrl.exe
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\DBCtrl\obj\x86\Debug\DBCtrl.pdb

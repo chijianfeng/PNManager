@@ -51,20 +51,20 @@ namespace DBCtrl.DBClass
  
         private int usertype;
         /// <summary>
-        /// 用户类型：1普通用户、2：管理员
+        /// 用户类型：1普通用户、0：管理员
         /// </summary>
         public int UserType
         {
             get
             {
-                if (usertype <= 0 || usertype > 2)
+                if (usertype < 0 || usertype > 1)
                     return 1;
                 else
                     return usertype;
             }
             set
             {
-                if (value >= 1 && value <= 2)
+                if (value <= 1 && value >= 0)
                     usertype = value;
                 else
                     usertype = 1;

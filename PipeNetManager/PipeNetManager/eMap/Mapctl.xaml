@@ -133,20 +133,20 @@
 
             <ToolBarTray Background="WhiteSmoke">
                 <ToolBar Band="1" BandIndex="0" Name="Edit">
-                    <Button ToolTip="添加雨水检查井" Click="Edit_Add_RainJunc_Click">
+                    <Button ToolTip="添加雨水检查井" Click="Edit_Add_RainJunc_Click" Name="Button_RainCover">
                         <Image Source="/Assets/AddRainJunc.png" Height="24"></Image>
                     </Button>
-                    <Button ToolTip="添加污水检查井" Click="Edit_Add_WasteJunc_Click">
+                    <Button ToolTip="添加污水检查井" Click="Edit_Add_WasteJunc_Click" Name="Button_WasteCover">
                         <Image Source="/Assets/AddWasteJunc.png" Height="24"></Image>
                     </Button>
-                    <Button ToolTip="添加雨水管道" Click="Edit_Add_RainPipe_Click">
+                    <Button ToolTip="添加雨水管道" Click="Edit_Add_RainPipe_Click" Name="Button_RainPipe">
                         <Image Source="/Assets/AddRainPipe.png" Height="24"></Image>
                     </Button>
-                    <Button ToolTip="添加污水管道" Click="Edit_Add_WastePipe_Click">
+                    <Button ToolTip="添加污水管道" Click="Edit_Add_WastePipe_Click" Name="Button_WastePipe">
                         <Image Source="/Assets/AddWastePipe.png" Height="24"></Image>
                     </Button>
                     <Separator></Separator>
-                    <Button ToolTip="删除对象" Click="Edit_Del_Click">
+                    <Button ToolTip="删除对象" Click="Edit_Del_Click" Name="Button_Del">
                         <Image Source="/Assets/Del.png" Height="24"></Image>
                     </Button>
                 </ToolBar>

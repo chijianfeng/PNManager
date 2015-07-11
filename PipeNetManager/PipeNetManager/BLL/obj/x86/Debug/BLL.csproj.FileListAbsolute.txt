@@ -82,3 +82,9 @@ C:\project\PipeNetManager1.4_debug\PipeNetManager\PipeNetManager\bin\Debug\BLL.p
 C:\project\PipeNetManager1.4_debug\PipeNetManager\PipeNetManager\BLL\obj\x86\Debug\BLL.csprojResolveAssemblyReference.cache
 C:\project\PipeNetManager1.4_debug\PipeNetManager\PipeNetManager\BLL\obj\x86\Debug\BLL.exe
 C:\project\PipeNetManager1.4_debug\PipeNetManager\PipeNetManager\BLL\obj\x86\Debug\BLL.pdb
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\bin\Debug\BLL.exe.config
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\bin\Debug\BLL.exe
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\bin\Debug\BLL.pdb
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\BLL\obj\x86\Debug\BLL.csprojResolveAssemblyReference.cache
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\BLL\obj\x86\Debug\BLL.exe
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\BLL\obj\x86\Debug\BLL.pdb

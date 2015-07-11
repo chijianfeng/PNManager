@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PipeNetManager.Login;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,14 +19,32 @@ namespace PipeNetManager.juncMsg
     /// </summary>
     public partial class JuncWindow : Window
     {
+        private BaseContent mBasic;
         public JuncWindow(string name)
         {
             InitializeComponent();
             this.Junc_Name.Text = "\t" + name + "检查井信息";
-            BaseContent basic = new BaseContent(name);
-            this.Stackpanel1.Children.Add(basic);
+            mBasic = new BaseContent(name);
+            this.Stackpanel1.Children.Add(mBasic);
+
+            //check authority
+            bool b = AuthControl.AUTH_ROOT == AuthControl.getInstance().getAuth();
+            Button_Cancle.IsEnabled = b;
+            Button_Save.IsEnabled = b;
         }
 
+        private void Button_Save_Click(object sender, RoutedEventArgs e)
+        {
+            if (mBasic.DoSave())
+            {
+                MessageBox.Show("修改成功");
+                this.Close();
+            }
+        }
 
+        private void Button_Cancle_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

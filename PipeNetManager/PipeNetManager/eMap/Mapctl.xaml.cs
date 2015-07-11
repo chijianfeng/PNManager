@@ -114,7 +114,18 @@ namespace PipeNetManager.eMap
 
 
             this.MapGrid.Children.Add(mWastejunc);
-            listLayer.Add(mWastejunc);            
+            listLayer.Add(mWastejunc);
+
+            //check authority
+            EnableButton(AuthControl.getInstance().getAuth() == AuthControl.AUTH_ROOT);
+        }
+
+        private void EnableButton(bool b) {
+            Button_Del.IsEnabled = b;
+            Button_RainCover.IsEnabled = b;
+            Button_RainPipe.IsEnabled = b;
+            Button_WasteCover.IsEnabled = b;
+            Button_WastePipe.IsEnabled = b;
         }
 
         //message
@@ -187,8 +198,8 @@ namespace PipeNetManager.eMap
                 View_Show_Rainjunc.IsChecked = true;
                 this.MapGrid.Children[index+1].Visibility = Visibility.Visible;
                 listLayer.ElementAt(index).IsHidden = false;
-                RainJuncs junc = listLayer.ElementAt(index) as RainJuncs;
-                junc.Update();
+                RainJuncs mJunc = listLayer.ElementAt(index) as RainJuncs;
+                mJunc.Update();
             }
         }
 
@@ -207,8 +218,8 @@ namespace PipeNetManager.eMap
                 View_Show_Wastejunc.IsChecked = true;
                 this.MapGrid.Children[index+1].Visibility = Visibility.Visible;
                 listLayer.ElementAt(index).IsHidden = false;
-                WasteJuncs junc = listLayer.ElementAt(index) as WasteJuncs;
-                junc.Update();
+                WasteJuncs mJunc = listLayer.ElementAt(index) as WasteJuncs;
+                mJunc.Update();
             }
         }
         //是否显示雨水管道图层

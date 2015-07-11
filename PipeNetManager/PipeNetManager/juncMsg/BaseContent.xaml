@@ -7,7 +7,7 @@
              d:DesignHeight="300" d:DesignWidth="400">
     <Grid>
         <DockPanel>
-            <TextBlock DockPanel.Dock="Top" Text="检查井数据" Margin="0,0,0,8" />
+            <TextBlock DockPanel.Dock="Top" Text="检查井数据" Margin="0,0,0,8" TextAlignment="Center"/>
             <DataGrid Name="JUNCDG" ItemsSource="{Binding}" AutoGenerateColumns="False" >
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="       选项             " Binding="{Binding ItemName}" Width="200"/>

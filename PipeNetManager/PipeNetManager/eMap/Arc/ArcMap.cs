@@ -37,15 +37,15 @@ namespace GIS.Arc
             TJuncInfo juninfo = new TJuncInfo(App._dbpath, App.PassWord);
             List<CJuncInfo> tmplist = juninfo.Sel_JuncInfoByCaty(1);            //仅仅加载雨水检查井
             //进行坐标转换
-            foreach (CJuncInfo junc in tmplist)
+            foreach (CJuncInfo mJunc in tmplist)
             {
-                if (junc.X_Coor == 0)                                           //无座标
+                if (mJunc.X_Coor == 0)                                           //无座标
                     continue;
                 RainCover cover = null;
-                Point p = new Point(junc.X_Coor + 0.0045, junc.Y_Coor - 0.0034);
+                Point p = new Point(mJunc.X_Coor + 0.0045, mJunc.Y_Coor - 0.0034);
 
-                cover = new RainCover(junc.JuncName, GISConverter.WGS842Merator(p), junc.SystemID);
-                cover.juncInfo = junc;
+                cover = new RainCover(mJunc.JuncName, GISConverter.WGS842Merator(p), mJunc.SystemID);
+                cover.juncInfo = mJunc;
                 RainCoverList.Add(cover);
             }
         }
@@ -55,15 +55,15 @@ namespace GIS.Arc
             TJuncInfo juninfo = new TJuncInfo(App._dbpath, App.PassWord);
             List<CJuncInfo> tmplist = juninfo.Sel_JuncInfoByCaty(2);            //仅仅加载污水检查井
             //进行坐标转换
-            foreach (CJuncInfo junc in tmplist)
+            foreach (CJuncInfo mJunc in tmplist)
             {
-                if (junc.X_Coor == 0)                                           //无座标
+                if (mJunc.X_Coor == 0)                                           //无座标
                     continue;
                 WasteCover cover = null;
-                Point p = new Point(junc.X_Coor + 0.0045, junc.Y_Coor - 0.0034);
+                Point p = new Point(mJunc.X_Coor + 0.0045, mJunc.Y_Coor - 0.0034);
 
-                cover = new WasteCover(junc.JuncName, GISConverter.WGS842Merator(p), junc.SystemID);
-                cover.juncInfo = junc;
+                cover = new WasteCover(mJunc.JuncName, GISConverter.WGS842Merator(p), mJunc.SystemID);
+                cover.juncInfo = mJunc;
                 WasterCoverList.Add(cover);
             }
         }
