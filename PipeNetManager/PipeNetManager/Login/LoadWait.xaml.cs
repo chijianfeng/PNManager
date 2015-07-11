@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PipeNetManager.eMap;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -20,9 +21,11 @@ namespace PipeNetManager.Login
     /// </summary>
     public partial class LoadWait : UserControl
     {
+        private Mapctl mMap;
         public LoadWait()
         {
             InitializeComponent();
+            mMap = new Mapctl();
             Dowork();
         }
 
@@ -33,14 +36,23 @@ namespace PipeNetManager.Login
                 backworkthread.ReportProgress(0 ,"正在导入雨水检查井数据，0%");
                 ((App)System.Windows.Application.Current).arcmap = new GIS.Arc.ArcMap();
                 ((App)System.Windows.Application.Current).arcmap.LoadRainCover();
+                mMap.InitRainJuncState();
                 backworkthread.ReportProgress(25 , "正在导入污水检查井数据，25%");
-                 ((App)System.Windows.Application.Current).arcmap.LoadWasterCover();
-                 backworkthread.ReportProgress(50, "正在导入雨水管道数据，50%");
-                 ((App)System.Windows.Application.Current).arcmap.LoadRainPipe();
-                 backworkthread.ReportProgress(75, "正在导入污水管道数据，75%");
-                 ((App)System.Windows.Application.Current).arcmap.LoadWasterPipe();
-                 backworkthread.ReportProgress(99, "导入数据完成...正在初始化，99%");
                 
+                 ((App)System.Windows.Application.Current).arcmap.LoadWasterCover();
+                 mMap.InitWasteJuncState();
+                 backworkthread.ReportProgress(50, "正在导入雨水管道数据，50%");
+
+                 ((App)System.Windows.Application.Current).arcmap.LoadRainPipe();
+                 mMap.InitRainpipeState();
+                 backworkthread.ReportProgress(75, "正在导入污水管道数据，75%");
+
+                 ((App)System.Windows.Application.Current).arcmap.LoadWasterPipe();
+                 mMap.InitWastepipeState();
+                 backworkthread.ReportProgress(85, "导入数据完成，加载背景地图...85%");
+
+                 mMap.InitBackground();
+                 backworkthread.ReportProgress(99, "导入数据完成，正在初始化...99%");
             }
         }
 
@@ -49,7 +61,12 @@ namespace PipeNetManager.Login
             //NavigationCommands.GoToPage.Execute("/eMap/Page_Map.xaml", this);
             App currentApp = (App)Application.Current;
             RoutedEventArgs newEventArgs = new RoutedEventArgs(Button.ClickEvent);
-            newEventArgs.Source = this;
+
+            HintText.Text = "导入数据完成，正在初始化...99%";
+
+            mMap.CreateContent();
+
+            newEventArgs.Source = mMap;
             currentApp.MainWindow.RaiseEvent(newEventArgs);
         }
 

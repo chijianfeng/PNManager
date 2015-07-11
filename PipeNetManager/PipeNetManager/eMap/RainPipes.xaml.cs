@@ -30,11 +30,12 @@ namespace PipeNetManager.eMap
         {
             InitializeComponent();
             rainjunc = rj;                      //检查井与管道绑定
-            InitPipes();                        //加载数据
-            AddPipes();                         //图层中添加管道
+            RainPipeGrid.Margin = new Thickness(0, 0, 0, 0);
+            state = new RainPipeState(this);
+          
         }
 
-        void InitPipes()
+       public void InitPipes()
         {
             if (((App)System.Windows.Application.Current).arcmap == null)                     //数据为空，从数据库中导入数据
             {
@@ -44,11 +45,15 @@ namespace PipeNetManager.eMap
             }
             listRains = ((App)System.Windows.Application.Current).arcmap.RainPipeList;
 
-            RainPipeGrid.Margin = new Thickness(0, 0, 0, 0);
-            state = new RainPipeState(this);
+            StartPipe = new Point[listRains.Count+50];
+            EndPipe = new Point[listRains.Count+50];
 
-            StartPipe = new Point[listRains.Count+500];
-            EndPipe = new Point[listRains.Count+500];
+            addpipes();                         //图层中添加管道
+        }
+
+
+        public void AddPipes() {
+            state.AddRainPipes(listRains, StartPipe, EndPipe);
         }
 
         
@@ -59,24 +64,28 @@ namespace PipeNetManager.eMap
             return info;
         }
         //增加雨水管道
-        void AddPipes()
+        void addpipes()
         {
-            Task.Factory.StartNew((Obj) =>
-            {
-                Parallel.For(0, (int)Obj, i =>          //计算位置
-                {
-                    StartPipe[i].X = (listRains[i].Start.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-                    StartPipe[i].Y = (App.Tiles[0].Y - listRains[i].Start.Location.Y) / App.Tiles[0].Dy;
+            //Task.Factory.StartNew((Obj) =>
+            //{
+            //    Parallel.For(0, (int)Obj, i =>          //计算位置
+            //    {
+            //        StartPipe[i].X = (listRains[i].Start.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
+            //        StartPipe[i].Y = (App.Tiles[0].Y - listRains[i].Start.Location.Y) / App.Tiles[0].Dy;
 
-                    EndPipe[i].X = (listRains[i].End.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-                    EndPipe[i].Y = (App.Tiles[0].Y - listRains[i].End.Location.Y) / App.Tiles[0].Dy;
-                });
+            //        EndPipe[i].X = (listRains[i].End.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
+            //        EndPipe[i].Y = (App.Tiles[0].Y - listRains[i].End.Location.Y) / App.Tiles[0].Dy;
+            //    });
 
-            }, listRains.Count).ContinueWith(ant => {               //添加到图层中
+            //}, listRains.Count).ContinueWith(ant => {               //添加到图层中
+            //}, TaskScheduler.FromCurrentSynchronizationContext());
+            for (int i = 0; i < listRains.Count; i++) {
+                StartPipe[i].X = (listRains[i].Start.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
+                StartPipe[i].Y = (App.Tiles[0].Y - listRains[i].Start.Location.Y) / App.Tiles[0].Dy;
 
-                state.AddRainPipes(listRains, StartPipe, EndPipe);
-
-            }, TaskScheduler.FromCurrentSynchronizationContext());
+                EndPipe[i].X = (listRains[i].End.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
+                EndPipe[i].Y = (App.Tiles[0].Y - listRains[i].End.Location.Y) / App.Tiles[0].Dy;
+            }
         }
 
         public void AddRainPipe(RainPipe pipe)

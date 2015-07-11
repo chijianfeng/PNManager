@@ -30,11 +30,11 @@ namespace PipeNetManager.eMap
         public WasteJuncs()
         {
             InitializeComponent();
-            InitWasteJuncs();               //初始化
-            AddJuncs();                     //添加污水井
+            WasteGrid.Margin = new Thickness(-0, -0, 0, 0);
+            state = new WasteJuncState(this);
         }
 
-        private void InitWasteJuncs()
+        public void InitWasteJuncs()
         {
             if (((App)System.Windows.Application.Current).arcmap == null)
             {
@@ -47,27 +47,33 @@ namespace PipeNetManager.eMap
             {
                 listWaste = ((App)System.Windows.Application.Current).arcmap.WasterCoverList;
             }
-            WasteGrid.Margin = new Thickness(-0, -0, 0, 0);
-            state = new WasteJuncState(this);
-
             //将点坐标进行保存
             Wastepx = new float[listWaste.Count];
             Wastepy = new float[listWaste.Count];
+
+            addjuncs();                     //添加污水井
         }
 
-        private  void AddJuncs()
+        private  void addjuncs()
         {
-            Task.Factory.StartNew<int>((Obj) =>
-           {
-               Parallel.For(0, (int)Obj, i =>              //并行计算
-               {
-                   Wastepx[i] = (float)((listWaste[i].Location.X - App.Tiles[0].X) / App.Tiles[0].Dx);
-                   Wastepy[i] = (float)((App.Tiles[0].Y - listWaste[i].Location.Y) / App.Tiles[0].Dy);
-               });
-               return 0;
-           }, listWaste.Count).ContinueWith(ant => {
-               state.AddWasteJunc(listWaste, Wastepx, Wastepy);
-           }, TaskScheduler.FromCurrentSynchronizationContext());
+           // Task.Factory.StartNew<int>((Obj) =>
+           //{
+           //    Parallel.For(0, (int)Obj, i =>              //并行计算
+           //    {
+           //        Wastepx[i] = (float)((listWaste[i].Location.X - App.Tiles[0].X) / App.Tiles[0].Dx);
+           //        Wastepy[i] = (float)((App.Tiles[0].Y - listWaste[i].Location.Y) / App.Tiles[0].Dy);
+           //    });
+           //    return 0;
+           //}, listWaste.Count).ContinueWith(ant => {
+           //}, TaskScheduler.FromCurrentSynchronizationContext());
+            for (int i = 0; i < listWaste.Count; i++) {
+                Wastepx[i] = (float)((listWaste[i].Location.X - App.Tiles[0].X) / App.Tiles[0].Dx);
+                Wastepy[i] = (float)((App.Tiles[0].Y - listWaste[i].Location.Y) / App.Tiles[0].Dy);
+            }
+        }
+
+        public void AddJuncs() {
+            state.AddWasteJunc(listWaste, Wastepx, Wastepy);
         }
 
         public void AddWasteJunc(WasteCover wc)

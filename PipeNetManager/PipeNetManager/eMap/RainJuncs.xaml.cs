@@ -31,12 +31,12 @@ namespace PipeNetManager.eMap
         public RainJuncs()
         {
             InitializeComponent();
-            InitRainJuncs();
-            AddJuncs();
+            RainGrid.Margin = new Thickness(-0, -0, 0, 0);                          //初始化相对位置
+            state = new RainJuncState(this);
         }
 
         //初始化相关变量---》》》》》》》》》》进行坐标转换加速
-        private void InitRainJuncs()
+        public void InitRainJuncs()
         {
 
             if (((App)System.Windows.Application.Current).arcmap == null)
@@ -50,27 +50,36 @@ namespace PipeNetManager.eMap
             {
                 listRains = ((App)System.Windows.Application.Current).arcmap.RainCoverList;
             }
-            RainGrid.Margin = new Thickness(-0, -0, 0, 0);                          //初始化相对位置
-            state = new RainJuncState(this);
-            
+           
             //将点坐标进行保存
-            Rainpx = new float[listRains.Count+500];
-            Rainpy = new float[listRains.Count+500];
+            Rainpx = new float[listRains.Count+50];
+            Rainpy = new float[listRains.Count+50];
+            addjuncs();
         }
 
         //向图层添加检查井
-        private void AddJuncs()
+        private void addjuncs()
         {
-            Task.Factory.StartNew((Obj) =>
+            //Task.Factory.StartNew((Obj) =>
+            //{
+            //    Parallel.For(0, (int)Obj, i =>              //并行计算
+            //    {
+            //        Rainpx[i] = (float)((listRains[i].Location.X - App.Tiles[0].X) / App.Tiles[0].Dx);
+            //        Rainpy[i] = (float)((App.Tiles[0].Y - listRains[i].Location.Y) / App.Tiles[0].Dy);
+            //    });
+            //}, listRains.Count).ContinueWith(ant =>
+            //{
+
+            //}, TaskScheduler.FromCurrentSynchronizationContext());
+            for (int i = 0; i < listRains.Count;i++ )
             {
-                Parallel.For(0, (int)Obj, i =>              //并行计算
-                {
-                    Rainpx[i] = (float)((listRains[i].Location.X - App.Tiles[0].X) / App.Tiles[0].Dx);
-                    Rainpy[i] = (float)((App.Tiles[0].Y - listRains[i].Location.Y) / App.Tiles[0].Dy);
-                });
-            }, listRains.Count).ContinueWith(ant => {
-                state.AddRainJunc(listRains, Rainpx, Rainpy);
-            }, TaskScheduler.FromCurrentSynchronizationContext());
+                Rainpx[i] = (float)((listRains[i].Location.X - App.Tiles[0].X) / App.Tiles[0].Dx);
+                Rainpy[i] = (float)((App.Tiles[0].Y - listRains[i].Location.Y) / App.Tiles[0].Dy);
+            }
+        }
+
+        public void AddJuncs() { 
+            state.AddRainJunc(listRains, Rainpx, Rainpy);
         }
 
         public void AddJunc(RainCover c)           //添加雨水检查井

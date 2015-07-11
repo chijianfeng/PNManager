@@ -169,7 +169,7 @@
 
                 </ToolBar>
             </ToolBarTray>
-            <TextBlock Width="600" Name="TextState" FontSize="18" Text="show state" VerticalAlignment="Center" 
+            <TextBlock Width="1200" Name="TextState" FontSize="18" Text="show state" VerticalAlignment="Center" 
                        TextAlignment="Center" Background="White"  Foreground="#ffbe4d4d"></TextBlock>
         </StackPanel>
         <StackPanel  Grid.Column="0" Grid.Row="2">

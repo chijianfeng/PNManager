@@ -25,44 +25,96 @@ namespace PipeNetManager.eMap
     /// </summary>
     public partial class Mapctl : UserControl
     {
+        private RainJuncs mRainjunc;
+        private WasteJuncs mWastejunc;
+        private RainPipes mRainpipe;
+        private WastePipes mWastepipe;
+        private MapBackground mBackground;
         public Mapctl()
         {
             InitializeComponent();
             TextState.Loaded += new RoutedEventHandler(textLoaded);
-            AddContent();
+            mBackground = new MapBackground();                     //创建地图背景图层
+            mRainjunc = new RainJuncs();
+            mWastejunc = new WasteJuncs();
+            mRainpipe = new RainPipes(mRainjunc);
+            mWastepipe = new WastePipes(mWastejunc);
+        }
+
+        //初始化数据
+        public void InitBackground() {
+
+            if (mBackground != null) {
+                mBackground.InitBackGroundMapGrid();
+            }
+        }
+
+        public void InitRainJuncState()
+        {
+            if (mRainjunc != null) {
+                mRainjunc.InitRainJuncs();
+            }
+        }
+
+        public void InitWasteJuncState()
+        {
+            if (mWastejunc != null) {
+                mWastejunc.InitWasteJuncs();
+            }
+        }
+
+        public void InitRainpipeState()
+        {
+            if (mRainpipe != null) {
+                mRainpipe.InitPipes();
+            }
+        }
+
+        public void InitWastepipeState() {
+            if (mWastepipe != null) {
+                mWastepipe.InitPipes();
+            }
+        }
+
+        //创建实际的图层内容
+        public void CreateContent() {
+            mBackground.CreateContent();
+            mRainjunc.AddJuncs();
+            mRainpipe.AddPipes();
+            mWastejunc.AddJuncs();
+            mWastepipe.AddPipes();
         }
 
         private void textLoaded(object sender, RoutedEventArgs e)
         {
-            TextState.Text = "当前用户：" + AuthControl.getInstance().UserName + "         " + AuthControl.getInstance().getLoginTime();
+            TextState.Text = "丽水城南水阁区块排水管网健康查询系统      当前用户：" + AuthControl.getInstance().UserName 
+                                + "         " + AuthControl.getInstance().getLoginTime();
             TextState.TextAlignment = TextAlignment.Center;
+            AddContent();
         }
 
         private List<BaseControl> listLayer = new List<BaseControl>();          //创建图层集合
         private void AddContent()
         {
-            MapBackground background = new MapBackground();                     //创建地图背景图层
             this.MapGrid.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
             this.MapGrid.VerticalAlignment = System.Windows.VerticalAlignment.Top;
-            this.MapGrid.Children.Add(background);
-            listLayer.Add(background);                                          //保存到图层中，便于管理
-            RainJuncs rainjuncs = new RainJuncs();
-            RainPipes rainpipes = new RainPipes(rainjuncs);                     //添加雨水管道图层
-            this.MapGrid.Children.Add(rainpipes);
-            listLayer.Add(rainpipes);
+            this.MapGrid.Children.Add(mBackground);
+            listLayer.Add(mBackground);                                          //保存到图层中，便于管理
 
-            WasteJuncs wastejuncs = new WasteJuncs();                           //添加污水检查井图层
-            WastePipes wastepipes = new WastePipes(wastejuncs);                 //添加污水管道图层
-            this.MapGrid.Children.Add(wastepipes);
-            listLayer.Add(wastepipes);
+            this.MapGrid.Children.Add(mRainpipe);                                //添加雨水管道图层
+            listLayer.Add(mRainpipe);
 
 
-            this.MapGrid.Children.Add(rainjuncs);                               //添加雨水检查井图层
-            listLayer.Add(rainjuncs);
+            this.MapGrid.Children.Add(mWastepipe);                              //添加污水管道图层
+            listLayer.Add(mWastepipe);
 
 
-            this.MapGrid.Children.Add(wastejuncs);
-            listLayer.Add(wastejuncs);            
+            this.MapGrid.Children.Add(mRainjunc);                               //添加雨水检查井图层
+            listLayer.Add(mRainjunc);
+
+
+            this.MapGrid.Children.Add(mWastejunc);
+            listLayer.Add(mWastejunc);            
         }
 
         //message

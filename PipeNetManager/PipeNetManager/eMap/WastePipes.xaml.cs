@@ -27,14 +27,14 @@ namespace PipeNetManager.eMap
     {
         public WastePipes(WasteJuncs wj)
         {
-           
             InitializeComponent(); 
             wastejunc = wj;
-            InitPipes();
-            AddPipes();
+            WastePipeGrid.Margin = new Thickness(0, 0, 0, 0);
+            state = new WastePipeState(this);
+            
         }
 
-        void InitPipes()
+        public void InitPipes()
         {
             if (((App)System.Windows.Application.Current).arcmap == null)                     //数据为空，从数据库中导入数据
             {
@@ -43,11 +43,10 @@ namespace PipeNetManager.eMap
                 map.LoadWasterPipe();
             }
             listWastes = ((App)System.Windows.Application.Current).arcmap.WastePipeList;
-            WastePipeGrid.Margin = new Thickness(0, 0, 0, 0);
-            state = new WastePipeState(this);
 
-            StartPipe = new Point[listWastes.Count+500];
-            EndPipe = new Point[listWastes.Count+500];
+            StartPipe = new Point[listWastes.Count+50];
+            EndPipe = new Point[listWastes.Count+50];
+            addpipes();
         }
 
        
@@ -60,27 +59,39 @@ namespace PipeNetManager.eMap
         }
 
         //增加污水管道
-        void AddPipes()
+        void addpipes()
         {
-            Task.Factory.StartNew((Obj) =>
+            //Task.Factory.StartNew((Obj) =>
+            //{
+
+            //    Parallel.For(0, (int)Obj, i =>          //计算位置
+            //    {
+            //        StartPipe[i].X = (listWastes[i].Start.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
+            //        StartPipe[i].Y = (App.Tiles[0].Y - listWastes[i].Start.Location.Y) / App.Tiles[0].Dy;
+
+            //        EndPipe[i].X = (listWastes[i].End.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
+            //        EndPipe[i].Y = (App.Tiles[0].Y - listWastes[i].End.Location.Y) / App.Tiles[0].Dy;
+            //    });
+
+            //}, listWastes.Count).ContinueWith(ant =>
+            //{               //添加到图层中
+            //}, TaskScheduler.FromCurrentSynchronizationContext());
+
+            for (int i = 0; i < listWastes.Count; i++)
             {
+                StartPipe[i].X = (listWastes[i].Start.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
+                StartPipe[i].Y = (App.Tiles[0].Y - listWastes[i].Start.Location.Y) / App.Tiles[0].Dy;
 
-                Parallel.For(0, (int)Obj, i =>          //计算位置
-                {
-                    StartPipe[i].X = (listWastes[i].Start.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-                    StartPipe[i].Y = (App.Tiles[0].Y - listWastes[i].Start.Location.Y) / App.Tiles[0].Dy;
-
-                    EndPipe[i].X = (listWastes[i].End.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-                    EndPipe[i].Y = (App.Tiles[0].Y - listWastes[i].End.Location.Y) / App.Tiles[0].Dy;
-                });
-
-            }, listWastes.Count).ContinueWith(ant =>
-            {               //添加到图层中
-
-                state.AddWastePipes(listWastes, StartPipe, EndPipe);
-
-            }, TaskScheduler.FromCurrentSynchronizationContext());
+                EndPipe[i].X = (listWastes[i].End.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
+                EndPipe[i].Y = (App.Tiles[0].Y - listWastes[i].End.Location.Y) / App.Tiles[0].Dy;
+            }
         }
+
+        
+        public void AddPipes() {
+            state.AddWastePipes(listWastes, StartPipe, EndPipe);
+        }
+
         public void AddWastePipe(WastePipe pipe)
         {
             listWastes.Add(pipe);

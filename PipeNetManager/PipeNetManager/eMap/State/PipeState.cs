@@ -91,7 +91,7 @@ namespace PipeNetManager.eMap.State
         /// <param name="path"></param>
         public bool DelPipe(Path path)
         {
-             if (path == null) return false;
+            if (path == null) return false;
 
             path.Stroke = colorCenter.Selected_Border_Color;
             string msg = "是否删除选中对象?";
@@ -102,15 +102,6 @@ namespace PipeNetManager.eMap.State
             MessageBox.Show(msg, title, buttons, icon);
             if (result == MessageBoxResult.Yes)
             {
-
-                /*object obj = path.ToolTip;
-                Pipe p = obj as Pipe;
-                if (p == null) return false;
-                PipeRev piperev = new PipeRev();
-                piperev.ListPipe = new List<DBCtrl.DBClass.CPipeInfo>();
-                piperev.ListPipe.Add(p.pipeInfo);*/
-                //dcmd.SetReceiver(piperev);
-                //dcmd.Execute();
                 context.Children.Remove(path);
                 return true;
             }
@@ -198,7 +189,7 @@ namespace PipeNetManager.eMap.State
         protected bool IsDrawLine = false;              //是否划线
         protected Cover c1, c2;
         protected Point p1, p2;
-        protected double HeadWidth = App.StrokeThinkness*2;
+        protected double HeadWidth = App.StrokeThinkness;
         protected double HeadHeight = App.StrokeThinkness;
     }
 }

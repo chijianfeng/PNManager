@@ -47,11 +47,11 @@ namespace PipeNetManager
                 this.stackpanl.Children.Clear();
                 this.stackpanl.Children.Add(wait);
             }
-            else if (e.OriginalSource.ToString().Equals("PipeNetManager.Login.LoadWait"))
+            else if (e.OriginalSource.ToString().Equals("PipeNetManager.eMap.Mapctl"))
             {
                 this.Grid1.Children.Remove(textBlock1);     //移除textblock
 
-                Mapctl eMap = new Mapctl();
+                Mapctl eMap = e.OriginalSource as Mapctl;
                 this.Grid1.Children.Remove(textBlock1);     //移除textblock
                 this.stackpanl.Children.Clear();
                 this.stackpanl.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
