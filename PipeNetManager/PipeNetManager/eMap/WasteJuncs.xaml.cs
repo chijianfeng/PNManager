@@ -184,7 +184,7 @@ namespace PipeNetManager.eMap
             }
            if (IsZoomOut)
            {
-              if (App.Cur_Level_Index < 1||IsHidden)
+              if (App.Cur_Level_Index < 0||IsHidden)
                     return;
               UpdateWasteJuncs();
               return;

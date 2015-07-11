@@ -98,14 +98,6 @@ namespace PipeNetManager.eMap.State
             MessageBox.Show(msg, title, buttons, icon);
             if (result == MessageBoxResult.Yes)
             {
-                /*object obj = path.ToolTip;
-                Cover c = obj as Cover;
-                if (c == null) return false;
-                JuncRev jrev = new JuncRev();
-                jrev.ListJunc = new List<DBCtrl.DBClass.CJuncInfo>();
-                jrev.ListJunc.Add(c.juncInfo);
-                //dcmd.SetReceiver(jrev);
-                //dcmd.Execute();*/
                 context.Children.Remove(path);
                 return true;
             }

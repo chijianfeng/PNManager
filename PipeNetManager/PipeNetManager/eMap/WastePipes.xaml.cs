@@ -178,7 +178,7 @@ namespace PipeNetManager.eMap
             }
             if (IsZoomOut)                                   //缩小操作
             {
-                if (App.Cur_Level_Index > App.TotalLevels||IsHidden)
+                if (App.Cur_Level_Index < 0||IsHidden)
                     return;
                 
                 UpdatePipes();
