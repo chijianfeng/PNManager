@@ -24,7 +24,7 @@ namespace PipeNetManager.pipeMsg
             if (pipename == null || pipename.Length <= 0) return;
             this.Title = pipename + "管道信息";
 
-            BaseInfoControl infopage = new BaseInfoControl(pipename);
+            BaseInfoControl infopage = new BaseInfoControl(pipename , new Notify(this));
             this.basicmsgpanel.Children.Add(infopage);
 
             PicControl picpage = new PicControl(pipename);
@@ -35,5 +35,23 @@ namespace PipeNetManager.pipeMsg
             VideoControl videopage = new VideoControl(pipename);
             this.videopanel.Children.Add(videopage);
         }
+
+        public class Notify : Callback
+        {
+            private PipeWindow mWnd;
+            public Notify(PipeWindow wnd)
+            {
+                mWnd = wnd;
+            }
+            public void CloseWindow()
+            {
+                mWnd.Close();
+            }
+        }
+        
+    }
+    public interface Callback
+    {
+         void CloseWindow();
     }
 }

@@ -118,6 +118,7 @@ namespace PipeNetManager.eMap
 
             //check authority
             EnableButton(AuthControl.getInstance().getAuth() == AuthControl.AUTH_ROOT);
+
         }
 
         private void EnableButton(bool b) {

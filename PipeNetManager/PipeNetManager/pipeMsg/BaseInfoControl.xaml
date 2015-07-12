@@ -7,9 +7,9 @@
              d:DesignHeight="431" d:DesignWidth="542">
     <Grid>
         <Button Content="管道基本数据" HorizontalAlignment="Left" Margin="0,24,0,0" VerticalAlignment="Top" Width="96" 
-                Background="#7FFAFAFA" Click="BaseInfo" FontSize="10"/>
-        <Button Content="管道内窥数据" HorizontalAlignment="Left" Margin="0,54,0,0" VerticalAlignment="Top" Width="96" 
-                Background="#7FFAFAFA" Click="USInfo"  FontSize="10"/>
+                Background="#7FFAFAFA" Click="BaseInfo" FontSize="12" Height="31"/>
+        <Button Content="管道内窥数据" HorizontalAlignment="Left" Margin="0,59,0,0" VerticalAlignment="Top" Width="96" 
+                Background="#7FFAFAFA" Click="USInfo"  FontSize="12" Height="31" RenderTransformOrigin="0.5,1.065"/>
         <GridSplitter HorizontalAlignment="Left" Height="411" Margin="96,10,0,0" VerticalAlignment="Top" Width="3"/>
         <ScrollViewer x:Name="scrolls" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="104,10,0,15.667">
             <ScrollViewer.Content>
@@ -17,5 +17,7 @@
                             Orientation="Horizontal" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
             </ScrollViewer.Content>
         </ScrollViewer>
+        <Button Content="保存" HorizontalAlignment="Left" Margin="0,344,0,0" VerticalAlignment="Top" Width="96" Height="36" Name ="Button_Save" Click="Button_Save_Click"/>
+        <Button Content="取消" HorizontalAlignment="Left" Margin="0,385,0,0" VerticalAlignment="Top" Width="96" Height="36" Name="Button_Cancel" Click="Button_Cancel_Click"/>
     </Grid>
 </UserControl>
