@@ -81,7 +81,10 @@ namespace PipeNetManager.pipeMsg
 
         private void Button_Cancel_Click(object sender, RoutedEventArgs e)
         {
-            
+            if (mCB != null)
+            {
+                mCB.CloseWindow();
+            }
         }
     }
 }

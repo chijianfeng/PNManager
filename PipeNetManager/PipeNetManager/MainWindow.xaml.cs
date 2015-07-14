@@ -1,5 +1,6 @@
 ﻿using PipeNetManager.eMap;
 using PipeNetManager.Login;
+using PipeNetManager.utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,8 @@ namespace PipeNetManager
             LoginWnd loginwnd = new LoginWnd();
             this.stackpanl.Children.Add(loginwnd);
             this.AddHandler(Button.ClickEvent, new RoutedEventHandler(PageChange));
+
+            AnimationUtil.ScaleEasingAnimation(loginwnd);
         }
 
         void PageChange(object sender, RoutedEventArgs e)

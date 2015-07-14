@@ -1,4 +1,5 @@
 ﻿using PipeNetManager.Login;
+using PipeNetManager.utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,8 @@ namespace PipeNetManager.juncMsg
             bool b = AuthControl.AUTH_ROOT == AuthControl.getInstance().getAuth();
             Button_Cancle.IsEnabled = b;
             Button_Save.IsEnabled = b;
+
+            AnimationUtil.ScaleEasingAnimation(this);
         }
 
         private void Button_Save_Click(object sender, RoutedEventArgs e)

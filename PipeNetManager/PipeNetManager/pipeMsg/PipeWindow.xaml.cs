@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PipeNetManager.utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,6 +35,8 @@ namespace PipeNetManager.pipeMsg
             this.reportpanel.Children.Add(reportpage);
             VideoControl videopage = new VideoControl(pipename);
             this.videopanel.Children.Add(videopage);
+
+            AnimationUtil.ScaleEasingAnimation(this);
         }
 
         public class Notify : Callback

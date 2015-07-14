@@ -32,13 +32,14 @@ namespace PipeNetManager.eMap.State
                 index++;
             }
         }
+
         
         /// <summary>
         /// 响应鼠标按下事件
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public new  void OnMouseDown(object sender, MouseButtonEventArgs e)
+        public void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             if(CurrentMode==ADDMODE)
             {

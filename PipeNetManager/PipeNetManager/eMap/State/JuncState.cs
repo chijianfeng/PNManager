@@ -55,12 +55,13 @@ namespace PipeNetManager.eMap.State
             Path path = new Path();
             path.Fill = cover.GetColorBrush();
             path.Stroke = colorCenter.UnSelected_Border_Color;
-            EllipseGeometry eg = new EllipseGeometry();
+            EllipseGeometry eg = new EllipseGeometry();            
             eg.Center = cp;
             eg.RadiusX = App.StrokeThinkness;
             eg.RadiusY = App.StrokeThinkness;
             path.Data = eg;
             path.ToolTip = cover;
+            
             context.Children.Add(path);
             listpath.Add(path);
         }
