@@ -22,7 +22,7 @@
                 <MenuItem Header="文件">
                     <MenuItem Header="打开文件"></MenuItem>
                     <MenuItem Header="导入数据">
-                        <MenuItem Header="Excel"></MenuItem>
+                        <MenuItem Header="Excel" Click="Menu_LoadData_Click"></MenuItem>
                     </MenuItem>
                     <MenuItem Header="导出数据">
                         <MenuItem Header="JPG"></MenuItem>

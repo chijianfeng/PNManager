@@ -133,8 +133,6 @@ C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\PipeNetManag
 C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\PipeNetManager.pdb
 C:\project\master\PNManager\PipeNetManager\PipeNetManager\bin\Debug\PipeNetManager.exe
 C:\project\master\PNManager\PipeNetManager\PipeNetManager\bin\Debug\PipeNetManager.pdb
-C:\project\master\PNManager\PipeNetManager\PipeNetManager\bin\Debug\BLL.pdb
-C:\project\master\PNManager\PipeNetManager\PipeNetManager\bin\Debug\DBCtrl.pdb
 C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\PipeNetManager.csprojResolveAssemblyReference.cache
 C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\juncMsg\BaseContent.baml
 C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\juncMsg\JuncWindow.baml
@@ -181,3 +179,8 @@ C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\Login\LoadWa
 C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\Login\LoginWnd.g.cs
 C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\utils\WaitUserControl.baml
 C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\utils\WaitUserControl.g.cs
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\bin\Debug\BLL.pdb
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\bin\Debug\DBCtrl.pdb
+C:\project\master\PNManager\PipeNetManager\Debug\PipeNetManager.exe.config
+C:\project\master\PNManager\PipeNetManager\Debug\PipeNetManager.exe
+C:\project\master\PNManager\PipeNetManager\Debug\PipeNetManager.pdb

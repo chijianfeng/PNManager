@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "PipeNetManager\BLL\BLL.csproj", "{428E8B8E-484C-4B18-9D7C-5D0F2011898B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBCtrl", "PipeNetManager\DBCtrl\DBCtrl.csproj", "{475FC15C-C770-4199-940C-0E434980EE0F}"
@@ -10,6 +8,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipeNetManager", "PipeNetManager\PipeNetManager.csproj", "{86D0996F-C9F4-4C48-ACE5-34B661D01848}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipeManagerLib", "PipeManagerLib\PipeManagerLib.csproj", "{1D46A078-6E69-4443-A57B-68B93F4754A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelLoader", "ExcelLoader\ExcelLoader.csproj", "{39CCCD43-D224-470E-A44A-15A081E05FA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +75,18 @@ Global
 		{1D46A078-6E69-4443-A57B-68B93F4754A9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1D46A078-6E69-4443-A57B-68B93F4754A9}.Release|Win32.ActiveCfg = Release|Any CPU
 		{1D46A078-6E69-4443-A57B-68B93F4754A9}.Release|x86.ActiveCfg = Release|Any CPU
+		{39CCCD43-D224-470E-A44A-15A081E05FA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39CCCD43-D224-470E-A44A-15A081E05FA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39CCCD43-D224-470E-A44A-15A081E05FA5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{39CCCD43-D224-470E-A44A-15A081E05FA5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{39CCCD43-D224-470E-A44A-15A081E05FA5}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{39CCCD43-D224-470E-A44A-15A081E05FA5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{39CCCD43-D224-470E-A44A-15A081E05FA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39CCCD43-D224-470E-A44A-15A081E05FA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39CCCD43-D224-470E-A44A-15A081E05FA5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{39CCCD43-D224-470E-A44A-15A081E05FA5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{39CCCD43-D224-470E-A44A-15A081E05FA5}.Release|Win32.ActiveCfg = Release|Any CPU
+		{39CCCD43-D224-470E-A44A-15A081E05FA5}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

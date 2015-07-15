@@ -17,7 +17,7 @@ using System.Windows.Shapes;
 
 namespace PipeNetManager.eMap.State
 {
-    class PipeState:IState
+    class PipeState : IState
     {
         public PipeState(Canvas canvas) : base(canvas) { }
 
@@ -43,7 +43,9 @@ namespace PipeNetManager.eMap.State
             }
             else
                 SelectPath = null;
+
         }
+
         /// <summary>
         /// 增加管道
         /// </summary>
@@ -82,7 +84,7 @@ namespace PipeNetManager.eMap.State
                 {
                     InternalDrawArrowGeometry(context, sps[i], eps[i]);
                 }
-                listpath[i].StrokeThickness = App.StrokeThinkness*2/3;
+                listpath[i].StrokeThickness = App.StrokeThinkness * 2 / 3;
             }
         }
 
@@ -123,7 +125,7 @@ namespace PipeNetManager.eMap.State
         {
             Path path = e.Source as Path;
             if (path == null)
-                return;  
+                return;
 
             SelectShape(path);
             object obj = path.ToolTip;
@@ -146,33 +148,33 @@ namespace PipeNetManager.eMap.State
         /// <param name="e"></param>
         public override void OnMouseMove(object sender, MouseEventArgs e)
         {
-            
+
         }
 
-        protected Geometry DrawPipe(Point sp , Point ep)
+        protected Geometry DrawPipe(Point sp, Point ep)
         {
             StreamGeometry geometry = new StreamGeometry();
             geometry.FillRule = FillRule.EvenOdd;
 
             using (StreamGeometryContext context = geometry.Open())
             {
-                InternalDrawArrowGeometry(context , sp , ep);
+                InternalDrawArrowGeometry(context, sp, ep);
             }
 
             return geometry;
         }
 
-        private void InternalDrawArrowGeometry(StreamGeometryContext context , Point sp , Point ep)
+        private void InternalDrawArrowGeometry(StreamGeometryContext context, Point sp, Point ep)
         {
-            double theta = Math.Atan2(sp.Y-ep.Y , sp.X-ep.X);
+            double theta = Math.Atan2(sp.Y - ep.Y, sp.X - ep.X);
             double sint = Math.Sin(theta);
             double cost = Math.Cos(theta);
 
-            Point pm = new Point((sp.X+ep.X)/2 ,  (sp.Y + ep.Y) / 2 );
+            Point pm = new Point((sp.X + ep.X) / 2, (sp.Y + ep.Y) / 2);
 
             Point pt3 = new Point(
                 pm.X + (HeadWidth * cost - HeadHeight * sint),
-                pm.Y+ (HeadWidth * sint + HeadHeight * cost));
+                pm.Y + (HeadWidth * sint + HeadHeight * cost));
 
             Point pt4 = new Point(
                  pm.X + (HeadWidth * cost + HeadHeight * sint),

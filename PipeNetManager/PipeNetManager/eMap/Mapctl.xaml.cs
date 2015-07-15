@@ -17,6 +17,7 @@ using System.Windows.Resources;
 using GIS.Map;
 using PipeMessage.eMap;
 using PipeNetManager.Login;
+using System.IO;
 
 namespace PipeNetManager.eMap
 {
@@ -422,6 +423,25 @@ namespace PipeNetManager.eMap
             View_Move.IsChecked = false;                                      //其他状态变为不可用
             View_ZoomOut.IsChecked = false;
             View_ZoomIn.IsChecked = false;
+        }
+
+        /// <summary>
+        /// 调起导入数据window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Menu_LoadData_Click(object sender, RoutedEventArgs e)
+        {
+            string loadpath = "/ExcelLoader.exe";
+            if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + loadpath))
+            {
+                System.Diagnostics.Process.Start(AppDomain.CurrentDomain.BaseDirectory + loadpath);
+            }
+            else
+            {
+                MessageBox.Show("无法启动导入数据程序");
+            }
+           
         }
     }
 }
