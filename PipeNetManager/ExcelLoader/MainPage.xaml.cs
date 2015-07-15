@@ -83,7 +83,7 @@ namespace ExcelLoader
         {
             loadprogress.Visibility = Visibility.Hidden;
             Loadbutton.IsEnabled = true;
-            MessageBox.Show("导入数据成功", "错误消息");
+            MessageBox.Show("导入数据成功", "消息");
             return;
         }
         private void sheetcmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -103,20 +103,29 @@ namespace ExcelLoader
         private Sheetlist sheetlist = new Sheetlist();
         private SheetInfo selectsheet = null;
         private ExcelReader reader;
-        private int DataType = 0;
+        private _DataType DataType = 0;
         private void RadioButton_Click(object sender, RoutedEventArgs e)
         {
-            DataType = 1;
+            DataType = _DataType.TYPE_JUNCINFO;
         }
 
         private void RadioButton_Click_1(object sender, RoutedEventArgs e)
         {
-            DataType = 2;
+            DataType = _DataType.TYPE_PIPEINFO;
         }
 
         private void RadioButton_Click_2(object sender, RoutedEventArgs e)
         {
-            DataType = 3;
+            DataType = _DataType.TYPE_USINFO;
         }
+    }
+    enum _DataType
+    {
+        //检查井类型
+        TYPE_JUNCINFO = 1,
+        //管道类型
+        TYPE_PIPEINFO = 2,
+        //内窥类型
+        TYPE_USINFO = 3
     }
 }

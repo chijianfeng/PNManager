@@ -8,6 +8,7 @@ using ExcelOper.Data;
 using BLL.Command;
 using BLL.Receiver;
 using DBCtrl.DBClass;
+using ExcelLoader;
 
 namespace ExcelOper
 {
@@ -20,15 +21,15 @@ namespace ExcelOper
 
         public string Sr;       //start position
         public string Er;       //end position
-        public int DataType;    //the Different Excel Type
+        public _DataType DataType;    //the Different Excel Type
 
         public  void LoadtoDB()
         {
-            if (DataType == 1)
+            if (DataType == _DataType.TYPE_JUNCINFO)
                 LoadJuncData();
-            if (DataType == 2)
+            if (DataType == _DataType.TYPE_PIPEINFO)
                 LoadPipeData();
-            if (DataType == 3)
+            if (DataType == _DataType.TYPE_USINFO)
                 LoadUSData();
         }
 
