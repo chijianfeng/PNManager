@@ -149,6 +149,10 @@ namespace PipeNetManager.eMap
             VIew_Orignal.IsChecked = false;
             View_Select.IsChecked = false;
             View_Move.IsChecked = true;
+            for (int i = 0; i < listLayer.Count; i++)
+            {
+                listLayer.ElementAt(i).SetOperationMode(IState.SELECTMODE);   //进入选择状态
+            }
         }
 
         private void OnSelect(object sender, RoutedEventArgs e)
@@ -159,6 +163,10 @@ namespace PipeNetManager.eMap
             VIew_Orignal.IsChecked = false;
             View_Move.IsChecked = false;
             View_Select.IsChecked = true;
+            for (int i = 0; i < listLayer.Count; i++)
+            {
+                listLayer.ElementAt(i).SetOperationMode(IState.SELECTMODE);   //进入选择状态
+            }
         }
         //放大操作
         private void OnZoomIn(object sender, RoutedEventArgs e)
@@ -170,6 +178,10 @@ namespace PipeNetManager.eMap
             VIew_Orignal.IsChecked = false;
             View_Select.IsChecked = false;
             View_ZoomIn.IsChecked = true;
+            for (int i = 0; i < listLayer.Count; i++)
+            {
+                listLayer.ElementAt(i).SetOperationMode(IState.SELECTMODE);   //进入选择状态
+            }
         }
 
         //缩小操作
@@ -183,6 +195,10 @@ namespace PipeNetManager.eMap
             VIew_Orignal.IsChecked = false;
             View_Select.IsChecked = false;
             View_ZoomOut.IsChecked = true;
+            for (int i = 0; i < listLayer.Count; i++)
+            {
+                listLayer.ElementAt(i).SetOperationMode(IState.SELECTMODE);   //进入选择状态
+            }
         }
 
         //是否显示雨水检查井
@@ -415,10 +431,10 @@ namespace PipeNetManager.eMap
         /// <param name="e"></param>
         private void Edit_Del_Click(object sender, RoutedEventArgs e)
         {
-            MapGrid.Cursor = CreateCur("/Assets/Del.cur");                    //表示添加状态
+            MapGrid.Cursor = CreateCur("/Assets/Del.cur");                    //表示delete状态
             for (int i = 0; i < listLayer.Count; i++)
             {
-                listLayer.ElementAt(i).SetOperationMode(IState.DELMODE);   //进入选择状态
+                listLayer.ElementAt(i).SetOperationMode(IState.DELMODE);      //进入选择状态
             }
             View_Move.IsChecked = false;                                      //其他状态变为不可用
             View_ZoomOut.IsChecked = false;

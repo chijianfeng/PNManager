@@ -53,7 +53,7 @@ namespace GIS.Arc
             for(int i=0;i<=4;i++)
             {
                 Rain_Defect_Pipe_Colors.Add(Color.FromArgb(255, 0, (byte)(255-i*60), 255));
-                Waste_Defect_Pipe_Colors.Add(Color.FromArgb(255, 255, (byte)(255-i*60), 0));
+                Waste_Defect_Pipe_Colors.Add(Color.FromArgb(255, 255, (byte)(255-i*40), 0));
             }
         }
 
