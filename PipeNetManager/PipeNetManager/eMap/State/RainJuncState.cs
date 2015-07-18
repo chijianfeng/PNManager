@@ -47,7 +47,6 @@ namespace PipeNetManager.eMap.State
                 cp.X = cp.X + 7-App.StrokeThinkness/2;
                 cp.Y = cp.Y + 7-App.StrokeThinkness/2;  //设置为中心
                 RainCover c = new RainCover("雨水检查井", GetMercator(cp), "双击查看详细信息");
-                c.juncInfo.Junc_Category = 1;
                 //添加其他相关信息
                 AddJunc(c, cp);                         //添加到视图中
                 rainjuncs.AddJunc(c);

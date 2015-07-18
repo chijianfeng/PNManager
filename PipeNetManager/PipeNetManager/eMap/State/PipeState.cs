@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -19,6 +20,11 @@ namespace PipeNetManager.eMap.State
 {
     class PipeState : IState
     {
+        /*
+         * this path is for drawing the pipe before saving in database.
+         */
+        protected Path mMovingPath = null;
+
         public PipeState(Canvas canvas) : base(canvas) { }
 
         /// <summary>
@@ -56,11 +62,10 @@ namespace PipeNetManager.eMap.State
         {
             Path path = new Path();
             path.Stroke = pipe.GetColorBrush();
-            LineGeometry lg = new LineGeometry();
-            lg.StartPoint = Start;
-            lg.EndPoint = End;
-            path.Data = lg;
-            path.StrokeThickness = App.StrokeThinkness;
+
+            path.Data = DrawPipe(Start, End);
+
+            path.StrokeThickness = App.StrokeThinkness * 2/3;
             path.SetValue(Canvas.ZIndexProperty, -1);
             path.ToolTip = pipe;
             context.Children.Add(path);
@@ -78,8 +83,6 @@ namespace PipeNetManager.eMap.State
             HeadWidth = App.StrokeThinkness * 2;
             for (int i = 0; i < listpath.Count; i++)
             {
-                /*((LineGeometry)(listpath[i].Data)).StartPoint = sps[i];
-                ((LineGeometry)(listpath[i].Data)).EndPoint = eps[i];*/
                 using (StreamGeometryContext context = ((StreamGeometry)(listpath[i].Data)).Open())
                 {
                     InternalDrawArrowGeometry(context, sps[i], eps[i]);
@@ -101,8 +104,7 @@ namespace PipeNetManager.eMap.State
             string title = "删除";
             MessageBoxButton buttons = MessageBoxButton.YesNo;
             MessageBoxImage icon = MessageBoxImage.Warning;
-            MessageBoxResult result =
-            MessageBox.Show(msg, title, buttons, icon);
+            MessageBoxResult result = MessageBox.Show(msg, title, buttons, icon);
             if (result == MessageBoxResult.Yes)
             {
                 context.Children.Remove(path);
@@ -113,7 +115,6 @@ namespace PipeNetManager.eMap.State
                 path.Stroke = colorCenter.UnSelected_Border_Color;
                 return false;
             }
-
         }
 
         /// <summary>
@@ -148,7 +149,14 @@ namespace PipeNetManager.eMap.State
         /// <param name="e"></param>
         public override void OnMouseMove(object sender, MouseEventArgs e)
         {
-
+            if (CurrentMode == ADDMODE&&mMovingPath!=null)
+            {
+                 Point newp = e.GetPosition(context);
+                 using (StreamGeometryContext cnt = ((StreamGeometry)(mMovingPath.Data)).Open())
+                 {
+                     InternalDrawArrowGeometry(cnt, p1, newp);
+                 }
+            }
         }
 
         protected Geometry DrawPipe(Point sp, Point ep)
@@ -163,6 +171,48 @@ namespace PipeNetManager.eMap.State
 
             return geometry;
         }
+
+        protected void InsterDb(Pipe pipe , Cover sc , Cover ec)
+        {
+            CPipeInfo pipeInfo = new CPipeInfo();
+            CPipeExtInfo pipeExtInfo = new CPipeExtInfo();
+            CUSInfo UsInfo = new CUSInfo();
+            pipeInfo.PipeName = pipe.Name;
+            pipeInfo.In_JunID = sc.juncInfo.ID;
+            pipeInfo.Out_JunID = ec.juncInfo.ID;
+
+            pipeInfo.Pipe_Category = pipe.pipeInfo.Pipe_Category;
+            UsInfo.Struct_Class = 0;
+
+            InsertCmd icmd = new InsertCmd();
+            PipeRev piperev = new PipeRev();
+
+            List<CPipeInfo> listpipe = new List<CPipeInfo>();
+            List<CPipeExtInfo> listpipExt = new List<CPipeExtInfo>();
+            List<CUSInfo> listUsInfo = new List<CUSInfo>();
+
+            listpipe.Add(pipeInfo);
+            listpipExt.Add(pipeExtInfo);
+            listUsInfo.Add(UsInfo);
+
+            piperev.ListPipe = listpipe;
+            piperev.ListPipeExt = listpipExt;
+            piperev.ListUS = listUsInfo;
+            icmd.SetReceiver(piperev);
+            icmd.Execute();
+        }
+
+        protected void DeleteDb(Pipe pipe)
+        {
+            if (pipe == null) return;
+            DeleteCmd dcmd = new DeleteCmd();
+            PipeRev piperev = new PipeRev();
+            piperev.ListPipe = new List<DBCtrl.DBClass.CPipeInfo>();
+            piperev.ListPipe.Add(pipe.pipeInfo);
+            dcmd.SetReceiver(piperev);
+            dcmd.Execute();
+        }
+
 
         private void InternalDrawArrowGeometry(StreamGeometryContext context, Point sp, Point ep)
         {

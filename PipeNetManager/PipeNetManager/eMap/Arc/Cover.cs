@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 using DBCtrl.DBClass;
+using PipeNetManager.common;
 
 namespace GIS.Arc
 {
@@ -51,7 +52,11 @@ namespace GIS.Arc
 
         public RainCover(String name, Point point, String info):base(name, point, info) 
         {
-            //Cover_Fill_Color.Color = Colors.DimGray;
+            if (juncInfo == null)
+            {
+                juncInfo = new CJuncInfo();
+                juncInfo.Junc_Category = (int)JUNCTYPE.JUNC_RAIN;
+            }
         }
 
         public override SolidColorBrush GetColorBrush()
@@ -68,7 +73,11 @@ namespace GIS.Arc
         public static SolidColorBrush Cover_Fill_Color = new SolidColorBrush();
         public WasteCover(String name, Point point, String info) : base(name, point, info) 
         {
-            //Cover_Fill_Color.Color = Colors.SaddleBrown;
+            if (juncInfo == null)
+            {
+                juncInfo = new CJuncInfo();
+                juncInfo.Junc_Category = (int)JUNCTYPE.JUNC_WASTE;
+            }
         }
 
         public override SolidColorBrush GetColorBrush()

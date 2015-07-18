@@ -151,7 +151,7 @@ namespace DBCtrl.DBClass
         {
             set { shapedata = value; }
             get {
-                if (shapedata.CompareTo("\\") == 0)
+                if (shapedata==null||shapedata.CompareTo("\\") == 0)
                     return "-";
                 else
                     return shapedata;

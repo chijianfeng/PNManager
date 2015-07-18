@@ -72,6 +72,8 @@ namespace PipeNetManager.eMap.State
                     AddPipe(pipe, p1, p2);
                     wastepipes.AddWastePipe(pipe);
                     //插入后台数据库
+
+                    InsterDb(pipe, c1, c2);
                 }
                 IsDrawLine = !IsDrawLine;
             }
@@ -82,6 +84,8 @@ namespace PipeNetManager.eMap.State
                 {
                     WastePipe p  = path.ToolTip as WastePipe;
                     wastepipes.DelWastePipe(p);
+                    
+                    DeleteDb(p);
                 }
             }
             base.OnMouseDown(sender, e);                //若都不是添加或删除命令，则交给父类进行处理

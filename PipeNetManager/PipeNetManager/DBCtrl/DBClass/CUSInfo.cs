@@ -32,7 +32,7 @@ namespace DBCtrl.DBClass
         {
             set { jobid = value; }
             get {
-                if (jobid.Equals("\\"))
+                if (jobid==null||jobid.Equals("\\"))
                     return "-";
                 else
                     return jobid;
@@ -220,7 +220,7 @@ namespace DBCtrl.DBClass
         {
             set { video_filename = value; }
             get {
-                if (video_filename.Equals("\\"))
+                if (video_filename==null||video_filename.Equals("\\"))
                     return "-";
                 else
                     return video_filename;
@@ -270,7 +270,7 @@ namespace DBCtrl.DBClass
         {
             set { losereason = value; }
             get {
-                if (losereason.Equals("\\"))
+                if (losereason == null || losereason.Equals("\\"))
                     return "-";
                 else
                     return losereason;

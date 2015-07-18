@@ -207,7 +207,7 @@ namespace DBCtrl.DBRW
             List<string> listcmd = new List<string>();
             try
             {
-                string cmd = "DELETE  FROM [PipeInfo] where ID = " + pipe.ID;
+                string cmd = "DELETE  FROM PipeInfo where ID = " + pipe.ID;
                 listcmd.Add(cmd);
                 ExectueCmd(listcmd);
             }

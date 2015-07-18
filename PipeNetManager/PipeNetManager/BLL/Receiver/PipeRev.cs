@@ -34,38 +34,6 @@ namespace BLL.Receiver
             set;
             get;
         }
-        /// <summary>
-        /// 管道日志信息
-        /// </summary>
-        public List<CLog_Pipe> ListLog
-        {
-            set;
-            get;
-        }
-        /// <summary>
-        /// 管道图像信息
-        /// </summary>
-        public List<CPic_Pipe> ListPic
-        {
-            set;
-            get;
-        }
-        /// <summary>
-        /// 管道文档报告信息
-        /// </summary>
-        public List<CReport_Pipe> ListRpt
-        {
-            set;
-            get;
-        }
-        /// <summary>
-        /// 管道视频信息
-        /// </summary>
-        public List<CVideo_Pipe> ListVideo
-        {
-            set;
-            get;
-        }
 
         /// <summary>
         /// 管道名称
@@ -80,11 +48,6 @@ namespace BLL.Receiver
         {
             ListPipe = null;
             ListPipeExt = null;
-            ListPic = null;
-            ListLog = null;
-            ListUS = null;
-            ListRpt = null;
-            ListVideo = null;
         }
 
         public override bool Docmd(string cmd)
@@ -159,9 +122,6 @@ namespace BLL.Receiver
             TPipeInfo pipeinfo = new TPipeInfo(_dbpath, PassWord);
             TPipeExtInfo pipextinfo = new TPipeExtInfo(_dbpath, PassWord);
             TUSInfo usinfo = new TUSInfo(_dbpath, PassWord);
-            TPicPipe pic = new TPicPipe(_dbpath, PassWord);
-            TVideoPipe video = new TVideoPipe(_dbpath, PassWord);
-            TReportPipe repott = new TReportPipe(_dbpath, PassWord);
 
             ListPipe = pipeinfo.Sel_PipeInfo(PipeName);
             if (ListPipe == null || ListPipe.Count <= 0)
@@ -169,10 +129,6 @@ namespace BLL.Receiver
 
             ListPipeExt = new List<CPipeExtInfo>();
             ListUS = new List<CUSInfo>();
-            ListLog = new List<CLog_Pipe>();
-            ListPic = new List<CPic_Pipe>();
-            ListVideo = new List<CVideo_Pipe>();
-            ListRpt = new List<CReport_Pipe>();
 
             foreach(CPipeInfo pipe in ListPipe)
             {
@@ -187,23 +143,6 @@ namespace BLL.Receiver
                 {
                     ListUS.Add(list2.ElementAt(0));
                 }
-
-                List<CPic_Pipe> list4 = pic.Sel_Pic_Pipe(id);
-                if (list4 != null && list4.Count > 0)
-                {
-                    ListPic.Add(list4.ElementAt(0));
-                }
-
-                List<CVideo_Pipe> list5 = video.Sel_Video_Pipe(id);
-                if (list5 != null && list5.Count > 0)
-                {
-                    ListVideo.Add(list5.ElementAt(0));
-                }
-                List<CReport_Pipe> list6 = repott.Sel_Report_Pipe(id);
-                if (list6 != null && list6.Count > 0)
-                {
-                    ListRpt.Add(list6.ElementAt(0));
-                }
             }
             return true;
         }
@@ -217,19 +156,10 @@ namespace BLL.Receiver
             TPipeInfo pipeinfo = new TPipeInfo(_dbpath, PassWord);
             TPipeExtInfo pipextinfo = new TPipeExtInfo(_dbpath, PassWord);
             TUSInfo usinfo = new TUSInfo(_dbpath, PassWord);
-            TLogPipe log = new TLogPipe(_dbpath, PassWord);
-            TPicPipe pic = new TPicPipe(_dbpath, PassWord);
-            TVideoPipe video = new TVideoPipe(_dbpath, PassWord);
-            TReportPipe repott = new TReportPipe(_dbpath, PassWord);
 
             pipeinfo.Update_PipeInfo(ListPipe);
             pipextinfo.Update_PipeExtInfo(ListPipeExt);
             usinfo.Update_USInfo(ListUS);
-            log.Update_Log_Pipe(ListLog);
-            pic.Update_Pic_Pipe(ListPic);
-            video.Update_Video_Pipe(ListVideo);
-            repott.Update_Report_Pipe(ListRpt);
-
             return true;
         }
 
@@ -244,10 +174,7 @@ namespace BLL.Receiver
             TPipeInfo pipeinfo = new TPipeInfo(_dbpath, PassWord);
             TPipeExtInfo pipextinfo = new TPipeExtInfo(_dbpath, PassWord);
             TUSInfo usinfo = new TUSInfo(_dbpath, PassWord);
-            /*TLogPipe log = new TLogPipe(_dbpath, PassWord);
-            TPicPipe pic = new TPicPipe(_dbpath, PassWord);
-            TVideoPipe video = new TVideoPipe(_dbpath, PassWord);
-            TReportPipe repott = new TReportPipe(_dbpath, PassWord);*/
+            
 
             pipeinfo.OpenDB();
             pipextinfo.OpenDB();
@@ -293,71 +220,6 @@ namespace BLL.Receiver
                 }
                 ustmp.PipeID = tmp.ID;
                 usinfo.Insert_USInfo(ref ustmp);
-
-                //插入管道日志
-               /* CLog_Pipe logtmp = null;
-                if (ListLog == null)
-                {
-                    logtmp = new CLog_Pipe();
-                }
-                else
-                {
-                    if (i < ListLog.Count)
-                        logtmp = ListLog.ElementAt(i);
-                    else
-                        logtmp = new CLog_Pipe();
-                }
-                logtmp.PipeID = tmp.ID;
-                log.Insert_Log_Pipe(ref logtmp);*/
-
-                //插入图片
-              /*  CPic_Pipe pictmp = null;
-                if (ListPic == null)
-                {
-                    pictmp = new CPic_Pipe();
-                }
-                else
-                {
-                    if (i < ListPic.Count)
-                        pictmp = ListPic.ElementAt(i);
-                    else
-                        pictmp = new CPic_Pipe();
-                }
-                pictmp.PipeID = tmp.ID;
-                pic.Insert_Pic_Pipe(ref pictmp);*/
-
-                //插入报告
-               /* CReport_Pipe rptmp = null;
-                if (ListRpt == null)
-                {
-                    rptmp = new CReport_Pipe();
-                }
-                else
-                {
-                    if (i < ListRpt.Count)
-                        rptmp = ListRpt.ElementAt(i);
-                    else
-                        rptmp = new CReport_Pipe();
-                }
-                rptmp.PipeID = tmp.ID;
-                repott.Insert_Report_Pipe(ref rptmp);*/
-
-                //插入视频信息
-              /*  CVideo_Pipe vtmp = null;
-                if (ListVideo == null)
-                {
-                    vtmp = new CVideo_Pipe();
-                }
-                else
-                {
-                    if (i < ListVideo.Count)
-                        vtmp = ListVideo.ElementAt(i);
-                    else
-                        vtmp = new CVideo_Pipe();
-                }
-                vtmp.PipeID = tmp.ID;
-                video.Insert_Video_Pipe(ref vtmp);*/
-
                 i++;
             }
 
@@ -422,10 +284,6 @@ namespace BLL.Receiver
             TPipeInfo pipeinfo = new TPipeInfo(_dbpath, PassWord);
             TPipeExtInfo pipextinfo = new TPipeExtInfo(_dbpath, PassWord);
             TUSInfo usinfo = new TUSInfo(_dbpath, PassWord);
-            TLogPipe log = new TLogPipe(_dbpath, PassWord);
-            TPicPipe pic = new TPicPipe(_dbpath, PassWord);
-            TVideoPipe video = new TVideoPipe(_dbpath, PassWord);
-            TReportPipe repott = new TReportPipe(_dbpath, PassWord);
 
             if (ListPipe == null || ListPipe.Count == 0)
                 return false;
@@ -442,33 +300,9 @@ namespace BLL.Receiver
 
                 CUSInfo us = null;
                 ListUS = usinfo.Sel_USInfo(pipe.ID);
-                if ( ListUS.Count > 0)
+                if (ListUS!=null && ListUS.Count > 0)
                     us = ListUS.ElementAt(0);
                 usinfo.Delete_USInfo(us);
-
-                CLog_Pipe l = null;
-                ListLog = log.Sel_Log_Pipe(pipe.ID);
-                if ( ListLog.Count > 0)
-                    l = ListLog.ElementAt(0);
-                log.Delete_Log_Pipe(l);
-
-                CPic_Pipe p = null;
-                ListPic = pic.Sel_Pic_Pipe(pipe.ID);
-                if (ListPic.Count > 0)
-                    p = ListPic.ElementAt(0);
-                pic.Delete_Pic_Pipe(p);
-
-                CVideo_Pipe v = null;
-                ListVideo = video.Sel_Video_Pipe(pipe.ID);
-                if ( ListVideo.Count > 0)
-                    v = ListVideo.ElementAt(0);
-                video.Delete_Video_Pipe(v);
-
-                CReport_Pipe r = null;
-                ListRpt = repott.Sel_Report_Pipe(pipe.ID);
-                if (ListRpt.Count > 0)
-                    r = ListRpt.ElementAt(0);
-                repott.Delete_Report_Pipe(r);
             }
 
             return true;
@@ -479,20 +313,10 @@ namespace BLL.Receiver
             TPipeInfo pipeinfo = new TPipeInfo(_dbpath, PassWord);
             TPipeExtInfo pipextinfo = new TPipeExtInfo(_dbpath, PassWord);
             TUSInfo usinfo = new TUSInfo(_dbpath, PassWord);
-            TLogPipe log = new TLogPipe(_dbpath, PassWord);
-            TPicPipe pic = new TPicPipe(_dbpath, PassWord);
-            TVideoPipe video = new TVideoPipe(_dbpath, PassWord);
-            TReportPipe repott = new TReportPipe(_dbpath, PassWord);
 
             pipeinfo.Clear_PipeInfo();
             pipextinfo.Clear_PipeExtInfo();
             usinfo.Clear_USInfo();
-            log.Clear_Log_Pipe();
-            pic.Clear_Pic_Pipe();
-            video.Clear_Video_Pipe();
-            repott.Clear_Report_Pipe();
-
-
             return true;
         }
     }

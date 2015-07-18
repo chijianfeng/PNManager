@@ -30,10 +30,6 @@ namespace PipeNetManager.eMap.State
             {
                 Path path = new Path();
                 path.Stroke = pipe.GetColorBrush();
-               /* LineGeometry lg = new LineGeometry();
-                lg.StartPoint = sps[index];
-                lg.EndPoint = eps[index];
-                path.Data = lg;*/
                 //添加带方向的管道
 
                 path.Data = DrawPipe(sps[index], eps[index]);
@@ -55,15 +51,36 @@ namespace PipeNetManager.eMap.State
                 cp.Y = cp.Y + 7 - App.StrokeThinkness / 2;             //设置为中心
                 Cover c = rainpipes.rainjunc.FindClosedCover(cp);      //检测最近点位
                 if (null == c)
+                {
+                    if (mMovingPath != null)
+                    {
+                        context.Children.Remove(mMovingPath);
+                        mMovingPath = null;
+                    }
+                    if (IsDrawLine)
+                    {
+                        IsDrawLine = false;
+                    }
                     return;
+                }
                 if (IsDrawLine == false)
                 {
                     c1 = c;
                     p1.X = ((c1.Location.X- App.Tiles[0].X) / App.Tiles[0].Dx) + App.StrokeThinkness / 2; //计算管道第一个点位置坐标
                     p1.Y = ((App.Tiles[0].Y - c1.Location.Y) / App.Tiles[0].Dy) +App.StrokeThinkness / 2;
+
+                    mMovingPath = new Path();
+                    mMovingPath.Stroke = colorCenter.Cover_Rain_Fill_Color;
+                    mMovingPath.Data = DrawPipe(p1, p1);
+                    mMovingPath.StrokeThickness = App.StrokeThinkness/2;
+                    context.Children.Add(mMovingPath);
                 }
                 else
                 {
+                    //removing the tmp moving path
+                    context.Children.Remove(mMovingPath);
+                    mMovingPath = null;
+
                     c2 = c;
                     p2.X = ((c2.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx) + App.StrokeThinkness / 2;
                     p2.Y = ((App.Tiles[0].Y - c2.Location.Y) / App.Tiles[0].Dy) + App.StrokeThinkness / 2;
@@ -71,7 +88,9 @@ namespace PipeNetManager.eMap.State
                     RainPipe pipe = new RainPipe(c1.Name + "-" + c2.Name, "双击查看信息", c1, c2);
                     AddPipe(pipe, p1, p2);
                     rainpipes.AddRainPipe(pipe);
+
                     //插入后台数据库
+                    InsterDb(pipe, c1, c2);
                 }
                 IsDrawLine = !IsDrawLine;
             }
@@ -82,6 +101,8 @@ namespace PipeNetManager.eMap.State
                 {
                     RainPipe rp = path.ToolTip as RainPipe;
                     rainpipes.DelRainPipe(rp);
+                    //从数据库中删除
+                    DeleteDb(rp);
                 }
             }
             base.OnMouseDown(sender, e);                //若都不是添加或删除命令，则交给父类进行处理

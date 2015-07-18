@@ -70,7 +70,6 @@ namespace PipeNetManager.eMap.State
                 cp.X = cp.X + 7;
                 cp.Y = cp.Y + 7;                        //设置为中心
                 WasteCover c = new WasteCover("污水检查井", GetMercator(cp), "双击查看详细信息");
-                c.juncInfo.Junc_Category = 2;
                 //添加其他相关信息
                 AddJunc(c, cp);                         //添加到视图中
                 wastejunc.AddWasteJunc(c);              //添加到数据中

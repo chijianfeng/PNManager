@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media;
 using DBCtrl.DBClass;
+using PipeNetManager.common;
 
 namespace GIS.Arc
 {
@@ -49,13 +50,21 @@ namespace GIS.Arc
         public RainPipe(IConcreteShape start, IConcreteShape end)
             : base(start, end)
         {
-
+            if (pipeInfo == null)
+            {
+                pipeInfo = new CPipeInfo();
+                pipeInfo.Pipe_Category = (int)PIPETYPE.PIPE_RAIN;
+            }
         }
 
         public RainPipe(String name, String info, IConcreteShape start, IConcreteShape end)
             : base(name, info, start, end)
         {
-
+            if (pipeInfo == null)
+            {
+                pipeInfo = new CPipeInfo();
+                pipeInfo.Pipe_Category = (int)PIPETYPE.PIPE_RAIN;
+            }
         }
 
         public override SolidColorBrush GetColorBrush()
@@ -78,12 +87,20 @@ namespace GIS.Arc
         public WastePipe(IConcreteShape start, IConcreteShape end)
             : base(start, end)
         {
-
+            if (pipeInfo == null)
+            {
+                pipeInfo = new CPipeInfo();
+                pipeInfo.Pipe_Category = (int)PIPETYPE.PIPE_WASTE;
+            }
         }
         public WastePipe(String name, String info, IConcreteShape start, IConcreteShape end)
             : base(name, info, start, end)
         {
-
+            if (pipeInfo == null)
+            {
+                pipeInfo = new CPipeInfo();
+                pipeInfo.Pipe_Category = (int)PIPETYPE.PIPE_WASTE;
+            }
         }
         public override SolidColorBrush GetColorBrush()
         {

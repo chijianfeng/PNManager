@@ -66,19 +66,6 @@ namespace PipeNetManager.eMap
         //增加雨水管道
         void addpipes()
         {
-            //Task.Factory.StartNew((Obj) =>
-            //{
-            //    Parallel.For(0, (int)Obj, i =>          //计算位置
-            //    {
-            //        StartPipe[i].X = (listRains[i].Start.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-            //        StartPipe[i].Y = (App.Tiles[0].Y - listRains[i].Start.Location.Y) / App.Tiles[0].Dy;
-
-            //        EndPipe[i].X = (listRains[i].End.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-            //        EndPipe[i].Y = (App.Tiles[0].Y - listRains[i].End.Location.Y) / App.Tiles[0].Dy;
-            //    });
-
-            //}, listRains.Count).ContinueWith(ant => {               //添加到图层中
-            //}, TaskScheduler.FromCurrentSynchronizationContext());
             for (int i = 0; i < listRains.Count; i++) {
                 StartPipe[i].X = (listRains[i].Start.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
                 StartPipe[i].Y = (App.Tiles[0].Y - listRains[i].Start.Location.Y) / App.Tiles[0].Dy;
@@ -153,10 +140,14 @@ namespace PipeNetManager.eMap
 
         public override void OnMouseMove(object sender, MouseEventArgs e)
         {
+            state.OnMouseMove(sender, e);
             if (!IsViewMove || !IsMousedown)
-                return;
+            {
+                return; 
+            }
             Grid CurGrid = this.RainPipeGrid;
             CurGrid.Margin = App.MoveRect;
+            
         }
 
         public override void OnMouseLeftDown(object sender, MouseButtonEventArgs e)
@@ -198,7 +189,6 @@ namespace PipeNetManager.eMap
         }
 
         List<RainPipe> listRains = null;                      //雨水管道集合
-        List<RainCover> listjunc = null;
         public RainJuncs rainjunc = null;
 
         RainPipeState state = null;                                   //操作 
