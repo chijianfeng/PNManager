@@ -21,11 +21,27 @@ namespace PipeNetManager.juncMsg
     public partial class JuncWindow : Window
     {
         private BaseContent mBasic;
+        private int p;
         public JuncWindow(string name)
         {
             InitializeComponent();
             this.Junc_Name.Text = "\t" + name + "检查井信息";
             mBasic = new BaseContent(name);
+            this.Stackpanel1.Children.Add(mBasic);
+
+            //check authority
+            bool b = AuthControl.AUTH_ROOT == AuthControl.getInstance().getAuth();
+            Button_Cancle.IsEnabled = b;
+            Button_Save.IsEnabled = b;
+
+            AnimationUtil.ScaleEasingAnimation(this);
+        }
+
+        public JuncWindow(int id)
+        {
+            InitializeComponent();
+            this.Junc_Name.Text = "\t" + id + " 检查井信息";
+            mBasic = new BaseContent(id);
             this.Stackpanel1.Children.Add(mBasic);
 
             //check authority

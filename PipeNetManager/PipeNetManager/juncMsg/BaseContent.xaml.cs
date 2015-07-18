@@ -26,6 +26,7 @@ namespace PipeNetManager.juncMsg
     {
         private CJuncInfo mJunc;
         private CJuncExtInfo mJuncext;
+        private int id;
 
         public class JuncMesage
         {
@@ -44,6 +45,65 @@ namespace PipeNetManager.juncMsg
             }
             ObservableCollection<JuncMesage> datas = GetData(juncname);
             JUNCDG.DataContext = datas;
+        }
+
+        public BaseContent(int id)
+        {
+            this.id = id;
+            InitializeComponent();
+            ObservableCollection<JuncMesage> datas = GetData(id);
+            JUNCDG.DataContext = datas;
+        }
+
+        private ObservableCollection<JuncMesage> GetData(int id)
+        {
+            var Datas = new ObservableCollection<JuncMesage>();
+
+            SelectCmd scmd = new SelectCmd();
+            JuncRev rev = new JuncRev();
+
+            rev.ID = id;
+            scmd.SetReceiver(rev);
+            scmd.Execute();
+            if (rev.ListJunc == null || rev.ListJunc.Count <= 0)
+                return null;
+            mJunc = rev.ListJunc.ElementAt(0);
+            mJuncext = rev.ListJuncExt.ElementAt(0);
+
+            Datas.Add(new JuncMesage { ItemName = "井盖名称", ValueName = mJunc.JuncName });
+            Datas.Add(new JuncMesage { ItemName = "道路名称", ValueName = mJuncext.Lane_Way });
+            Datas.Add(new JuncMesage { ItemName = "经度", ValueName = Convert.ToString(mJunc.X_Coor) });
+            Datas.Add(new JuncMesage { ItemName = "纬度", ValueName = Convert.ToString(mJunc.Y_Coor) });
+            Datas.Add(new JuncMesage { ItemName = "检查井类别", ValueName = GetCategoryName(mJunc.Junc_Category) });
+            Datas.Add(new JuncMesage { ItemName = "检查井类型", ValueName = GetType(mJunc.Junc_Type) });
+            Datas.Add(new JuncMesage { ItemName = "检查井形式", ValueName = GetStyle(mJunc.Junc_Style) });
+            Datas.Add(new JuncMesage { ItemName = "井深", ValueName = GetDepth(mJunc.Depth) });
+
+            Datas.Add(new JuncMesage { ItemName = "井盖所处的地面高程", ValueName = GetDepth(mJunc.Surface_Ele) });
+            Datas.Add(new JuncMesage { ItemName = "数据来源", ValueName = GetDataSource(mJunc.DataSource) });
+            Datas.Add(new JuncMesage { ItemName = "数据填报单位", ValueName = mJunc.ReportDept });
+            Datas.Add(new JuncMesage { ItemName = "数据填报时间", ValueName = Convert.ToString(mJunc.Record_Date) });
+            Datas.Add(new JuncMesage { ItemName = "管道是否暗接", ValueName = bool2str(mJunc.Junc_Darkjoint) });
+
+            Datas.Add(new JuncMesage { ItemName = "污水是否直排", ValueName = bool2str(mJunc.Sewage_Line) });
+            Datas.Add(new JuncMesage { ItemName = "井盖错误", ValueName = bool2str(mJunc.Junc_Error) });
+            Datas.Add(new JuncMesage { ItemName = "CCTV检测编号", ValueName = mJunc.CCTV_CheckCode });
+            Datas.Add(new JuncMesage { ItemName = "数据是否完整", ValueName = bool2str(mJunc.FullData) });
+            Datas.Add(new JuncMesage { ItemName = "数据缺失原因", ValueName = mJunc.LoseReson });
+
+            Datas.Add(new JuncMesage { ItemName = "A上游井口至管顶距离", ValueName = GetDepth(mJunc.Dis[0]) });
+            Datas.Add(new JuncMesage { ItemName = "A上游井口至管底距离", ValueName = GetDepth(mJunc.Dis[1]) });
+            Datas.Add(new JuncMesage { ItemName = "A下游井口至管顶距离", ValueName = GetDepth(mJunc.Dis[2]) });
+            Datas.Add(new JuncMesage { ItemName = "A下游井口至管底距离", ValueName = GetDepth(mJunc.Dis[3]) });
+            Datas.Add(new JuncMesage { ItemName = "B上游井口至管顶距离", ValueName = GetDepth(mJunc.Dis[4]) });
+            Datas.Add(new JuncMesage { ItemName = "B上游井口至管底距离", ValueName = GetDepth(mJunc.Dis[5]) });
+            Datas.Add(new JuncMesage { ItemName = "B下游井口至管顶距离", ValueName = GetDepth(mJunc.Dis[6]) });
+            Datas.Add(new JuncMesage { ItemName = "B下游井口至管底距离", ValueName = GetDepth(mJunc.Dis[7]) });
+
+            Datas.Add(new JuncMesage { ItemName = "备注", ValueName = mJuncext.Remark });
+
+
+            return Datas;
         }
 
         public bool DoSave()

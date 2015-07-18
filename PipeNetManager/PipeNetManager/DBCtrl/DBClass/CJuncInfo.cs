@@ -237,8 +237,8 @@ namespace DBCtrl.DBClass
             {
                 cctv_ckeckcode = value;
             }
-            get { 
-                if(cctv_ckeckcode.CompareTo("\\")==0)
+            get {
+                if (cctv_ckeckcode==null||cctv_ckeckcode.CompareTo("\\") == 0)
                     return "-";
                 return cctv_ckeckcode;
             }

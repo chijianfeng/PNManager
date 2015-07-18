@@ -70,11 +70,13 @@ namespace PipeNetManager.eMap.State
                 cp.X = cp.X + 7;
                 cp.Y = cp.Y + 7;                        //设置为中心
                 WasteCover c = new WasteCover("污水检查井", GetMercator(cp), "双击查看详细信息");
+                c.juncInfo.Junc_Category = 2;
                 //添加其他相关信息
                 AddJunc(c, cp);                         //添加到视图中
                 wastejunc.AddWasteJunc(c);              //添加到数据中
 
                 //插入后台数据库
+                InsterDB(c);
 
             }
             else if (CurrentMode == DELMODE)
@@ -84,6 +86,8 @@ namespace PipeNetManager.eMap.State
                 {
                     WasteCover c = path.ToolTip as WasteCover;
                     wastejunc.DelWasteJunc(c);
+                    //删除数据库中数据
+                    DelDB(c);
                 }
             }
             base.OnMouseDown(sender, e);                //若都不是添加或删除命令，则交给父类进行处理

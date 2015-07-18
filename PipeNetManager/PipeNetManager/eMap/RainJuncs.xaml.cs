@@ -197,7 +197,7 @@ namespace PipeNetManager.eMap
             return;
         }
 
-        public new void Update()                               //强制更新检查井位置
+        public new void Update()                                           //强制更新检查井位置
         {
             UpdateRainJuncs();
         }

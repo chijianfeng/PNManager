@@ -1,6 +1,8 @@
 ﻿using BLL.Command;
 using BLL.Receiver;
+using DBCtrl.DBClass;
 using GIS.Arc;
+using GIS.Map;
 using PipeMessage.eMap;
 using PipeNetManager.juncMsg;
 using System;
@@ -135,7 +137,15 @@ namespace PipeNetManager.eMap.State
             {
                  Cover cover = path.ToolTip as Cover;
                  if (cover == null) return;
-                 JuncWindow juncWnd = new JuncWindow(cover.Name);
+                 JuncWindow juncWnd;
+                 if (cover.Name == null || cover.Name.Length <= 0)
+                 {
+                      juncWnd = new JuncWindow(cover.juncInfo.ID);
+                 }
+                 else
+                 {
+                      juncWnd = new JuncWindow(cover.Name);
+                 }
                  juncWnd.ShowDialog();
             }
         }
@@ -143,6 +153,43 @@ namespace PipeNetManager.eMap.State
         public override void OnMouseMove(object sender, MouseEventArgs e)
         {
             
+        }
+
+        protected void InsterDB(Cover c)
+        {
+            if (c == null) return;
+            //change the coordinate Mercator to WGS84
+            Coords.Point p = new Coords.Point();
+            p.x = c.Location.X;
+            p.y = c.Location.Y;
+            p = Coords.Mercator2WGS84(p);
+            //store to 
+            CJuncInfo info = new CJuncInfo();
+            info.X_Coor = p.x;
+            info.Y_Coor = p.y;
+            info.Junc_Category = c.juncInfo.Junc_Category;
+
+            InsertCmd cmd = new InsertCmd();
+            JuncRev rev = new JuncRev();
+            rev.ListJunc = new List<CJuncInfo>();
+            rev.ListJunc.Add(info);
+
+            cmd.SetReceiver(rev);
+            cmd.Execute();
+        }
+
+        protected void DelDB(Cover c)
+        {
+            if (c == null) return;
+            CJuncInfo info = c.juncInfo;
+
+            DeleteCmd cmd = new DeleteCmd();
+            JuncRev rev = new JuncRev();
+            rev.ListJunc = new List<CJuncInfo>();
+            rev.ListJunc.Add(info);
+
+            cmd.SetReceiver(rev);
+            cmd.Execute();
         }
     }
 }

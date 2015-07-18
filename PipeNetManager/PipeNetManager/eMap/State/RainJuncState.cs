@@ -39,7 +39,7 @@ namespace PipeNetManager.eMap.State
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void OnMouseDown(object sender, MouseButtonEventArgs e)
+        public override void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             if(CurrentMode==ADDMODE)
             {
@@ -47,12 +47,13 @@ namespace PipeNetManager.eMap.State
                 cp.X = cp.X + 7-App.StrokeThinkness/2;
                 cp.Y = cp.Y + 7-App.StrokeThinkness/2;  //设置为中心
                 RainCover c = new RainCover("雨水检查井", GetMercator(cp), "双击查看详细信息");
+                c.juncInfo.Junc_Category = 1;
                 //添加其他相关信息
                 AddJunc(c, cp);                         //添加到视图中
                 rainjuncs.AddJunc(c);
 
                 //插入后台数据库
-
+                InsterDB(c);
             }
             else if(CurrentMode==DELMODE)
             {
@@ -61,6 +62,9 @@ namespace PipeNetManager.eMap.State
                 {
                     RainCover c = path.ToolTip as RainCover;
                     rainjuncs.DelJunc(c);
+
+                    //删除数据库中数据
+                    DelDB(c);
                 }
             }
             base.OnMouseDown(sender, e);                //若都不是添加或删除命令，则交给父类进行处理

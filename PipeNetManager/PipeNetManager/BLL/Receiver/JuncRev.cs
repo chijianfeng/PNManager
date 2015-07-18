@@ -130,6 +130,14 @@ namespace BLL.Receiver
                 ListJunc = new List<CJuncInfo>();
                 if (ji != null)
                     ListJunc.Add(ji);
+
+                ListJuncExt = new List<CJuncExtInfo>();
+                foreach (CJuncInfo junc in ListJunc)
+                {
+                    List<CJuncExtInfo> tmplist = juncextinfo.Sel_JuncExtInfo(junc.ID);
+                    if (tmplist != null && tmplist.Count > 0)
+                        ListJuncExt.Add(tmplist.ElementAt(0));
+                }
             }
 
             return true;

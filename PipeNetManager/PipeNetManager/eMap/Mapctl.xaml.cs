@@ -431,11 +431,13 @@ namespace PipeNetManager.eMap
         /// <param name="e"></param>
         private void Edit_Del_Click(object sender, RoutedEventArgs e)
         {
-            MapGrid.Cursor = CreateCur("/Assets/Del.cur");                    //表示delete状态
+            MapGrid.Cursor = Cursors.Arrow;
+            //MapGrid.Cursor = CreateCur("/Assets/Del.cur");                    //表示delete状态
             for (int i = 0; i < listLayer.Count; i++)
             {
                 listLayer.ElementAt(i).SetOperationMode(IState.DELMODE);      //进入选择状态
             }
+            
             View_Move.IsChecked = false;                                      //其他状态变为不可用
             View_ZoomOut.IsChecked = false;
             View_ZoomIn.IsChecked = false;
