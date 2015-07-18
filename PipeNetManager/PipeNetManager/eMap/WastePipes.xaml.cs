@@ -156,6 +156,7 @@ namespace PipeNetManager.eMap
 
         public override void OnMouseMove(object sender, MouseEventArgs e)
         {
+            state.OnMouseMove(sender, e);
             if (!IsViewMove || !IsMousedown)
                 return;
             Grid CurGrid = this.WastePipeGrid;

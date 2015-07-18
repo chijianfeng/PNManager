@@ -85,6 +85,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="common\Constants.cs" />
+    <Compile Include="common\RectAdorner.cs" />
     <Compile Include="utils\AnimationUtil.cs" />
     <Compile Include="utils\ExceptionProcess.cs" />
     <Compile Include="utils\ValueConvert.cs" />

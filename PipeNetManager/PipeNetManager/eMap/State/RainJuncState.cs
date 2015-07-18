@@ -76,6 +76,7 @@ namespace PipeNetManager.eMap.State
         /// <param name="e"></param>
         public override void OnMouseMove(object sender, MouseEventArgs e)
         {
+            base.OnMouseMove(sender, e);
             if (CurrentMode == SELECTMODE)                                  //若是选择模式，不进行位置标记
                 return;
             Point cp = e.GetPosition(context);                              //获取相对位置

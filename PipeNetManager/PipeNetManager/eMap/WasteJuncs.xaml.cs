@@ -120,15 +120,6 @@ namespace PipeNetManager.eMap
         private void UpdateWasteJuncs()
         {
             //计算相对位置
-            /*Point Start = new Point();
-            Point End = new Point();
-
-            if (App.Tiles.Count <= 0)
-                return;
-
-            Start.X = App.Tiles[0].X; Start.Y = App.Tiles[0].Y;
-            End.X = App.Tiles[App.Tiles.Count - 1].X + 256 * App.Tiles[App.Tiles.Count - 1].Dx;
-            End.Y = App.Tiles[App.Tiles.Count - 2].Y - 256 * App.Tiles[App.Tiles.Count - 2].Dy;*/
             Task.Factory.StartNew<int>((Obj) =>
             {
                 Parallel.For(0, (int)Obj, i =>              //并行计算

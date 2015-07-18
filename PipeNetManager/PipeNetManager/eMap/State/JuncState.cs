@@ -4,6 +4,7 @@ using DBCtrl.DBClass;
 using GIS.Arc;
 using GIS.Map;
 using PipeMessage.eMap;
+using PipeNetManager.common;
 using PipeNetManager.juncMsg;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -19,10 +21,13 @@ namespace PipeNetManager.eMap.State
 {
     class JuncState:IState
     {
+        protected RectAdorner mAdorner;
+
         public JuncState(Canvas canvas):base(canvas){
 
             animationcanvas = new Canvas();
             canvas.Children.Add(animationcanvas);           //用于显示动画特效
+
         }
 
         protected Canvas animationcanvas = null;
@@ -97,8 +102,7 @@ namespace PipeNetManager.eMap.State
             string title = "删除";
             MessageBoxButton buttons = MessageBoxButton.YesNo;
             MessageBoxImage icon = MessageBoxImage.Warning;
-            MessageBoxResult result =
-            MessageBox.Show(msg, title, buttons, icon);
+            MessageBoxResult result = MessageBox.Show(msg, title, buttons, icon);
             if (result == MessageBoxResult.Yes)
             {
                 context.Children.Remove(path);
@@ -129,8 +133,7 @@ namespace PipeNetManager.eMap.State
             if (path==null)
                 return;
 
-            SelectShape(path);
-            object obj = path.ToolTip;
+            SelectShape(path);                              //设置焦点
            
             //若是双击
             if (e.ClickCount >= 2)
