@@ -29,6 +29,16 @@ namespace DBCtrl.DBRW
             return Select(cmd);
         }
 
+        public CUSInfo Sel_USInfoByPipeid(int pipeid)
+        {
+            string cmd = "SELECT * FROM USInfo where PipeID =" + pipeid;
+            List<CUSInfo> list =  Select(cmd);
+            if (list != null && list.Count > 0)
+                return list.ElementAt(0);
+            else
+                return null;
+        }
+
         public bool Update_USInfo(List<CUSInfo> listus)
         {
             if (listus == null || listus.Count <= 0)

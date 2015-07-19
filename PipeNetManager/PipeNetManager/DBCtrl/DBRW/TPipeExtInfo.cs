@@ -29,6 +29,16 @@ namespace DBCtrl.DBRW
             return Select(cmd);
         }
 
+        public CPipeExtInfo Sel_PipeExtInfoByPipeId(int pipeid)
+        {
+            string cmd = "SELECT * FROM PipeExtInfo where PipeID=" + pipeid;
+            List<CPipeExtInfo> list =  Select(cmd);
+            if (list != null && list.Count > 0)
+                return list.ElementAt(0);
+            else
+                return null;
+        }
+
         /// <summary>
         /// 更新管道信息，管道ID必须在数据库中存在
         /// </summary>

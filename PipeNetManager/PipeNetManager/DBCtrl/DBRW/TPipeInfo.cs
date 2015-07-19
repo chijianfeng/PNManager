@@ -34,6 +34,16 @@ namespace DBCtrl.DBRW
             return Select(cmd);
         }
 
+        public CPipeInfo Sel_PipeInfoByid(int id)
+        {
+            string cmd = "SELECT * FROM PipeInfo where id=" + id;
+            List<CPipeInfo> list =  Select(cmd);
+            if (list != null && list.Count > 0)
+                return list.ElementAt(0);
+            else
+                return null;
+        }
+
         /// <summary>
         /// 根据管道类型进行选择
         /// </summary>

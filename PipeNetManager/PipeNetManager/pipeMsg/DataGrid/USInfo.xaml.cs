@@ -25,12 +25,23 @@ namespace PipeNetManager.pipeMsg.DataGrid
     /// </summary>
     public partial class USInfo : UserControl
     {
-        private string mPipeName;
         private CUSInfo mUSinfo;
         public USInfo(string name)
         {
             InitializeComponent();
             ShowContent(name);
+        }
+
+        public USInfo(int id)
+        {
+            InitializeComponent();
+            ShowContent(id);
+        }
+
+        private void ShowContent(int id)
+        {
+            ObservableCollection<Mesage> datas = GetData(id);
+            DG1.DataContext = datas;
         }
 
         public void ShowContent(string pipename)
@@ -40,8 +51,7 @@ namespace PipeNetManager.pipeMsg.DataGrid
                 MessageBox.Show("Load Data Failed!", "错误消息");
                 return;
             }
-            mPipeName = pipename;
-            ObservableCollection<Mesage> datas = GetData();
+            ObservableCollection<Mesage> datas = GetData(pipename);
             DG1.DataContext = datas;
         }
 
@@ -161,13 +171,13 @@ namespace PipeNetManager.pipeMsg.DataGrid
             }
         }
 
-        private ObservableCollection<Mesage> GetData()
+        private ObservableCollection<Mesage> GetData(string pipename)
         {
             var Datas = new ObservableCollection<Mesage>();
 
             SelectCmd scmd = new SelectCmd();
             PipeRev pr = new PipeRev();
-            pr.PipeName = mPipeName;
+            pr.PipeName = pipename;
             scmd.SetReceiver(pr);
             scmd.Execute();
             if (pr.ListUS == null || pr.ListUS.Count <= 0)
@@ -176,6 +186,43 @@ namespace PipeNetManager.pipeMsg.DataGrid
             mUSinfo = pr.ListUS.ElementAt(0);
 
             Datas.Add(new Mesage { ItemName = "排水管标识码", ValueName = pr.PipeName });
+            Datas.Add(new Mesage { ItemName = "作业编号", ValueName = mUSinfo.JobID });
+            Datas.Add(new Mesage { ItemName = "检测日期", ValueName = Convert.ToString(mUSinfo.DetectDate) });
+            Datas.Add(new Mesage { ItemName = "检测单位", ValueName = mUSinfo.DetectDep });
+            Datas.Add(new Mesage { ItemName = "检测操作人员", ValueName = mUSinfo.Detect_Person });
+            Datas.Add(new Mesage { ItemName = "检测单位联系方式", ValueName = mUSinfo.Contacts });
+            Datas.Add(new Mesage { ItemName = "检测方法", ValueName = GetCheckMethod(mUSinfo.Detect_Method) });
+            Datas.Add(new Mesage { ItemName = "检测方向", ValueName = GetCheckDir(mUSinfo.Detect_Dir) });
+            Datas.Add(new Mesage { ItemName = "封堵情况", ValueName = mUSinfo.Pipe_Stop });
+            Datas.Add(new Mesage { ItemName = "功能性缺失", ValueName = GetFuncDef(mUSinfo.Func_Defect) });
+            Datas.Add(new Mesage { ItemName = "功能性缺失等级", ValueName = GetClass(mUSinfo.Func_Class) });
+            Datas.Add(new Mesage { ItemName = "结构性缺陷", ValueName = GetStructDef(mUSinfo.Strcut_Defect) });
+            Datas.Add(new Mesage { ItemName = "结构性缺陷等级", ValueName = GetClass(mUSinfo.Struct_Class) });
+            Datas.Add(new Mesage { ItemName = "修复指数RI", ValueName = Convert.ToString(mUSinfo.Repair_Index) });
+            Datas.Add(new Mesage { ItemName = "养护指数MI", ValueName = Convert.ToString(mUSinfo.Matain_Index) });
+            Datas.Add(new Mesage { ItemName = "缺陷描述", ValueName = mUSinfo.Problem });
+            Datas.Add(new Mesage { ItemName = "检测影像文件的文件", ValueName = mUSinfo.Video_Filename });
+            Datas.Add(new Mesage { ItemName = "数据填报单位", ValueName = Convert.ToString(mUSinfo.ReportDept) });
+            Datas.Add(new Mesage { ItemName = "填报日期", ValueName = Convert.ToString(mUSinfo.ReportDate) });
+            Datas.Add(new Mesage { ItemName = "数据是否完整", ValueName = bool2str(mUSinfo.DataIsFull) });
+            Datas.Add(new Mesage { ItemName = "数据缺失原因", ValueName = mUSinfo.LoseReason });
+            Datas.Add(new Mesage { ItemName = "备注", ValueName = mUSinfo.Remark });
+            return Datas;
+        }
+
+        private ObservableCollection<Mesage> GetData(int id)
+        {
+            var Datas = new ObservableCollection<Mesage>();
+
+            TUSInfo tusinfo = new TUSInfo(App._dbpath, App.PassWord);
+            mUSinfo = tusinfo.Sel_USInfoByPipeid(id);
+            if (mUSinfo == null)
+            {
+                MessageBox.Show("读取内窥数据失败");
+                return null;
+            }
+
+            Datas.Add(new Mesage { ItemName = "排水管标识码", ValueName = "-" });
             Datas.Add(new Mesage { ItemName = "作业编号", ValueName = mUSinfo.JobID });
             Datas.Add(new Mesage { ItemName = "检测日期", ValueName = Convert.ToString(mUSinfo.DetectDate) });
             Datas.Add(new Mesage { ItemName = "检测单位", ValueName = mUSinfo.DetectDep });

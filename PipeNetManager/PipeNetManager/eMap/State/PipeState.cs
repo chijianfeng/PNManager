@@ -3,6 +3,7 @@ using BLL.Receiver;
 using DBCtrl.DBClass;
 using GIS.Arc;
 using PipeMessage.eMap;
+using PipeNetManager.common;
 using PipeNetManager.pipeMsg;
 using System;
 using System.Collections.Generic;
@@ -137,7 +138,12 @@ namespace PipeNetManager.eMap.State
             //double click
             if (e.ClickCount >= 2)
             {
-                PipeWindow pipeWnd = new PipeWindow(p.pipeInfo.PipeName);
+                PipeWindow pipeWnd;
+                if(p.pipeInfo.PipeName!=null&&!p.pipeInfo.PipeName.Equals(Constants.PIPENONENAME))
+                    pipeWnd = new PipeWindow(p.pipeInfo.PipeName);
+                else{
+                    pipeWnd = new PipeWindow(p.pipeInfo.ID);
+                }
                 pipeWnd.ShowDialog();
             }
         }

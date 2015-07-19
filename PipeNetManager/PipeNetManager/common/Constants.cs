@@ -41,5 +41,6 @@ namespace PipeNetManager.common
     }
     class Constants
     {
+        public const  String PIPENONENAME = "-";
     }
 }

@@ -34,8 +34,6 @@ namespace PipeNetManager.pipeMsg.DataGrid
     /// </summary>
     public partial class PipeInfo : UserControl
     {
-        private string mPipename;
-
         private CPipeInfo mPipeInfo;
         private CPipeExtInfo mPipeExtInfo;
 
@@ -45,6 +43,12 @@ namespace PipeNetManager.pipeMsg.DataGrid
             ShowContent(name);
         }
 
+        public PipeInfo(int id)
+        {
+            InitializeComponent();
+            ShowContent(id);
+        }
+
         public void ShowContent(string pipename)
         {
             if (pipename == null && pipename.Length <= 0)
@@ -52,8 +56,13 @@ namespace PipeNetManager.pipeMsg.DataGrid
                 MessageBox.Show("Load Data Failed!", "错误消息");
                 return;
             }
-            mPipename = pipename;
-            ObservableCollection<Mesage> datas = GetData();
+            ObservableCollection<Mesage> datas = GetData(pipename);
+            DG1.DataContext = datas;
+        }
+
+        public void ShowContent(int id)
+        {
+            ObservableCollection<Mesage> datas = GetData(id);
             DG1.DataContext = datas;
         }
 
@@ -184,13 +193,13 @@ namespace PipeNetManager.pipeMsg.DataGrid
             }
         }
 
-        private ObservableCollection<Mesage> GetData()
+        private ObservableCollection<Mesage> GetData(string pipename)
         {
             var Datas = new ObservableCollection<Mesage>();
 
             SelectCmd scmd = new SelectCmd();
             PipeRev pr = new PipeRev();
-            pr.PipeName = mPipename;
+            pr.PipeName = pipename;
             scmd.SetReceiver(pr);
             scmd.Execute();
             if (pr.ListPipe == null || pr.ListPipe.Count <= 0)
@@ -224,6 +233,44 @@ namespace PipeNetManager.pipeMsg.DataGrid
             return Datas;
         }
 
+        private ObservableCollection<Mesage> GetData(int id)
+        {
+            var Datas = new ObservableCollection<Mesage>();
+
+            TPipeInfo tpipeinfo = new TPipeInfo(App._dbpath, App.PassWord);
+            TPipeExtInfo tpipeextinfo = new TPipeExtInfo(App._dbpath, App.PassWord);
+            mPipeInfo = tpipeinfo.Sel_PipeInfoByid(id);
+            mPipeExtInfo = tpipeextinfo.Sel_PipeExtInfoByPipeId(id);
+            if (mPipeInfo == null||mPipeExtInfo==null)
+            {
+                MessageBox.Show("读取管道数据失败");
+                return null;
+            }
+
+            Datas.Add(new Mesage { ItemName = "排水管标识码", ValueName = mPipeInfo.PipeName });
+            Datas.Add(new Mesage { ItemName = "排水系统编码/路名", ValueName = mPipeExtInfo.Lane_Way });
+            Datas.Add(new Mesage { ItemName = "管道类别", ValueName = GetCategoryName(mPipeInfo.Pipe_Category) });
+            Datas.Add(new Mesage { ItemName = "起点编码", ValueName = GetJuncName(mPipeInfo.In_JunID) });
+            Datas.Add(new Mesage { ItemName = "终点编码", ValueName = GetJuncName(mPipeInfo.Out_JunID) });
+            Datas.Add(new Mesage { ItemName = "起点管顶标高", ValueName = Convert.ToString(mPipeInfo.In_UpEle) });
+            Datas.Add(new Mesage { ItemName = "起点管底标高", ValueName = Convert.ToString(mPipeInfo.In_BottomEle) });
+            Datas.Add(new Mesage { ItemName = "终点管顶标高", ValueName = Convert.ToString(mPipeInfo.Out_UpEle) });
+            Datas.Add(new Mesage { ItemName = "终点管底标高", ValueName = Convert.ToString(mPipeInfo.Out_BottomEle) });
+            Datas.Add(new Mesage { ItemName = "起点实测管径", ValueName = Convert.ToString(mPipeInfo.Shape_Data1) });
+            Datas.Add(new Mesage { ItemName = "终点实测管径", ValueName = Convert.ToString(mPipeInfo.Shape_Data2) });
+            Datas.Add(new Mesage { ItemName = "断面形式", ValueName = GetShapeType(mPipeInfo.ShapeType) });
+            Datas.Add(new Mesage { ItemName = "断面数据", ValueName = mPipeInfo.ShapeData });
+            Datas.Add(new Mesage { ItemName = "管道材质", ValueName = Getmaterial(mPipeInfo.Material) });
+            Datas.Add(new Mesage { ItemName = "管顶糙率", ValueName = Convert.ToString(mPipeInfo.Roughness) });
+            Datas.Add(new Mesage { ItemName = "数据来源", ValueName = GetDataSource(mPipeInfo.DataSource) });
+            Datas.Add(new Mesage { ItemName = "数据获取时间", ValueName = Convert.ToString(mPipeInfo.Record_Date) });
+            Datas.Add(new Mesage { ItemName = "填报单位", ValueName = mPipeInfo.ReportDept });
+            Datas.Add(new Mesage { ItemName = "填报日期", ValueName = Convert.ToString(mPipeInfo.ReportDate) });
+            Datas.Add(new Mesage { ItemName = "数据是否完整", ValueName = bool2str(mPipeExtInfo.DataIsFull) });
+            Datas.Add(new Mesage { ItemName = "数据缺失原因", ValueName = mPipeExtInfo.LoseReason });
+            Datas.Add(new Mesage { ItemName = "备注", ValueName = mPipeExtInfo.Remark });
+            return Datas;
+        }
         private string GetCategoryName(int i)
         {
             i = i - 1;

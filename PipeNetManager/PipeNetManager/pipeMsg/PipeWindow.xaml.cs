@@ -39,6 +39,18 @@ namespace PipeNetManager.pipeMsg
             AnimationUtil.ScaleEasingAnimation(this);
         }
 
+        public PipeWindow(int id)
+        {
+            InitializeComponent();
+           
+            this.Title = id + "-管道信息";
+
+            BaseInfoControl infopage = new BaseInfoControl(id, new Notify(this));
+            this.basicmsgpanel.Children.Add(infopage);
+
+            AnimationUtil.ScaleEasingAnimation(this);
+        }
+
         public class Notify : Callback
         {
             private PipeWindow mWnd;

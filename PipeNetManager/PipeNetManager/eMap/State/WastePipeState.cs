@@ -69,7 +69,7 @@ namespace PipeNetManager.eMap.State
                     p1.Y = ((App.Tiles[0].Y - c1.Location.Y) / App.Tiles[0].Dy) + App.StrokeThinkness / 2;
 
                     mMovingPath = new Path();
-                    mMovingPath.Stroke = colorCenter.Cover_Waste_Fill_Color;
+                    mMovingPath.Stroke = colorCenter.Seleted_Fill_Color;
                     mMovingPath.Data = DrawPipe(p1, p1);
                     mMovingPath.StrokeThickness = App.StrokeThinkness / 2;
                     context.Children.Add(mMovingPath);

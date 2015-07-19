@@ -8,6 +8,7 @@ using BLL.Receiver;
 using DBCtrl.DBClass;
 using DBCtrl.DBRW;
 using PipeNetManager;
+using PipeNetManager.common;
 
 namespace GIS.Arc
 {
@@ -35,7 +36,7 @@ namespace GIS.Arc
         public void LoadRainCover() 
         {
             TJuncInfo juninfo = new TJuncInfo(App._dbpath, App.PassWord);
-            List<CJuncInfo> tmplist = juninfo.Sel_JuncInfoByCaty(1);            //仅仅加载雨水检查井
+            List<CJuncInfo> tmplist = juninfo.Sel_JuncInfoByCaty((int)JUNCTYPE.JUNC_RAIN);            //仅仅加载雨水检查井
             //进行坐标转换
             foreach (CJuncInfo mJunc in tmplist)
             {
@@ -53,7 +54,7 @@ namespace GIS.Arc
         public void LoadWasterCover() {
 
             TJuncInfo juninfo = new TJuncInfo(App._dbpath, App.PassWord);
-            List<CJuncInfo> tmplist = juninfo.Sel_JuncInfoByCaty(2);            //仅仅加载污水检查井
+            List<CJuncInfo> tmplist = juninfo.Sel_JuncInfoByCaty((int)JUNCTYPE.JUNC_WASTE);            //仅仅加载污水检查井
             //进行坐标转换
             foreach (CJuncInfo mJunc in tmplist)
             {
@@ -70,7 +71,7 @@ namespace GIS.Arc
 
         public void LoadRainPipe() {
             TPipeInfo pipeinfo = new TPipeInfo(App._dbpath, App.PassWord);   //读取数据库
-            List<CPipeInfo> pipelist = pipeinfo.Sel_PipeInfo(1);             //仅仅读取雨水管道
+            List<CPipeInfo> pipelist = pipeinfo.Sel_PipeInfo((int)PIPETYPE.PIPE_RAIN);             //仅仅读取雨水管道
 
             TUSInfo usinfo = new TUSInfo(App._dbpath, App.PassWord);
             List<CUSInfo> uslist = usinfo.Load_USInfo();
@@ -93,7 +94,7 @@ namespace GIS.Arc
 
         public void LoadWasterPipe() {
             TPipeInfo pipeinfo = new TPipeInfo(App._dbpath, App.PassWord);   //读取数据库
-            List<CPipeInfo> pipelist = pipeinfo.Sel_PipeInfo(2);             //仅仅读取污水管道
+            List<CPipeInfo> pipelist = pipeinfo.Sel_PipeInfo((int)PIPETYPE.PIPE_WASTE);             //仅仅读取污水管道
 
             //读取管道内窥数据
             TUSInfo usinfo = new TUSInfo(App._dbpath, App.PassWord);

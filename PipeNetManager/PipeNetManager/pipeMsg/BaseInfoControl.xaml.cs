@@ -32,6 +32,25 @@ namespace PipeNetManager.pipeMsg
             mCB = cb;
         }
 
+        public BaseInfoControl(int id, Callback cb)
+        {
+            InitializeComponent();
+            ShowContent(id);
+            mPipeName = null;
+            mId = id;
+            mCB = cb;
+        }
+
+        private void ShowContent(int id)
+        {
+            this.stackpanel.Children.Clear();
+            if (mPipeInfo == null)
+            {
+                mPipeInfo = new PipeInfo(id);
+            }
+            this.stackpanel.Children.Add(mPipeInfo);
+        }
+
         private void ShowContent(string name)
         {
             this.stackpanel.Children.Clear();
@@ -46,7 +65,10 @@ namespace PipeNetManager.pipeMsg
             this.stackpanel.Children.Clear();
             if (mUsInfo == null)
             {
-                mUsInfo = new USInfo(mPipeName);
+                if (mPipeName != null)
+                    mUsInfo = new USInfo(mPipeName);
+                else
+                    mUsInfo = new USInfo(mId);
             }
             this.stackpanel.Children.Add(mUsInfo);
         }
@@ -56,12 +78,16 @@ namespace PipeNetManager.pipeMsg
             this.stackpanel.Children.Clear();
             if (mPipeInfo == null)
             {
-                mPipeInfo = new PipeInfo(mPipeName);
+                if (mPipeName != null)
+                    mPipeInfo = new PipeInfo(mPipeName);
+                else
+                    mPipeInfo = new PipeInfo(mId);
             }
             this.stackpanel.Children.Add(mPipeInfo);
         }
 
         private string mPipeName;
+        private int mId;
 
         private void Button_Save_Click(object sender, RoutedEventArgs e)
         {
