@@ -60,17 +60,6 @@ namespace PipeNetManager.eMap
         //向图层添加检查井
         private void addjuncs()
         {
-            //Task.Factory.StartNew((Obj) =>
-            //{
-            //    Parallel.For(0, (int)Obj, i =>              //并行计算
-            //    {
-            //        Rainpx[i] = (float)((listRains[i].Location.X - App.Tiles[0].X) / App.Tiles[0].Dx);
-            //        Rainpy[i] = (float)((App.Tiles[0].Y - listRains[i].Location.Y) / App.Tiles[0].Dy);
-            //    });
-            //}, listRains.Count).ContinueWith(ant =>
-            //{
-
-            //}, TaskScheduler.FromCurrentSynchronizationContext());
             for (int i = 0; i < listRains.Count;i++ )
             {
                 Rainpx[i] = (float)((listRains[i].Location.X - App.Tiles[0].X) / App.Tiles[0].Dx);

@@ -19,10 +19,8 @@ using System.Windows.Shapes;
 
 namespace PipeNetManager.eMap.State
 {
-    class JuncState:IState
-    {
-        protected RectAdorner mAdorner;
-
+     public  class JuncState:IState
+     {
         public JuncState(Canvas canvas):base(canvas){
 
             animationcanvas = new Canvas();
@@ -57,7 +55,7 @@ namespace PipeNetManager.eMap.State
         /// </summary>
         /// <param name="cover"></param>
         /// <param name="cp"></param>
-        public  void AddJunc(Cover cover, Point cp)
+        public void AddJunc(Cover cover, Point cp)
         {
             Path path = new Path();
             path.Fill = cover.GetColorBrush();
@@ -71,6 +69,23 @@ namespace PipeNetManager.eMap.State
             
             context.Children.Add(path);
             listpath.Add(path);
+        }
+
+        public Path AddJunc(Cover cover)
+        {
+            Path path = new Path();
+            path.Fill = cover.GetColorBrush();
+            path.Stroke = colorCenter.UnSelected_Border_Color;
+            EllipseGeometry eg = new EllipseGeometry();
+            eg.Center = cover.Location;
+            eg.RadiusX = App.StrokeThinkness;
+            eg.RadiusY = App.StrokeThinkness;
+            path.Data = eg;
+            path.ToolTip = cover;
+
+            context.Children.Add(path);
+            listpath.Add(path);
+            return path;
         }
 
         /// <summary>
@@ -115,6 +130,12 @@ namespace PipeNetManager.eMap.State
             }
         }
 
+        public void delJunc(Path path)
+        {
+            if (path == null) return;
+            context.Children.Remove(path);
+        }
+
         //更新检查井位置
         public void UpdateJuncPos(float[] px, float[] py)
         {
@@ -125,6 +146,10 @@ namespace PipeNetManager.eMap.State
                 ((EllipseGeometry)(listpath[i].Data)).RadiusY = App.StrokeThinkness;
             }
         }
+
+        public virtual void AddJunc2Data(Cover c){}
+
+        public virtual void DelJuncFromData(Cover c) { }
 
         //鼠标按下后，出现基本信息
         public override void OnMouseDown(object sender, MouseButtonEventArgs e)

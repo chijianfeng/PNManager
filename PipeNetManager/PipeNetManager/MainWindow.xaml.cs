@@ -56,6 +56,7 @@ namespace PipeNetManager
 
                 Mapctl eMap = e.OriginalSource as Mapctl;
                 eMap.AddContent();
+                eMap.setCallBack(new LocaleCallBack(this));
                 this.Grid1.Children.Remove(textBlock1);     //移除textblock
                 this.stackpanl.Children.Clear();
                 this.stackpanl.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
@@ -63,5 +64,20 @@ namespace PipeNetManager
                 this.stackpanl.Children.Add(eMap);
             }
         }
+    }
+
+    public class LocaleCallBack : MainCallBack{
+        private MainWindow handle;
+        public LocaleCallBack(MainWindow wm) { 
+            handle = wm;
+        }
+        public void Quit() {
+            handle.Close();
+        }
+    }
+
+    public interface MainCallBack
+    {
+         void Quit();
     }
 }

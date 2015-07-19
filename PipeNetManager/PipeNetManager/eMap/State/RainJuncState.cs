@@ -1,4 +1,5 @@
 ﻿using GIS.Arc;
+using PipeNetManager.UndoRedo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,22 @@ namespace PipeNetManager.eMap.State
             }
         }
 
+        /// <summary>
+        /// set the new junction point to buffer and insert into database
+        /// </summary>
+        /// <param name="c"></param>
+        public override void AddJunc2Data(Cover c) {
+            rainjuncs.AddJunc((RainCover)c);
+            InsterDB(c);
+        }
+
+        public override void DelJuncFromData(Cover c)
+        {
+            rainjuncs.DelJunc((RainCover)c);
+            //删除数据库中数据
+            DelDB(c);
+        }
+
         
         /// <summary>
         /// 响应鼠标按下事件
@@ -48,11 +65,11 @@ namespace PipeNetManager.eMap.State
                 cp.Y = cp.Y + 7-App.StrokeThinkness/2;  //设置为中心
                 RainCover c = new RainCover("雨水检查井", GetMercator(cp), "双击查看详细信息");
                 //添加其他相关信息
-                AddJunc(c, cp);                         //添加到视图中
-                rainjuncs.AddJunc(c);
+                c.Location = cp;
 
-                //插入后台数据库
-                InsterDB(c);
+                JuncAddCommand cmd = new JuncAddCommand(this, c);
+                cmd.Excute();
+                CmdManager.getInstance().PushCmd(cmd);
             }
             else if(CurrentMode==DELMODE)
             {

@@ -8,9 +8,9 @@
             d:DesignHeight="768" d:DesignWidth="1000">
     <UserControl.Resources>
         <local:DataControl x:Key="data"></local:DataControl>
-    
+
     </UserControl.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
@@ -34,20 +34,20 @@
                     <MenuItem Header="页面设置"></MenuItem>
                     <MenuItem Header="打印预览"></MenuItem>
                     <MenuItem Header="打印"></MenuItem>
-                    <MenuItem Header="退出"></MenuItem>
+                    <MenuItem Header="退出" Click="Menu_Quit_App" ToolTip="退出程序"></MenuItem> 
                 </MenuItem>
                 <MenuItem Header="编辑" DataContext="{StaticResource data}">
-                    <MenuItem Header="撤销操作"></MenuItem>
-                    <MenuItem Header="重新操作"></MenuItem>
+                    <MenuItem Header="撤销操作" Click="Edit_Cancel_Oper"></MenuItem>
+                    <MenuItem Header="重新操作" Click="Edit_Redo_Oper"></MenuItem>
                     <MenuItem Header="选择对象"></MenuItem>
                     <MenuItem Header="添加对象">
-                        <MenuItem Header="雨水管道" Name="Edit_Add_RainPipe" IsCheckable="True"
+                        <MenuItem Header="雨水管道" Name="Edit_Add_RainPipe" IsCheckable="True"  IsChecked="{Binding Path=IsAddRainJunc, Mode=TwoWay}"
                                   Click="Edit_Add_RainPipe_Click"></MenuItem>
-                        <MenuItem Header="污水管道" Name="Edit_Add_WastePipe" IsCheckable="True"
+                        <MenuItem Header="雨水管道" Name="Edit_Add_WastePipe" IsCheckable="True" IsChecked="{Binding Path=IsAddRainPipe, Mode=TwoWay}"
                                   Click="Edit_Add_WastePipe_Click"></MenuItem>
-                        <MenuItem Header="雨水检查井" Name="Edit_Add_RainJunc" IsCheckable="True" 
+                        <MenuItem Header="雨水检查井" Name="Edit_Add_RainJunc" IsCheckable="True" IsChecked="{Binding Path=IsAddWasteJunc, Mode=TwoWay}"
                                   Click="Edit_Add_RainJunc_Click"></MenuItem>
-                        <MenuItem Header="污水检查井" Name="Edit_Add_WasteJunc" IsCheckable="True" 
+                        <MenuItem Header="污水检查井" Name="Edit_Add_WasteJunc" IsCheckable="True" IsChecked="{Binding Path=IsAddWastePipe, Mode=TwoWay}"
                                   Click="Edit_Add_WasteJunc_Click"></MenuItem>
                     </MenuItem>
                     <MenuItem Header="删除对象" Name="Edit_Del" Click="Edit_Del_Click"></MenuItem>
@@ -175,7 +175,7 @@
         <StackPanel  Grid.Column="0" Grid.Row="2">
             <Grid Name="MapGrid" MouseUp="MapGrid_MouseUp" MouseLeftButtonDown="MapGrid_MouseLeftButtonDown"
                    MouseMove="MapGrid_MouseMove" Panel.ZIndex="0">
-                <StackPanel  HorizontalAlignment="Left" Panel.ZIndex="1">
+                <StackPanel  HorizontalAlignment="Left" Panel.ZIndex="1" Grid.ColumnSpan="2">
                     <Grid Width="100" Height="100" x:Name="Map_Navi" HorizontalAlignment="Left">
                         <Grid.Background>
                             <ImageBrush ImageSource="..\\Assets\daohang.png"></ImageBrush>
@@ -183,7 +183,7 @@
                     </Grid>
                     <Slider Orientation="Vertical" Margin="38,20,0,0" Height="100"/>
                     <Grid HorizontalAlignment="Left" Height="122" Margin="10,150,-2,0" Width="165" Name="Map_Info">
- 
+
                         <Label x:Name="Lbl_Detail" Background="#000EA317" Foreground="#FF2AC015" FontWeight="Bold" 
                                Margin="0,151,-106,-84" Grid.ColumnSpan="2"/>
                         <Image HorizontalAlignment="Left" Height="150" Margin="0,211,-135,-239" 

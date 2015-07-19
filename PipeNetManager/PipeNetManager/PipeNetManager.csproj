@@ -86,6 +86,9 @@
     </ApplicationDefinition>
     <Compile Include="common\Constants.cs" />
     <Compile Include="common\RectAdorner.cs" />
+    <Compile Include="UndoRedo\Basecmd.cs" />
+    <Compile Include="UndoRedo\CmdManager.cs" />
+    <Compile Include="UndoRedo\JuncAddCommand.cs" />
     <Compile Include="utils\AnimationUtil.cs" />
     <Compile Include="utils\ExceptionProcess.cs" />
     <Compile Include="utils\ValueConvert.cs" />

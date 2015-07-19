@@ -1,4 +1,5 @@
 ﻿using GIS.Arc;
+using PipeNetManager.UndoRedo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,6 +63,19 @@ namespace PipeNetManager.eMap.State
             base.OnMouseMove(sender, e);
         }
 
+        public override void AddJunc2Data(Cover c)
+        {
+            wastejunc.AddWasteJunc((WasteCover)c);
+            InsterDB(c);
+        }
+
+        public override void DelJuncFromData(Cover c)
+        {
+            wastejunc.DelWasteJunc((WasteCover)c);
+            //删除数据库中数据
+            DelDB(c);
+        }
+
         public new  void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (CurrentMode == ADDMODE)
@@ -70,12 +84,11 @@ namespace PipeNetManager.eMap.State
                 cp.X = cp.X + 7;
                 cp.Y = cp.Y + 7;                        //设置为中心
                 WasteCover c = new WasteCover("污水检查井", GetMercator(cp), "双击查看详细信息");
+                c.Location = cp;
                 //添加其他相关信息
-                AddJunc(c, cp);                         //添加到视图中
-                wastejunc.AddWasteJunc(c);              //添加到数据中
-
-                //插入后台数据库
-                InsterDB(c);
+                JuncAddCommand cmd = new JuncAddCommand(this, c);
+                cmd.Excute();
+                CmdManager.getInstance().PushCmd(cmd);
 
             }
             else if (CurrentMode == DELMODE)

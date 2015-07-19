@@ -18,6 +18,7 @@ using GIS.Map;
 using PipeMessage.eMap;
 using PipeNetManager.Login;
 using System.IO;
+using PipeNetManager.UndoRedo;
 
 namespace PipeNetManager.eMap
 {
@@ -42,7 +43,7 @@ namespace PipeNetManager.eMap
             mWastepipe = new WastePipes(mWastejunc);
         }
 
-        //初始化数据
+        #region        初始化数据
         public void InitBackground() {
 
             if (mBackground != null) {
@@ -85,6 +86,7 @@ namespace PipeNetManager.eMap
             mWastejunc.AddJuncs();
             mWastepipe.AddPipes();
         }
+        #endregion
 
         private void textLoaded(object sender, RoutedEventArgs e)
         {
@@ -138,6 +140,7 @@ namespace PipeNetManager.eMap
             Cursor customCursor = new Cursor(sri.Stream);
             return customCursor;
         }
+        #region 视图操作
         /*
          * 移动消息处理
          */
@@ -324,6 +327,8 @@ namespace PipeNetManager.eMap
             Msg += "经纬度坐标：\nX:" + mp.x.ToString("0.00000000") + "\nY:" + mp.y.ToString("0.00000000") + "\n";
             Lbl_Detail.Content = Msg;
         }
+        #endregion
+        #region 编辑操作
 
         //显示原始尺寸
         private void VIew_Orignal_Click(object sender, RoutedEventArgs e)
@@ -359,6 +364,10 @@ namespace PipeNetManager.eMap
             View_Move.IsChecked = false;                                      //其他状态变为不可用
             View_ZoomOut.IsChecked = false;
             View_ZoomIn.IsChecked = false;
+
+            Edit_Add_RainPipe.IsChecked = false;
+            Edit_Add_WasteJunc.IsChecked = false;
+            Edit_Add_WastePipe.IsChecked = false;
         }
 
         //添加污水检查井
@@ -381,8 +390,13 @@ namespace PipeNetManager.eMap
             View_Move.IsChecked = false;                                      //其他状态变为不可用
             View_ZoomOut.IsChecked = false;
             View_ZoomIn.IsChecked = false;
+
+            Edit_Add_RainPipe.IsChecked = false;
+            Edit_Add_RainJunc.IsChecked = false;
+            Edit_Add_WastePipe.IsChecked = false;
         }
 
+        //添加污水管道
         private void Edit_Add_WastePipe_Click(object sender, RoutedEventArgs e)
         {
             int index = 2;
@@ -402,8 +416,13 @@ namespace PipeNetManager.eMap
             View_Move.IsChecked = false;                                      //其他状态变为不可用
             View_ZoomOut.IsChecked = false;
             View_ZoomIn.IsChecked = false;
+
+            Edit_Add_RainPipe.IsChecked = false;
+            Edit_Add_WasteJunc.IsChecked = false;
+            Edit_Add_RainJunc.IsChecked = false;
         }
 
+        //添加雨水管道
         private void Edit_Add_RainPipe_Click(object sender, RoutedEventArgs e)
         {
             int index = 1;
@@ -423,6 +442,10 @@ namespace PipeNetManager.eMap
             View_Move.IsChecked = false;                                      //其他状态变为不可用
             View_ZoomOut.IsChecked = false;
             View_ZoomIn.IsChecked = false;
+
+            Edit_Add_RainJunc.IsChecked = false;
+            Edit_Add_WasteJunc.IsChecked = false;
+            Edit_Add_WastePipe.IsChecked = false;
         }
         /// <summary>
         /// 删除对象
@@ -441,8 +464,26 @@ namespace PipeNetManager.eMap
             View_Move.IsChecked = false;                                      //其他状态变为不可用
             View_ZoomOut.IsChecked = false;
             View_ZoomIn.IsChecked = false;
+
+            Edit_Add_RainPipe.IsChecked = false;
+            Edit_Add_RainJunc.IsChecked = false;
+            Edit_Add_WasteJunc.IsChecked = false;
+            Edit_Add_WastePipe.IsChecked = false;
         }
 
+        //cancle operation
+        private void Edit_Cancel_Oper(object sender, RoutedEventArgs e)
+        {
+            CmdManager.getInstance().Undo();
+        }
+
+        private void Edit_Redo_Oper(object sender, RoutedEventArgs e)
+        {
+            CmdManager.getInstance().Redo();
+        }
+#endregion
+
+        #region 文件操作
         /// <summary>
         /// 调起导入数据window
         /// </summary>
@@ -459,7 +500,29 @@ namespace PipeNetManager.eMap
             {
                 MessageBox.Show("无法启动导入数据程序");
             }
-           
         }
+
+        public void setCallBack(MainCallBack cb)
+        {
+            mCallBack = cb;
+        }
+        private void Menu_Quit_App(object sender, RoutedEventArgs e)
+        {
+            string msg = "是否退出软件?";
+            string title = "退出";
+            MessageBoxButton buttons = MessageBoxButton.YesNo;
+            MessageBoxImage icon = MessageBoxImage.Warning;
+            MessageBoxResult result = MessageBox.Show(msg, title, buttons, icon);
+            if (result == MessageBoxResult.Yes)
+            {
+                if (mCallBack == null) return;
+                mCallBack.Quit();
+            }
+        }
+
+        private MainCallBack mCallBack;
+        #endregion
+
+       
     }
 }
