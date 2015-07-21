@@ -63,10 +63,10 @@ namespace PipeNetManager.eMap.State
             base.OnMouseMove(sender, e);
         }
 
-        public override void AddJunc2Data(Cover c)
+        public override int AddJunc2Data(Cover c)
         {
             wastejunc.AddWasteJunc((WasteCover)c);
-            InsterDB(c);
+            return InsterDB(c);
         }
 
         public override void DelJuncFromData(Cover c)
@@ -94,13 +94,14 @@ namespace PipeNetManager.eMap.State
             else if (CurrentMode == DELMODE)
             {
                 Path path = e.Source as Path;
-                if(DelJunc(path))
+                if (path == null)
                 {
-                    WasteCover c = path.ToolTip as WasteCover;
-                    wastejunc.DelWasteJunc(c);
-                    //删除数据库中数据
-                    DelDB(c);
+                    base.OnMouseDown(sender, e);          //若都不是添加或删除命令，则交给父类进行处理
+                    return;
                 }
+                JuncDelCommand cmd = new JuncDelCommand(this, path);
+                cmd.Excute();
+                CmdManager.getInstance().PushCmd(cmd);
             }
             base.OnMouseDown(sender, e);                //若都不是添加或删除命令，则交给父类进行处理
         }

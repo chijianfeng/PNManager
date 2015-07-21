@@ -25,8 +25,10 @@ namespace PipeNetManager.UndoRedo
         {
             if (mState == null)
                 return;
+            int id =  mState.AddJunc2Data(mCover);
+            mCover.juncInfo.ID = id;
             mPath =  mState.AddJunc(mCover);
-            mState.AddJunc2Data(mCover);
+            
         }
 
         public void Undo()          //delete the junction

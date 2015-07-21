@@ -38,9 +38,9 @@ namespace PipeNetManager.eMap.State
         /// set the new junction point to buffer and insert into database
         /// </summary>
         /// <param name="c"></param>
-        public override void AddJunc2Data(Cover c) {
+        public override int AddJunc2Data(Cover c) {
             rainjuncs.AddJunc((RainCover)c);
-            InsterDB(c);
+            return InsterDB(c);
         }
 
         public override void DelJuncFromData(Cover c)
@@ -74,14 +74,14 @@ namespace PipeNetManager.eMap.State
             else if(CurrentMode==DELMODE)
             {
                 Path path = e.Source as Path;
-                if(DelJunc(path))
+                if (path == null)
                 {
-                    RainCover c = path.ToolTip as RainCover;
-                    rainjuncs.DelJunc(c);
-
-                    //删除数据库中数据
-                    DelDB(c);
+                    base.OnMouseDown(sender, e);          //若都不是添加或删除命令，则交给父类进行处理
+                    return;
                 }
+                JuncDelCommand cmd = new JuncDelCommand(this, path);
+                cmd.Excute();
+                CmdManager.getInstance().PushCmd(cmd);
             }
             base.OnMouseDown(sender, e);                //若都不是添加或删除命令，则交给父类进行处理
         }

@@ -1,6 +1,7 @@
 ﻿using BLL.Command;
 using BLL.Receiver;
 using DBCtrl.DBClass;
+using DBCtrl.DBRW;
 using GIS.Arc;
 using GIS.Map;
 using PipeMessage.eMap;
@@ -147,7 +148,7 @@ namespace PipeNetManager.eMap.State
             }
         }
 
-        public virtual void AddJunc2Data(Cover c){}
+        public virtual int AddJunc2Data(Cover c) { return 0; }
 
         public virtual void DelJuncFromData(Cover c) { }
 
@@ -166,7 +167,7 @@ namespace PipeNetManager.eMap.State
                  Cover cover = path.ToolTip as Cover;
                  if (cover == null) return;
                  JuncWindow juncWnd;
-                 if (cover.Name == null || cover.Name.Length <= 0)
+                 if (cover.juncInfo.JuncName == null || cover.juncInfo.JuncName.Length <= 0)
                  {
                       juncWnd = new JuncWindow(cover.juncInfo.ID);
                  }
@@ -183,27 +184,43 @@ namespace PipeNetManager.eMap.State
             
         }
 
-        protected void InsterDB(Cover c)
+         //返回插入junction的id
+        protected int InsterDB(Cover c)
         {
-            if (c == null) return;
+            if (c == null) return 0;
             //change the coordinate Mercator to WGS84
             Coords.Point p = new Coords.Point();
             p.x = c.Location.X;
             p.y = c.Location.Y;
+
+            int Column = (int)p.x / 256;
+            int Row = (int)p.y / 256;
+
+            double dx = p.x - Column * 256;
+            double dy = p.y - Row * 256;
+
+            Tile tile = App.Tiles[Row * Level.Total_Column + Column];
+            p.x = tile.X + tile.Dx * dx;
+            p.y = tile.Y - tile.Dy * dy;
+           
             p = Coords.Mercator2WGS84(p);
             //store to 
             CJuncInfo info = new CJuncInfo();
-            info.X_Coor = p.x;
-            info.Y_Coor = p.y;
+            info.X_Coor = p.x + Constants.COOR_X_OFFSET;
+            info.Y_Coor = p.y + Constants.COOR_Y_OFFSET;
+
             info.Junc_Category = c.juncInfo.Junc_Category;
 
-            InsertCmd cmd = new InsertCmd();
-            JuncRev rev = new JuncRev();
-            rev.ListJunc = new List<CJuncInfo>();
-            rev.ListJunc.Add(info);
-
-            cmd.SetReceiver(rev);
-            cmd.Execute();
+            //数据库操作
+            TJuncInfo juncinfo = new TJuncInfo(App._dbpath, App.PassWord);
+            TJuncExtInfo juncextinfo = new TJuncExtInfo(App._dbpath, App.PassWord);
+            if (!juncinfo.Insert_JuncInfo(ref info)) {
+                return 0;
+            }
+            CJuncExtInfo extinfo = new CJuncExtInfo();
+            extinfo.JuncID = info.ID;
+            juncextinfo.Insert_JuncExtInfo(ref extinfo);
+            return info.ID;
         }
 
         protected void DelDB(Cover c)

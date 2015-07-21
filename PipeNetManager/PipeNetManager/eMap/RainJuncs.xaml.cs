@@ -183,7 +183,6 @@ namespace PipeNetManager.eMap
                 return;
             }
             state.OnMouseDown(sender, e);                               //其他操作，删除，选择操作等
-            return;
         }
 
         public new void Update()                                           //强制更新检查井位置
