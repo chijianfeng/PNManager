@@ -48,5 +48,7 @@ namespace PipeNetManager.common
         public const double COOR_X_OFFSET = -0.0045;
 
         public const double COOR_Y_OFFSET = 0.0034;
+
+        public const int JUNCBUFFERSIZE = 80;
     }
 }

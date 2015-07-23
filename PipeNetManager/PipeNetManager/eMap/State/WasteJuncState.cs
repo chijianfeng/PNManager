@@ -33,6 +33,16 @@ namespace PipeNetManager.eMap.State
             }
         }
 
+        public void AddWasteJunc(List<WasteCover> listjuncs, List<Point> listpoint)
+        {
+            int index = 0;
+            foreach (WasteCover cover in listjuncs)
+            {
+                AddJunc(cover, listpoint[index]);
+                index++;
+            }
+        }
+
         public override void OnMouseMove(object sender, MouseEventArgs e)
         {
             if (CurrentMode == SELECTMODE)
@@ -84,7 +94,7 @@ namespace PipeNetManager.eMap.State
                 cp.X = cp.X + 7;
                 cp.Y = cp.Y + 7;                        //设置为中心
                 WasteCover c = new WasteCover("污水检查井", GetMercator(cp), "双击查看详细信息");
-                c.Location = cp;
+                c.Location = GetMercator(cp);
                 //添加其他相关信息
                 JuncAddCommand cmd = new JuncAddCommand(this, c);
                 cmd.Excute();

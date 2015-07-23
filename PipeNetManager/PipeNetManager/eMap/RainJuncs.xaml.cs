@@ -2,6 +2,7 @@
 using DBCtrl.DBRW;
 using GIS.Arc;
 using PipeMessage.eMap;
+using PipeNetManager.common;
 using PipeNetManager.eMap.State;
 using System;
 using System.Collections.Generic;
@@ -52,8 +53,7 @@ namespace PipeNetManager.eMap
             }
            
             //将点坐标进行保存
-            Rainpx = new float[listRains.Count+50];
-            Rainpy = new float[listRains.Count+50];
+            mListScreenpoint = new List<Point>(listRains.Count+Constants.JUNCBUFFERSIZE);
             addjuncs();
         }
 
@@ -62,21 +62,20 @@ namespace PipeNetManager.eMap
         {
             for (int i = 0; i < listRains.Count;i++ )
             {
-                Rainpx[i] = (float)((listRains[i].Location.X - App.Tiles[0].X) / App.Tiles[0].Dx);
-                Rainpy[i] = (float)((App.Tiles[0].Y - listRains[i].Location.Y) / App.Tiles[0].Dy);
+                mListScreenpoint.Add(state.Mercator2Screen(listRains.ElementAt(i).Location));
             }
         }
 
         public void AddJuncs() { 
-            state.AddRainJunc(listRains, Rainpx, Rainpy);
+            state.AddRainJunc(listRains, mListScreenpoint);
         }
 
         public void AddJunc(RainCover c)           //添加雨水检查井
         {
             listRains.Add(c);
             //计算点的坐标
-            Rainpx[listRains.Count] = (float)((c.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx);
-            Rainpy[listRains.Count] = (float)((App.Tiles[0].Y - c.Location.Y) / App.Tiles[0].Dy);
+            mListScreenpoint.Add(state.Mercator2Screen(c.Location));
+         
         }
 
         public void DelJunc(RainCover c)
@@ -91,7 +90,10 @@ namespace PipeNetManager.eMap
                 index++;
             }
             if (index < listRains.Count)
+            {
                 listRains.RemoveAt(index);
+                mListScreenpoint.RemoveAt(index);
+            }
         }
 
         /// <summary>
@@ -105,10 +107,10 @@ namespace PipeNetManager.eMap
             double dis = App.StrokeThinkness;
             for (int i = 0; i < listRains.Count;i++ )
             {
-                if (Math.Abs(Rainpx[i] - p.X) > dis || Math.Abs(Rainpy[i] - p.Y) > dis)
+                if (Math.Abs(mListScreenpoint.ElementAt(i).X - p.X) > dis || Math.Abs(mListScreenpoint.ElementAt(i).Y - p.Y) > dis)
                     continue;
-                double d = Math.Sqrt((Rainpx[i] - p.X) * (Rainpx[i] - p.X) +
-                    (Rainpy[i] - p.Y) * (Rainpy[i] - p.Y));                       //计算距离
+                double d = Math.Sqrt((mListScreenpoint.ElementAt(i).X - p.X) * (mListScreenpoint.ElementAt(i).X - p.X) +
+                    (mListScreenpoint.ElementAt(i).Y - p.Y) * (mListScreenpoint.ElementAt(i).Y - p.Y));                       //计算距离
                 if (dis > d)
                 {
                     dis = d;
@@ -122,18 +124,16 @@ namespace PipeNetManager.eMap
         private void UpdateRainJuncs()
         {
             //计算相对位置
-            
             Task.Factory.StartNew<int>((Obj) =>
             {
                 Parallel.For(0, (int)Obj, i =>              //并行计算
                 {
-                    Rainpx[i] = (float)((listRains[i].Location.X - App.Tiles[0].X) / App.Tiles[0].Dx);
-                    Rainpy[i] = (float)((App.Tiles[0].Y - listRains[i].Location.Y) / App.Tiles[0].Dy);
+                    mListScreenpoint[i] = state.Mercator2Screen(listRains.ElementAt(i).Location);
                 });
                 return 0;
             }, listRains.Count).ContinueWith(ant =>
             {
-                state.UpdateJuncPos(Rainpx, Rainpy);
+                state.UpdateJuncPos(mListScreenpoint);
             }, TaskScheduler.FromCurrentSynchronizationContext());
             this.RainGrid.Margin = App.MoveRect;
         }
@@ -198,11 +198,10 @@ namespace PipeNetManager.eMap
 
         public List<RainCover> listRains = null;               //雨水检查井集合
 
+        private List<Point> mListScreenpoint = null;            //屏幕上物理坐标
+
         RainJuncState state = null;                            //操作 
 
         bool IsMousedown = false;                              //鼠标是否按下
-
-        unsafe float[] Rainpx = null;                           //检查井坐标
-        unsafe float[] Rainpy = null;
     }
 }

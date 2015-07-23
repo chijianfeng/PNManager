@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using GIS.Map;
 using BLL.Command;
 using PipeNetManager;
+using PipeNetManager.common;
 
 namespace PipeMessage.eMap
 {
@@ -49,9 +50,9 @@ namespace PipeMessage.eMap
         public abstract void SelectShape(Path path);
 
         /// <summary>
-        /// 坐标转换
+        /// 坐标转换 
         /// </summary>
-        /// <param name="p"></param>
+        /// <param name="p"> 屏幕上物理坐标点</param>
         /// <returns></returns>
         public Point GetMercator(Point p)
         {
@@ -69,6 +70,57 @@ namespace PipeMessage.eMap
         }
 
         /// <summary>
+        /// 转换为GIS坐标
+        /// </summary>
+        /// <param name="p"> 屏幕上实际坐标</param>
+        /// <returns></returns>
+        public Point GetGIS842(Point p)
+        {
+            Point point = new Point();
+            point = GetMercator(p);
+            Coords.Point cp = new Coords.Point();
+            cp.x = point.X;
+            cp.y = point.Y;
+            cp = Coords.Mercator2WGS84(cp);
+            point.X = cp.x + Constants.COOR_X_OFFSET;
+            point.Y = cp.y + Constants.COOR_Y_OFFSET;
+            return point;
+        }
+
+        /// <summary>
+        /// 墨卡托坐标转换为屏幕坐标
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public Point Mercator2Screen(Point p)
+        {
+            Point point = new Point();
+            point.X = (float)((p.X - App.Tiles[0].X) / App.Tiles[0].Dx);
+            point.Y = (float)((App.Tiles[0].Y - p.Y) / App.Tiles[0].Dy);
+            return point;
+        }
+
+        public float Mercator2ScreenX(double x)
+        {
+            return (float)((x - App.Tiles[0].X) / App.Tiles[0].Dx);
+        }
+
+        public float Mercator2ScreenY(double y)
+        {
+            return (float)((App.Tiles[0].Y - y) / App.Tiles[0].Dy);
+        }
+
+        public Point GIS842toScreen(Point p)
+        {
+            p.X = p.X - Constants.COOR_X_OFFSET;
+            p.Y = p.Y - Constants.COOR_Y_OFFSET;
+
+            p = GISConverter.WGS842Merator(p);
+
+            return Mercator2Screen(p);
+        }
+
+        /// <summary>
         /// 鼠标响应事件
         /// </summary>
         /// <param name="sender"></param>
@@ -81,6 +133,6 @@ namespace PipeMessage.eMap
         /// <param name="sender"></param>
         /// <param name="e"></param>
         public abstract void OnMouseMove(Object sender, MouseEventArgs e);
-
+      
     }
 }

@@ -43,7 +43,7 @@ namespace GIS.Arc
                 if (mJunc.X_Coor == 0)                                           //无座标
                     continue;
                 RainCover cover = null;
-                Point p = new Point(mJunc.X_Coor + 0.0045, mJunc.Y_Coor - 0.0034);
+                Point p = new Point(mJunc.X_Coor - Constants.COOR_X_OFFSET, mJunc.Y_Coor - Constants.COOR_Y_OFFSET);
 
                 cover = new RainCover(mJunc.JuncName, GISConverter.WGS842Merator(p), mJunc.SystemID);
                 cover.juncInfo = mJunc;
@@ -61,7 +61,7 @@ namespace GIS.Arc
                 if (mJunc.X_Coor == 0)                                           //无座标
                     continue;
                 WasteCover cover = null;
-                Point p = new Point(mJunc.X_Coor + 0.0045, mJunc.Y_Coor - 0.0034);
+                Point p = new Point(mJunc.X_Coor - Constants.COOR_X_OFFSET, mJunc.Y_Coor - Constants.COOR_Y_OFFSET);
 
                 cover = new WasteCover(mJunc.JuncName, GISConverter.WGS842Merator(p), mJunc.SystemID);
                 cover.juncInfo = mJunc;

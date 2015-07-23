@@ -2,6 +2,7 @@
 using DBCtrl.DBRW;
 using GIS.Arc;
 using PipeMessage.eMap;
+using PipeNetManager.common;
 using PipeNetManager.eMap.State;
 using System;
 using System.Collections.Generic;
@@ -48,39 +49,26 @@ namespace PipeNetManager.eMap
                 listWaste = ((App)System.Windows.Application.Current).arcmap.WasterCoverList;
             }
             //将点坐标进行保存
-            Wastepx = new float[listWaste.Count];
-            Wastepy = new float[listWaste.Count];
+            mListScreenpoint = new List<Point>(listWaste.Count + Constants.JUNCBUFFERSIZE);
 
             addjuncs();                     //添加污水井
         }
 
         private  void addjuncs()
         {
-           // Task.Factory.StartNew<int>((Obj) =>
-           //{
-           //    Parallel.For(0, (int)Obj, i =>              //并行计算
-           //    {
-           //        Wastepx[i] = (float)((listWaste[i].Location.X - App.Tiles[0].X) / App.Tiles[0].Dx);
-           //        Wastepy[i] = (float)((App.Tiles[0].Y - listWaste[i].Location.Y) / App.Tiles[0].Dy);
-           //    });
-           //    return 0;
-           //}, listWaste.Count).ContinueWith(ant => {
-           //}, TaskScheduler.FromCurrentSynchronizationContext());
             for (int i = 0; i < listWaste.Count; i++) {
-                Wastepx[i] = (float)((listWaste[i].Location.X - App.Tiles[0].X) / App.Tiles[0].Dx);
-                Wastepy[i] = (float)((App.Tiles[0].Y - listWaste[i].Location.Y) / App.Tiles[0].Dy);
+                mListScreenpoint.Add(state.Mercator2Screen(listWaste.ElementAt(i).Location));
             }
         }
 
         public void AddJuncs() {
-            state.AddWasteJunc(listWaste, Wastepx, Wastepy);
+            state.AddWasteJunc(listWaste, mListScreenpoint);
         }
 
         public void AddWasteJunc(WasteCover wc)
         {
             listWaste.Add(wc);
-            Wastepx = new float[listWaste.Count];
-            Wastepy = new float[listWaste.Count];
+            mListScreenpoint.Add(state.Mercator2Screen(wc.Location));
         }
 
         public void DelWasteJunc(WasteCover c)
@@ -88,7 +76,7 @@ namespace PipeNetManager.eMap
             int index = 0;
             foreach (WasteCover tmpc in listWaste)
             {
-                if (c.Name.Equals(tmpc.Name))
+                if (c.juncInfo.ID.Equals(tmpc.juncInfo.ID))
                 {
                     break;
                 }
@@ -104,10 +92,10 @@ namespace PipeNetManager.eMap
             double dis = App.StrokeThinkness;
             for (int i = 0; i < listWaste.Count; i++)
             {
-                if (Math.Abs(Wastepx[i] - p.X) > dis || Math.Abs(Wastepy[i] - p.Y) > dis)
+                if (Math.Abs(mListScreenpoint.ElementAt(i).X - p.X) > dis || Math.Abs(mListScreenpoint.ElementAt(i).Y - p.Y) > dis)
                     continue;
-                double d = Math.Sqrt((Wastepx[i] - p.X) * (Wastepx[i] - p.X) +
-                    (Wastepy[i] - p.Y) * (Wastepy[i] - p.Y));                       //计算距离
+                double d = Math.Sqrt((mListScreenpoint.ElementAt(i).X - p.X) * (mListScreenpoint.ElementAt(i).X - p.X) +
+                    (mListScreenpoint.ElementAt(i).Y - p.Y) * (mListScreenpoint.ElementAt(i).Y - p.Y));                       //计算距离
                 if (dis > d)
                 {
                     dis = d;
@@ -124,13 +112,12 @@ namespace PipeNetManager.eMap
             {
                 Parallel.For(0, (int)Obj, i =>              //并行计算
                 {
-                    Wastepx[i] = (float)((listWaste[i].Location.X - App.Tiles[0].X) / App.Tiles[0].Dx);
-                    Wastepy[i] = (float)((App.Tiles[0].Y - listWaste[i].Location.Y) / App.Tiles[0].Dy);
+                    mListScreenpoint[i] = state.Mercator2Screen(listWaste.ElementAt(i).Location);
                 });
                 return 0;
             }, listWaste.Count).ContinueWith(ant =>
             {
-                state.UpdateJuncPos(Wastepx, Wastepy);
+                state.UpdateJuncPos(mListScreenpoint);
             }, TaskScheduler.FromCurrentSynchronizationContext());
             this.WasteGrid.Margin = App.MoveRect;
         }
@@ -196,13 +183,11 @@ namespace PipeNetManager.eMap
         }
 
         public List<WasteCover> listWaste = null;
+
+        private List<Point> mListScreenpoint = null;            //屏幕上物理坐标
+
         WasteJuncState  state = null;                           //操作 
 
         bool IsMousedown = false;                              //鼠标是否按下
-
-        float[] Wastepx = null;                                 //污水检查井位置
-        float[] Wastepy = null;
-
-      
     }
 }

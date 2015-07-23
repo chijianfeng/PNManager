@@ -14,6 +14,8 @@ namespace PipeNetManager.UndoRedo
 
         private Path mPath;         //real data
 
+        private int mCurId;         //current id
+
         public JuncDelCommand(JuncState state, Path path)
         {
             mState = state;
@@ -35,7 +37,7 @@ namespace PipeNetManager.UndoRedo
                 return;
             Cover c = mPath.ToolTip as Cover;
             mPath = mState.AddJunc(c);
-            mState.AddJunc2Data(c);
+            mCurId = mState.AddJunc2Data(c);
         }
 
         public void Redo()
@@ -44,6 +46,7 @@ namespace PipeNetManager.UndoRedo
             if (mPath == null) return;
             mState.delJunc(mPath);
             Cover c = mPath.ToolTip as Cover;
+            c.juncInfo.ID = mCurId;
             mState.DelJuncFromData(c);
         }
     }

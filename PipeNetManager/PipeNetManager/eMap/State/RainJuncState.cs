@@ -34,6 +34,16 @@ namespace PipeNetManager.eMap.State
             }
         }
 
+        public void AddRainJunc(List<RainCover> listjuncs, List<Point> listpoint)
+        {
+            int index = 0;
+            foreach (RainCover cover in listjuncs)
+            {
+                AddJunc(cover, listpoint[index]);
+                index++;
+            }
+        }
+
         /// <summary>
         /// set the new junction point to buffer and insert into database
         /// </summary>
@@ -65,7 +75,7 @@ namespace PipeNetManager.eMap.State
                 cp.Y = cp.Y + 7-App.StrokeThinkness/2;  //设置为中心
                 RainCover c = new RainCover("雨水检查井", GetMercator(cp), "双击查看详细信息");
                 //添加其他相关信息
-                c.Location = cp;
+                c.Location = GetMercator(cp);
 
                 JuncAddCommand cmd = new JuncAddCommand(this, c);
                 cmd.Excute();

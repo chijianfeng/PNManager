@@ -78,7 +78,7 @@ namespace PipeNetManager.eMap.State
             path.Fill = cover.GetColorBrush();
             path.Stroke = colorCenter.UnSelected_Border_Color;
             EllipseGeometry eg = new EllipseGeometry();
-            eg.Center = cover.Location;
+            eg.Center = Mercator2Screen(cover.Location);
             eg.RadiusX = App.StrokeThinkness;
             eg.RadiusY = App.StrokeThinkness;
             path.Data = eg;
@@ -122,6 +122,7 @@ namespace PipeNetManager.eMap.State
             if (result == MessageBoxResult.Yes)
             {
                 context.Children.Remove(path);
+                listpath.Remove(path);
                 return true;
             }
             else
@@ -135,6 +136,7 @@ namespace PipeNetManager.eMap.State
         {
             if (path == null) return;
             context.Children.Remove(path);
+            listpath.Remove(path);
         }
 
         //更新检查井位置
@@ -145,6 +147,18 @@ namespace PipeNetManager.eMap.State
                 ((EllipseGeometry)(listpath[i].Data)).Center = new Point(px[i], py[i]);
                 ((EllipseGeometry)(listpath[i].Data)).RadiusX = App.StrokeThinkness;
                 ((EllipseGeometry)(listpath[i].Data)).RadiusY = App.StrokeThinkness;
+            }
+        }
+
+        public void UpdateJuncPos(List<Point> list)
+        {
+            int i = 0;
+            foreach (Point p in list)
+            {
+                ((EllipseGeometry)(listpath[i].Data)).Center = p;
+                ((EllipseGeometry)(listpath[i].Data)).RadiusX = App.StrokeThinkness;
+                ((EllipseGeometry)(listpath[i].Data)).RadiusY = App.StrokeThinkness;
+                i++;
             }
         }
 
@@ -192,17 +206,6 @@ namespace PipeNetManager.eMap.State
             Coords.Point p = new Coords.Point();
             p.x = c.Location.X;
             p.y = c.Location.Y;
-
-            int Column = (int)p.x / 256;
-            int Row = (int)p.y / 256;
-
-            double dx = p.x - Column * 256;
-            double dy = p.y - Row * 256;
-
-            Tile tile = App.Tiles[Row * Level.Total_Column + Column];
-            p.x = tile.X + tile.Dx * dx;
-            p.y = tile.Y - tile.Dy * dy;
-           
             p = Coords.Mercator2WGS84(p);
             //store to 
             CJuncInfo info = new CJuncInfo();
