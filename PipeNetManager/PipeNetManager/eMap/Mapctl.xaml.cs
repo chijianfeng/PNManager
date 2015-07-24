@@ -475,6 +475,10 @@ namespace PipeNetManager.eMap
         private void Edit_Cancel_Oper(object sender, RoutedEventArgs e)
         {
             CmdManager.getInstance().Undo();
+            if (CmdManager.getInstance().GetDoneCmdNumber() <= 0)
+            {
+                Button_Edit_Undo.IsEnabled = false;
+            }
         }
 
         private void Edit_Redo_Oper(object sender, RoutedEventArgs e)

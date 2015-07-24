@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/passwd.png")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/username.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/redo.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/undo.png")]
 
 

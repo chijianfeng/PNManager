@@ -150,7 +150,15 @@
                         <Image Source="/Assets/Del.png" Height="24"></Image>
                     </Button>
                 </ToolBar>
-                <ToolBar Band="1" BandIndex="2" Name="View">
+                <ToolBar Band="1" BandIndex="2" Name="Edit_undo">
+                    <Button ToolTip="撤销操作" Click="Edit_Cancel_Oper" Name="Button_Edit_Undo">
+                        <Image Source="/Assets/undo.png" Height="24" Width="24"></Image>
+                    </Button>
+                    <Button ToolTip="重新操作" Click="Edit_Redo_Oper" Name="Button_Edit_Redo">
+                        <Image Source="/Assets/redo.png" Height="24" Width="24"></Image>
+                    </Button>
+                </ToolBar>
+                <ToolBar Band="1" BandIndex="3" Name="View">
                     <Button ToolTip="选择" Click="OnSelect">
                         <Image Source="/Assets/Select.png" Height="24"></Image>
                     </Button>

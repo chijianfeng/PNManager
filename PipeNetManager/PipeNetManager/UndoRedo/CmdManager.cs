@@ -87,5 +87,15 @@ namespace PipeNetManager.UndoRedo
             return true;
         }
 
+        public int GetDoneCmdNumber()
+        {
+            return mStackDone.Count;
+        }
+
+        public int GetRedoCmdNumber()
+        {
+            return mStackReDo.Count;
+        }
+
     }
 }
