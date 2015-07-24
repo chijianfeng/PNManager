@@ -2,6 +2,7 @@
 using DBCtrl.DBRW;
 using GIS.Arc;
 using PipeMessage.eMap;
+using PipeNetManager.common;
 using PipeNetManager.eMap.State;
 using System;
 using System.Collections.Generic;
@@ -44,8 +45,7 @@ namespace PipeNetManager.eMap
             }
             listWastes = ((App)System.Windows.Application.Current).arcmap.WastePipeList;
 
-            StartPipe = new Point[listWastes.Count+50];
-            EndPipe = new Point[listWastes.Count+50];
+            mListVLine = new List<VectorLine>(listWastes.Count + Constants.PIPEBUFFERSIZE);
             addpipes();
         }
 
@@ -61,46 +61,22 @@ namespace PipeNetManager.eMap
         //增加污水管道
         void addpipes()
         {
-            //Task.Factory.StartNew((Obj) =>
-            //{
-
-            //    Parallel.For(0, (int)Obj, i =>          //计算位置
-            //    {
-            //        StartPipe[i].X = (listWastes[i].Start.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-            //        StartPipe[i].Y = (App.Tiles[0].Y - listWastes[i].Start.Location.Y) / App.Tiles[0].Dy;
-
-            //        EndPipe[i].X = (listWastes[i].End.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-            //        EndPipe[i].Y = (App.Tiles[0].Y - listWastes[i].End.Location.Y) / App.Tiles[0].Dy;
-            //    });
-
-            //}, listWastes.Count).ContinueWith(ant =>
-            //{               //添加到图层中
-            //}, TaskScheduler.FromCurrentSynchronizationContext());
-
             for (int i = 0; i < listWastes.Count; i++)
             {
-                StartPipe[i].X = (listWastes[i].Start.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-                StartPipe[i].Y = (App.Tiles[0].Y - listWastes[i].Start.Location.Y) / App.Tiles[0].Dy;
-
-                EndPipe[i].X = (listWastes[i].End.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-                EndPipe[i].Y = (App.Tiles[0].Y - listWastes[i].End.Location.Y) / App.Tiles[0].Dy;
+                mListVLine.Add(new VectorLine(state.Mercator2Screen(listWastes[i].Start.Location) , 
+                                              state.Mercator2Screen(listWastes[i].End.Location)));
             }
         }
 
         
         public void AddPipes() {
-            state.AddWastePipes(listWastes, StartPipe, EndPipe);
+            state.AddWastePipes(listWastes, mListVLine);
         }
 
         public void AddWastePipe(WastePipe pipe)
         {
             listWastes.Add(pipe);
-            int i = listWastes.Count - 1;
-            StartPipe[i+1].X = (listWastes[i].Start.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-            StartPipe[i+1].Y = (App.Tiles[0].Y - listWastes[i].Start.Location.Y) / App.Tiles[0].Dy;
-
-            EndPipe[i+1].X = (listWastes[i].End.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-            EndPipe[i+1].Y = (App.Tiles[0].Y - listWastes[i].End.Location.Y) / App.Tiles[0].Dy;
+            mListVLine.Add(new VectorLine(pipe.Start.Location, pipe.End.Location));
         }
 
         public void DelWastePipe(WastePipe pipe)
@@ -125,17 +101,13 @@ namespace PipeNetManager.eMap
 
                 Parallel.For(0, (int)Obj, i =>          //计算位置
                 {
-                    StartPipe[i].X = (listWastes[i].Start.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-                    StartPipe[i].Y = (App.Tiles[0].Y - listWastes[i].Start.Location.Y) / App.Tiles[0].Dy;
-
-                    EndPipe[i].X = (listWastes[i].End.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-                    EndPipe[i].Y = (App.Tiles[0].Y - listWastes[i].End.Location.Y) / App.Tiles[0].Dy;
+                    mListVLine[i].StartPoint = state.Mercator2Screen(listWastes[i].Start.Location);
+                    mListVLine[i].EndPoint = state.Mercator2Screen(listWastes[i].End.Location);
                 });
 
             }, listWastes.Count).ContinueWith(ant =>
             {               //更新到图层中
-
-                state.UpdatePipes(StartPipe, EndPipe);
+                state.UpdatePipes(mListVLine);
 
             }, TaskScheduler.FromCurrentSynchronizationContext());
             this.WastePipeGrid.Margin = App.MoveRect;                        //更新相对位置
@@ -209,7 +181,6 @@ namespace PipeNetManager.eMap
 
         bool IsMousedown = false;                              //鼠标是否按下
 
-        Point[] StartPipe = null;                              //起始点管道坐标
-        Point[] EndPipe = null;                                //终止点管道坐标
+        List<VectorLine> mListVLine;                            //实际屏幕坐标
     }
 }

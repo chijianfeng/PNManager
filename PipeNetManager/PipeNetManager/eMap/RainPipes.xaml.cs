@@ -2,6 +2,7 @@
 using DBCtrl.DBRW;
 using GIS.Arc;
 using PipeMessage.eMap;
+using PipeNetManager.common;
 using PipeNetManager.eMap.State;
 using System;
 using System.Collections.Generic;
@@ -44,16 +45,13 @@ namespace PipeNetManager.eMap
                 map.LoadRainPipe();
             }
             listRains = ((App)System.Windows.Application.Current).arcmap.RainPipeList;
-
-            StartPipe = new Point[listRains.Count+50];
-            EndPipe = new Point[listRains.Count+50];
-
+            mListVLine = new List<VectorLine>(listRains.Count + Constants.PIPEBUFFERSIZE);
             addpipes();                         //图层中添加管道
         }
 
 
         public void AddPipes() {
-            state.AddRainPipes(listRains, StartPipe, EndPipe);
+            state.AddRainPipes(listRains, mListVLine);
         }
 
         
@@ -67,11 +65,8 @@ namespace PipeNetManager.eMap
         void addpipes()
         {
             for (int i = 0; i < listRains.Count; i++) {
-                StartPipe[i].X = (listRains[i].Start.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-                StartPipe[i].Y = (App.Tiles[0].Y - listRains[i].Start.Location.Y) / App.Tiles[0].Dy;
-
-                EndPipe[i].X = (listRains[i].End.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-                EndPipe[i].Y = (App.Tiles[0].Y - listRains[i].End.Location.Y) / App.Tiles[0].Dy;
+                mListVLine.Add(new VectorLine(state.Mercator2Screen(listRains[i].Start.Location),
+                                              state.Mercator2Screen(listRains[i].End.Location)));
             }
         }
 
@@ -79,11 +74,8 @@ namespace PipeNetManager.eMap
         {
             listRains.Add(pipe);
             int i = listRains.Count;
-            StartPipe[i].X = (listRains[i-1].Start.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-            StartPipe[i].Y = (App.Tiles[0].Y - listRains[i-1].Start.Location.Y) / App.Tiles[0].Dy;
-
-            EndPipe[i].X = (listRains[i-1].End.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-            EndPipe[i].Y = (App.Tiles[0].Y - listRains[i-1].End.Location.Y) / App.Tiles[0].Dy;
+            mListVLine.Add(new VectorLine(state.Mercator2Screen(pipe.Start.Location),
+                                          state.Mercator2Screen(pipe.End.Location)));
         }
 
         public void DelRainPipe(RainPipe pipe)
@@ -109,18 +101,13 @@ namespace PipeNetManager.eMap
 
                 Parallel.For(0, (int)Obj, i =>          //计算位置
                 {
-                    StartPipe[i].X = (listRains[i].Start.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-                    StartPipe[i].Y = (App.Tiles[0].Y - listRains[i].Start.Location.Y) / App.Tiles[0].Dy;
-
-                    EndPipe[i].X = (listRains[i].End.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx;
-                    EndPipe[i].Y = (App.Tiles[0].Y - listRains[i].End.Location.Y) / App.Tiles[0].Dy;
+                    mListVLine[i].StartPoint = state.Mercator2Screen(listRains[i].Start.Location);
+                    mListVLine[i].EndPoint = state.Mercator2Screen(listRains[i].End.Location);
                 });
 
             }, listRains.Count).ContinueWith(ant =>
             {               //更新到图层中
-
-                state.UpdatePipes(StartPipe, EndPipe);
-
+                state.UpdatePipes(mListVLine);
             }, TaskScheduler.FromCurrentSynchronizationContext());
             this.RainPipeGrid.Margin = App.MoveRect;                        //更新相对位置
         }
@@ -147,7 +134,6 @@ namespace PipeNetManager.eMap
             }
             Grid CurGrid = this.RainPipeGrid;
             CurGrid.Margin = App.MoveRect;
-            
         }
 
         public override void OnMouseLeftDown(object sender, MouseButtonEventArgs e)
@@ -191,11 +177,9 @@ namespace PipeNetManager.eMap
         List<RainPipe> listRains = null;                      //雨水管道集合
         public RainJuncs rainjunc = null;
 
-        RainPipeState state = null;                                   //操作 
-
+        RainPipeState state = null;                            //操作 
         bool IsMousedown = false;                              //鼠标是否按下
 
-        Point[] StartPipe = null;                              //起始点管道坐标
-        Point[] EndPipe = null;                                //终止点管道坐标
+        List<VectorLine> mListVLine;                           //保存屏幕实际坐标
     }
 }

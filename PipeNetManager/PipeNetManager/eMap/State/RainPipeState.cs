@@ -1,4 +1,5 @@
 ﻿using GIS.Arc;
+using PipeNetManager.common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace PipeNetManager.eMap.State
         /// <param name="listpipe"></param>
         /// <param name="sps"></param>
         /// <param name="eps"></param>
-        public void AddRainPipes(List<RainPipe> listpipe , Point[] sps , Point[] eps)
+        public void AddRainPipes(List<RainPipe> listpipe , List<VectorLine> list)
         {
             int index = 0;
             foreach (RainPipe pipe in listpipe)
@@ -32,11 +33,10 @@ namespace PipeNetManager.eMap.State
                 path.Stroke = pipe.GetColorBrush();
                 //添加带方向的管道
 
-                path.Data = DrawPipe(sps[index], eps[index]);
+                path.Data = DrawPipe(list[index].StartPoint, list[index].EndPoint);
                 index++;
                 
                 path.StrokeThickness = App.StrokeThinkness;
-                path.SetValue(Canvas.ZIndexProperty, -1);
                 path.ToolTip = pipe;
                 context.Children.Add(path);
                 listpath.Add(path);

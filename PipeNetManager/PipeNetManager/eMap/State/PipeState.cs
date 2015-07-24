@@ -73,6 +73,11 @@ namespace PipeNetManager.eMap.State
             listpath.Add(path);
         }
 
+        public void AddPipe(Pipe pipe, VectorLine line)
+        {
+            AddPipe(pipe, line.StartPoint, line.EndPoint);
+        }
+
         /// <summary>
         /// 更新管道
         /// </summary>
@@ -87,6 +92,20 @@ namespace PipeNetManager.eMap.State
                 using (StreamGeometryContext context = ((StreamGeometry)(listpath[i].Data)).Open())
                 {
                     InternalDrawArrowGeometry(context, sps[i], eps[i]);
+                }
+                listpath[i].StrokeThickness = App.StrokeThinkness * 2 / 3;
+            }
+        }
+
+        public void UpdatePipes(List<VectorLine> list)
+        {
+            HeadHeight = App.StrokeThinkness;
+            HeadWidth = App.StrokeThinkness * 2;
+            for (int i = 0; i < listpath.Count; i++)
+            {
+                using (StreamGeometryContext context = ((StreamGeometry)(listpath[i].Data)).Open())
+                {
+                    InternalDrawArrowGeometry(context, list[i].StartPoint, list[i].EndPoint);
                 }
                 listpath[i].StrokeThickness = App.StrokeThinkness * 2 / 3;
             }
@@ -109,6 +128,7 @@ namespace PipeNetManager.eMap.State
             if (result == MessageBoxResult.Yes)
             {
                 context.Children.Remove(path);
+                listpath.Remove(path);
                 return true;
             }
             else
@@ -116,6 +136,19 @@ namespace PipeNetManager.eMap.State
                 path.Stroke = colorCenter.UnSelected_Border_Color;
                 return false;
             }
+        }
+
+        /// <summary>
+        /// 删除管道，但是不会有提示
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public bool delPipe(Path path)
+        {
+            if (path == null) return false;
+            context.Children.Remove(path);
+            listpath.Remove(path);
+            return true;
         }
 
         /// <summary>

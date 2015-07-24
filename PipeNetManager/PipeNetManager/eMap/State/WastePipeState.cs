@@ -1,4 +1,5 @@
 ﻿using GIS.Arc;
+using PipeNetManager.common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace PipeNetManager.eMap.State
             wastepipes = wp;
         }
 
-        public void AddWastePipes(List<WastePipe> listpipe, Point[] sps, Point[] eps)
+        public void AddWastePipes(List<WastePipe> listpipe, List<VectorLine> list)
         {
             int index = 0;
             foreach (WastePipe pipe in listpipe)
@@ -28,7 +29,7 @@ namespace PipeNetManager.eMap.State
 
                 //添加带方向的管道
 
-                path.Data = DrawPipe(sps[index], eps[index]);
+                path.Data = DrawPipe(list[index].StartPoint, list[index].EndPoint);
                 index++;
 
                 path.StrokeThickness = App.StrokeThinkness;
