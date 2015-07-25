@@ -101,8 +101,8 @@ namespace PipeNetManager.eMap.State
                     mEndPoint.Y = Mercator2ScreenY(mEndJunc.Location.Y) + App.StrokeThinkness / 2;
 
                     RainPipe pipe = new RainPipe(mStartJunc.Name + "-" + mEndJunc.Name, "双击查看信息", mStartJunc, mEndJunc);
-                    pipe.Start.Location = mStartPoint;
-                    pipe.End.Location = mEndPoint;
+                    pipe.Start.Location = GetMercator(mStartPoint);
+                    pipe.End.Location = GetMercator(mEndPoint);
 
                     PipeAddCommand cmd = new PipeAddCommand(this ,pipe , mStartJunc, mEndJunc);
                     cmd.Excute();
@@ -113,13 +113,14 @@ namespace PipeNetManager.eMap.State
             else if (CurrentMode == DELMODE)
             {
                 Path path = e.Source as Path;
-                if(DelPipe(path))
+                if (path == null)
                 {
-                    RainPipe rp = path.ToolTip as RainPipe;
-                    rainpipes.DelRainPipe(rp);
-                    //从数据库中删除
-                    DeleteDb(rp);
+                    base.OnMouseDown(sender, e);          //若都不是添加或删除命令，则交给父类进行处理
+                    return;
                 }
+                PipeDelCommand cmd = new PipeDelCommand(this, path);
+                cmd.Excute();
+                CmdManager.getInstance().PushCmd(cmd);
             }
             base.OnMouseDown(sender, e);                //若都不是添加或删除命令，则交给父类进行处理
         }

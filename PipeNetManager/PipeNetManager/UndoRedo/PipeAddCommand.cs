@@ -33,7 +33,7 @@ namespace PipeNetManager.UndoRedo
             //先插入到数据库，获取id，后插入图层中
             int id = mState.AddPipe2Data(mPipe , mInJunc , mOutJunc);
             mPipe.pipeInfo.ID = id;
-            mPath = mState.AddPipe(mPipe, new VectorLine(mPipe.Start.Location , mPipe.End.Location));
+            mPath = mState.AddPipe(mPipe, new VectorLine(mState.Mercator2Screen(mPipe.Start.Location) ,mState.Mercator2Screen( mPipe.End.Location)));
         }
 
         public void Undo()

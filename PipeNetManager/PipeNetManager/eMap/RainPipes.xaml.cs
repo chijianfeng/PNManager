@@ -73,7 +73,6 @@ namespace PipeNetManager.eMap
         public void AddRainPipe(RainPipe pipe)
         {
             listRains.Add(pipe);
-            int i = listRains.Count;
             mListVLine.Add(new VectorLine(state.Mercator2Screen(pipe.Start.Location),
                                           state.Mercator2Screen(pipe.End.Location)));
         }

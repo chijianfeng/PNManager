@@ -66,6 +66,11 @@ namespace DBCtrl.DBRW
             {
                 if(connect.State==ConnectionState.Closed)
                     connect.Open();
+                else if (connect.State == ConnectionState.Open)
+                {
+                    connect.Close();
+                    connect.Open();
+                }
                 MySqlCommand cmd = new MySqlCommand();
                 cmd.Connection = connect;
                 cmd.CommandType = CommandType.Text;
