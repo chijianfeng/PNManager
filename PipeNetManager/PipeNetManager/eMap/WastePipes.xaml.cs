@@ -91,11 +91,14 @@ namespace PipeNetManager.eMap
                 index++;
             }
             if (index < listWastes.Count)
+            {
                 listWastes.RemoveAt(index);
+                mListVLine.RemoveAt(index);
+            }
+            
         }
         void UpdatePipes()
         {
-            
             Task.Factory.StartNew((Obj) =>
             {
 
@@ -108,7 +111,6 @@ namespace PipeNetManager.eMap
             }, listWastes.Count).ContinueWith(ant =>
             {               //更新到图层中
                 state.UpdatePipes(mListVLine);
-
             }, TaskScheduler.FromCurrentSynchronizationContext());
             this.WastePipeGrid.Margin = App.MoveRect;                        //更新相对位置
         }

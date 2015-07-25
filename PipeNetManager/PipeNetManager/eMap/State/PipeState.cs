@@ -1,6 +1,7 @@
 ﻿using BLL.Command;
 using BLL.Receiver;
 using DBCtrl.DBClass;
+using DBCtrl.DBRW;
 using GIS.Arc;
 using PipeMessage.eMap;
 using PipeNetManager.common;
@@ -54,7 +55,7 @@ namespace PipeNetManager.eMap.State
         }
 
         /// <summary>
-        /// 增加管道
+        /// 界面中 增加管道
         /// </summary>
         /// <param name="pipe"></param>
         /// <param name="Start"></param>
@@ -73,9 +74,27 @@ namespace PipeNetManager.eMap.State
             listpath.Add(path);
         }
 
-        public void AddPipe(Pipe pipe, VectorLine line)
+        /// <summary>
+        /// 界面中 添加管道，
+        /// </summary>
+        /// <param name="pipe"></param>
+        /// <param name="line"></param>
+        /// <returns>创建的path</returns>
+        public Path AddPipe(Pipe pipe, VectorLine line)
         {
-            AddPipe(pipe, line.StartPoint, line.EndPoint);
+            Path path = new Path();
+            path.Stroke = pipe.GetColorBrush();
+
+            path.Data = DrawPipe(line.StartPoint , line.EndPoint);
+
+            path.StrokeThickness = App.StrokeThinkness * 2 / 3;
+            path.SetValue(Canvas.ZIndexProperty, -1);
+
+            path.ToolTip = pipe;
+            context.Children.Add(path);
+            listpath.Add(path);
+
+            return path;
         }
 
         /// <summary>
@@ -193,7 +212,7 @@ namespace PipeNetManager.eMap.State
                  Point newp = e.GetPosition(context);
                  using (StreamGeometryContext cnt = ((StreamGeometry)(mMovingPath.Data)).Open())
                  {
-                     InternalDrawArrowGeometry(cnt, p1, newp);
+                     InternalDrawArrowGeometry(cnt, mStartPoint, newp);
                  }
             }
         }
@@ -211,34 +230,29 @@ namespace PipeNetManager.eMap.State
             return geometry;
         }
 
-        protected void InsterDb(Pipe pipe , Cover sc , Cover ec)
+        protected int InsterDb(Pipe pipe , Cover injunc , Cover outjunc)
         {
             CPipeInfo pipeInfo = new CPipeInfo();
             CPipeExtInfo pipeExtInfo = new CPipeExtInfo();
             CUSInfo UsInfo = new CUSInfo();
             pipeInfo.PipeName = pipe.Name;
-            pipeInfo.In_JunID = sc.juncInfo.ID;
-            pipeInfo.Out_JunID = ec.juncInfo.ID;
+            pipeInfo.In_JunID = injunc.juncInfo.ID;
+            pipeInfo.Out_JunID = outjunc.juncInfo.ID;
 
             pipeInfo.Pipe_Category = pipe.pipeInfo.Pipe_Category;
             UsInfo.Struct_Class = 0;
 
-            InsertCmd icmd = new InsertCmd();
-            PipeRev piperev = new PipeRev();
+            TPipeInfo tpipeinfo = new TPipeInfo(App._dbpath, App.PassWord);
+            TPipeExtInfo tpipextinfo = new TPipeExtInfo(App._dbpath, App.PassWord);
+            TUSInfo tusinfo = new TUSInfo(App._dbpath, App.PassWord);
 
-            List<CPipeInfo> listpipe = new List<CPipeInfo>();
-            List<CPipeExtInfo> listpipExt = new List<CPipeExtInfo>();
-            List<CUSInfo> listUsInfo = new List<CUSInfo>();
+            tpipeinfo.Insert_PipeInfo(ref pipeInfo);
+            pipeExtInfo.PipeID = pipeInfo.ID;
+            tpipextinfo.Insert_PipeExtInfo(ref pipeExtInfo);
+            UsInfo.PipeID = pipeInfo.ID;
+            tusinfo.Insert_USInfo(ref UsInfo);
 
-            listpipe.Add(pipeInfo);
-            listpipExt.Add(pipeExtInfo);
-            listUsInfo.Add(UsInfo);
-
-            piperev.ListPipe = listpipe;
-            piperev.ListPipeExt = listpipExt;
-            piperev.ListUS = listUsInfo;
-            icmd.SetReceiver(piperev);
-            icmd.Execute();
+            return pipeInfo.ID;
         }
 
         protected void DeleteDb(Pipe pipe)
@@ -278,9 +292,15 @@ namespace PipeNetManager.eMap.State
             context.LineTo(pt4, true, true);
         }
 
+        //添加数据到缓存数据以及数据库
+        public virtual int AddPipe2Data(Pipe pipe, Cover injuc, Cover outjunc) { return 0; }
+
+        //从数据库以及缓存中删除数据
+        public virtual void DelPipeFromData(Pipe pipe) { }
+
         protected bool IsDrawLine = false;              //是否划线
-        protected Cover c1, c2;
-        protected Point p1, p2;
+        protected Cover mStartJunc, mEndJunc;           
+        protected Point mStartPoint, mEndPoint;
         protected double HeadWidth = App.StrokeThinkness;
         protected double HeadHeight = App.StrokeThinkness;
     }

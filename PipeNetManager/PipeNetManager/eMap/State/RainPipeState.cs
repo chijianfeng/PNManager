@@ -1,5 +1,6 @@
 ﻿using GIS.Arc;
 using PipeNetManager.common;
+using PipeNetManager.UndoRedo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,20 @@ namespace PipeNetManager.eMap.State
                 listpath.Add(path);
             }
         }
+
+        public override int AddPipe2Data(Pipe pipe , Cover injunc , Cover outjunc)
+        {
+            rainpipes.AddRainPipe((RainPipe)pipe);
+            //插入后台数据库
+            return InsterDb(pipe , injunc , outjunc);
+        }
+
+        public override void DelPipeFromData(Pipe pipe)
+        {
+            rainpipes.DelRainPipe((RainPipe)pipe);
+            DeleteDb(pipe);
+        }
+
         public new  void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (CurrentMode == ADDMODE)
@@ -65,13 +80,13 @@ namespace PipeNetManager.eMap.State
                 }
                 if (IsDrawLine == false)
                 {
-                    c1 = c;
-                    p1.X = ((c1.Location.X- App.Tiles[0].X) / App.Tiles[0].Dx) + App.StrokeThinkness / 2; //计算管道第一个点位置坐标
-                    p1.Y = ((App.Tiles[0].Y - c1.Location.Y) / App.Tiles[0].Dy) +App.StrokeThinkness / 2;
+                    mStartJunc = c;
+                    mStartPoint.X = Mercator2ScreenX(mStartJunc.Location.X) + App.StrokeThinkness / 2; //计算管道第一个点位置坐标
+                    mStartPoint.Y = Mercator2ScreenY(mStartJunc.Location.Y) +App.StrokeThinkness / 2;
 
                     mMovingPath = new Path();
                     mMovingPath.Stroke = colorCenter.Seleted_Fill_Color;
-                    mMovingPath.Data = DrawPipe(p1, p1);
+                    mMovingPath.Data = DrawPipe(mStartPoint, mStartPoint);
                     mMovingPath.StrokeThickness = App.StrokeThinkness/2;
                     context.Children.Add(mMovingPath);
                 }
@@ -81,16 +96,17 @@ namespace PipeNetManager.eMap.State
                     context.Children.Remove(mMovingPath);
                     mMovingPath = null;
 
-                    c2 = c;
-                    p2.X = ((c2.Location.X - App.Tiles[0].X) / App.Tiles[0].Dx) + App.StrokeThinkness / 2;
-                    p2.Y = ((App.Tiles[0].Y - c2.Location.Y) / App.Tiles[0].Dy) + App.StrokeThinkness / 2;
+                    mEndJunc = c;
+                    mEndPoint.X = Mercator2ScreenX(mEndJunc.Location.X) + App.StrokeThinkness / 2;
+                    mEndPoint.Y = Mercator2ScreenY(mEndJunc.Location.Y) + App.StrokeThinkness / 2;
 
-                    RainPipe pipe = new RainPipe(c1.Name + "-" + c2.Name, "双击查看信息", c1, c2);
-                    AddPipe(pipe, p1, p2);
-                    rainpipes.AddRainPipe(pipe);
+                    RainPipe pipe = new RainPipe(mStartJunc.Name + "-" + mEndJunc.Name, "双击查看信息", mStartJunc, mEndJunc);
+                    pipe.Start.Location = mStartPoint;
+                    pipe.End.Location = mEndPoint;
 
-                    //插入后台数据库
-                    InsterDb(pipe, c1, c2);
+                    PipeAddCommand cmd = new PipeAddCommand(this ,pipe , mStartJunc, mEndJunc);
+                    cmd.Excute();
+                    CmdManager.getInstance().PushCmd(cmd);
                 }
                 IsDrawLine = !IsDrawLine;
             }

@@ -62,7 +62,7 @@ namespace PipeNetManager.eMap
             return info;
         }
         //增加雨水管道
-        void addpipes()
+        private void addpipes()
         {
             for (int i = 0; i < listRains.Count; i++) {
                 mListVLine.Add(new VectorLine(state.Mercator2Screen(listRains[i].Start.Location),
@@ -90,7 +90,10 @@ namespace PipeNetManager.eMap
                 index++;
             }
             if (index < listRains.Count)
+            {
                 listRains.RemoveAt(index);
+                mListVLine.RemoveAt(index);
+            }
         }
 
         //更新管道
