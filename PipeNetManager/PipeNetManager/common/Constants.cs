@@ -52,5 +52,7 @@ namespace PipeNetManager.common
         public const int JUNCBUFFERSIZE = 80;
 
         public const int PIPEBUFFERSIZE = 80;
+
+        public const int CALACTION_TRACELEN = 10;
     }
 }

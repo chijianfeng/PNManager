@@ -22,6 +22,7 @@ namespace GIS.Map
             wgs84.y = y;
             return wgs84;
         }
+  
         public static Point WGS842Mercator(Point wgs84)
         {
             Point mercator;

@@ -184,3 +184,5 @@ C:\project\master\PNManager\PipeNetManager\PipeNetManager\bin\Debug\DBCtrl.pdb
 C:\project\master\PNManager\PipeNetManager\Debug\PipeNetManager.exe.config
 C:\project\master\PNManager\PipeNetManager\Debug\PipeNetManager.exe
 C:\project\master\PNManager\PipeNetManager\Debug\PipeNetManager.pdb
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\eMap\AssistView.g.cs
+C:\project\master\PNManager\PipeNetManager\PipeNetManager\obj\Debug\eMap\AssistView.baml

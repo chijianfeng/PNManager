@@ -64,6 +64,7 @@ namespace PipeNetManager.eMap
         public abstract void OnMouseUp(object sender, MouseButtonEventArgs e);
         public abstract void OnMouseMove(object sender, MouseEventArgs e);
         public abstract void OnMouseLeftDown(object sender, MouseButtonEventArgs e);
+        public virtual void OnMouseRightDown(object sender, MouseButtonEventArgs e) { }
 
         public abstract void OnViewOriginal(object sender, RoutedEventArgs e);
 

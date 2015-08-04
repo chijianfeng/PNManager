@@ -17,7 +17,7 @@ namespace PipeNetManager.utils
             return mCauseReson;
         }
 
-        public string ToString()
+        public override string ToString()
         {
             return mCauseReson;
         }

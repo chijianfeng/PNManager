@@ -87,6 +87,9 @@
     <Compile Include="common\Constants.cs" />
     <Compile Include="common\VectorLine.cs" />
     <Compile Include="common\RectAdorner.cs" />
+    <Compile Include="eMap\AssistView.xaml.cs">
+      <DependentUpon>AssistView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UndoRedo\Basecmd.cs" />
     <Compile Include="UndoRedo\CmdManager.cs" />
     <Compile Include="UndoRedo\JuncAddCommand.cs" />
@@ -94,11 +97,18 @@
     <Compile Include="UndoRedo\PipeAddCommand.cs" />
     <Compile Include="UndoRedo\PipeDelCommand.cs" />
     <Compile Include="utils\AnimationUtil.cs" />
+    <Compile Include="utils\Assist\BaseAction.cs" />
+    <Compile Include="utils\Assist\CalAreaAction.cs" />
+    <Compile Include="utils\Assist\CalLenAction.cs" />
     <Compile Include="utils\ExceptionProcess.cs" />
     <Compile Include="utils\ValueConvert.cs" />
     <Compile Include="utils\WaitUserControl.xaml.cs">
       <DependentUpon>WaitUserControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="eMap\AssistView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="eMap\MapBackground.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -346,6 +356,7 @@
     <Resource Include="Assets\redo.png" />
     <Resource Include="Assets\undo.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

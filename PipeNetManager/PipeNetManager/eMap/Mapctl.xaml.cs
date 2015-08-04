@@ -19,6 +19,7 @@ using PipeMessage.eMap;
 using PipeNetManager.Login;
 using System.IO;
 using PipeNetManager.UndoRedo;
+using PipeNetManager.utils.Assist;
 
 namespace PipeNetManager.eMap
 {
@@ -32,6 +33,7 @@ namespace PipeNetManager.eMap
         private RainPipes mRainpipe;
         private WastePipes mWastepipe;
         private MapBackground mBackground;
+        private AssistView mAssistView = null;
         public Mapctl()
         {
             InitializeComponent();
@@ -295,8 +297,16 @@ namespace PipeNetManager.eMap
         {
             foreach (var item in listLayer)                                    //每个图层接收消息
             {
-               // if(!item.IsHidden)
                 item.OnMouseLeftDown(sender, e);
+            }
+            System.Console.WriteLine("no mouse left down");
+        }
+
+        private void MapGrid_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            foreach (var item in listLayer)                                    //每个图层接收消息
+            {
+                item.OnMouseRightDown(sender, e);
             }
         }
 
@@ -326,7 +336,7 @@ namespace PipeNetManager.eMap
             String Msg = "";
             Msg += "经纬度坐标：\nX:" + mp.x.ToString("0.00000000") + "\nY:" + mp.y.ToString("0.00000000") + "\n";
             Lbl_Detail.Content = Msg;
-        }
+        }      
         #endregion
         #region 编辑操作
 
@@ -481,6 +491,52 @@ namespace PipeNetManager.eMap
         {
             CmdManager.getInstance().Redo();
         }
+
+        //测算长度
+        private void Edit_Calc_Length_Click(object sender, RoutedEventArgs e)
+        {
+            if (mAssistView != null && !mAssistView.GetAction().GetType().ToString().Equals(CalLenAction.getType()))
+            {
+                MapGrid.Children.Remove(mAssistView);
+                listLayer.Remove(mAssistView);
+                mAssistView = null;
+            }
+            if (mAssistView == null)
+            {
+                mAssistView = new AssistView(new CalLenAction());
+                MapGrid.Children.Add(mAssistView);
+                listLayer.Add(mAssistView);
+            }
+        }
+
+        //测算面积
+        private void Edit_Calc_Area_Click(object sender, RoutedEventArgs e)
+        {
+            if (mAssistView != null && !mAssistView.GetAction().GetType().ToString().Equals(CalAreaAction.getType()))
+            {
+                MapGrid.Children.Remove(mAssistView);
+                listLayer.Remove(mAssistView);
+                mAssistView = null;
+            }
+            if (mAssistView == null)
+            {
+                mAssistView = new AssistView(new CalAreaAction());
+                MapGrid.Children.Add(mAssistView);
+                listLayer.Add(mAssistView);
+            }
+        }
+
+        //取消测算，移除附加图层
+        private void Edit_Calc_Cancle_Click(object sender, RoutedEventArgs e)
+        {
+            if (mAssistView != null)
+            {
+                this.MapGrid.Children.Remove(mAssistView);
+                listLayer.Remove(mAssistView);
+            }
+            mAssistView = null;
+        }
+
 #endregion
 
         #region 文件操作
@@ -522,5 +578,6 @@ namespace PipeNetManager.eMap
 
         private MainCallBack mCallBack;
         #endregion
+       
     }
 }
